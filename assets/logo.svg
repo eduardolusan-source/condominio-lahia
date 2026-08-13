@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Lahia Lofts">
+  <defs>
+    <clipPath id="circ"><circle cx="100" cy="100" r="92"/></clipPath>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="#2e6f8e"/>
+  <g clip-path="url(#circ)">
+    <!-- torre principal inclinada -->
+    <polygon points="98,14 128,8 134,186 104,186" fill="#c9dfea"/>
+    <polygon points="128,8 140,24 144,186 134,186" fill="#9fc4d6"/>
+    <!-- remate superior -->
+    <polygon points="60,34 128,8 130,26 66,50" fill="#c9dfea"/>
+    <!-- losas horizontales -->
+    <polygon points="30,96 98,90 98,104 30,110" fill="#c9dfea"/>
+    <polygon points="26,120 98,116 98,130 26,134" fill="#c9dfea"/>
+    <polygon points="22,144 98,142 98,156 22,158" fill="#c9dfea"/>
+    <polygon points="30,168 104,168 104,182 30,182" fill="#c9dfea"/>
+  </g>
+</svg>

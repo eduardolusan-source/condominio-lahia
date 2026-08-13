@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Finanzas · Condominio Lahia</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="assets/logo.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span class="logo">LAHIA</span><span class="tag">Lofts</span></a>
+    <nav class="main">
+      <a href="index.html">Inicio</a>
+      <a href="reglamentos.html">Reglamentos</a>
+      <a href="casa-club.html">Casa club</a>
+      <a href="finanzas.html" class="active">Finanzas</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Portón de acceso -->
+<div id="gate" class="gate">
+  <div class="lock">🔒</div>
+  <h1 style="font-size:1.3rem; margin:0.5rem 0 0.25rem">Reportes financieros</h1>
+  <p style="color:var(--ink-2); font-size:0.92rem">Sección exclusiva para residentes.<br>Ingresa la clave que te compartió la administración.</p>
+  <form id="gateForm">
+    <input id="gateKey" type="password" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="····" aria-label="Clave de acceso">
+    <p class="error" id="gateError"></p>
+    <button type="submit" class="btn primary" style="width:100%">Entrar</button>
+  </form>
+</div>
+
+<!-- Contenido protegido -->
+<main class="wrap" id="content" hidden>
+  <h1 class="section-title" style="margin-top:1rem">Rendición de cuentas</h1>
+  <p class="section-sub">Cifras reales del Excel de captura de la administración · enero a julio de 2026.</p>
+
+  <div class="privacy">🛡️ <strong>Privacidad de adeudos.</strong> Por disposición de la Ley de protección de datos personales, la morosidad se informa siempre de forma <strong>agregada</strong>: montos y número de unidades, sin identificar ningún departamento.</div>
+
+  <!-- ===== Datos mensuales ===== -->
+  <h2 class="section-title" id="mensual">📅 Datos del mes</h2>
+  <p class="section-sub">Selecciona el mes que quieres consultar.</p>
+  <div class="month-chips" id="chips" role="tablist"></div>
+
+  <div class="stat-grid" id="statCards"></div>
+
+  <div class="two-col" style="margin-top:1.25rem">
+    <div class="panel">
+      <h3>Ingresos del mes</h3>
+      <div class="table-scroll"><table class="data" id="tIngresos"></table></div>
+    </div>
+    <div class="panel">
+      <h3>Indicadores del mes</h3>
+      <div class="table-scroll"><table class="data" id="tIndicadores"></table></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Egresos del mes <span class="sub" id="egresosSub"></span></h3>
+    <div class="table-scroll"><table class="data" id="tEgresos"></table></div>
+  </div>
+
+  <div class="panel">
+    <h3>Morosidad (agregada)</h3>
+    <div class="stat-grid" id="morosidadCards"></div>
+    <p style="font-size:0.85rem; color:var(--muted); margin:0.9rem 0 0">Los adeudos se gestionan de manera directa y confidencial entre la administración y cada unidad.</p>
+  </div>
+
+  <!-- ===== Panorama anual ===== -->
+  <h2 class="section-title">📈 Panorama 2026</h2>
+  <p class="section-sub">Evolución de enero a julio.</p>
+
+  <div class="panel">
+    <h3>Ingresos vs. egresos por mes</h3>
+    <div class="legend">
+      <span class="li"><span class="sw" style="background:var(--series-1)"></span>Ingresos</span>
+      <span class="li"><span class="sw" style="background:var(--series-2)"></span>Egresos</span>
+    </div>
+    <div class="chart-box" id="chartBars"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Saldo en caja al cierre de cada mes</h3>
+    <div class="chart-box" id="chartLine"></div>
+    <p style="font-size:0.85rem; color:var(--muted); margin:0.6rem 0 0">El condominio arrancó 2026 con saldo positivo; desde enero opera con saldo negativo que se ha ido recuperando gradualmente.</p>
+  </div>
+
+  <!-- ===== Métricas fijas ===== -->
+  <h2 class="section-title" id="fijas">📌 Métricas fijas del condominio</h2>
+  <p class="section-sub">Datos estructurales que no cambian mes a mes (promedios de enero–julio 2026).</p>
+
+  <div class="stat-grid" id="fixedCards"></div>
+
+  <div class="two-col" style="margin-top:1.25rem">
+    <div class="panel">
+      <h3>En qué se va el gasto fijo <span class="sub">mes típico</span></h3>
+      <div class="chart-box" id="chartFijos"></div>
+    </div>
+    <div class="panel">
+      <h3>El agua en cifras</h3>
+      <div class="table-scroll"><table class="data" id="tAgua"></table></div>
+      <p style="font-size:0.85rem; color:var(--muted); margin:0.9rem 0 0">El agua se financia con una derrama mensual según consumo; en 2026 la derrama ha cubierto en promedio el 84% del costo de las pipas.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Proyectos en curso</h3>
+    <div class="table-scroll"><table class="data" id="tProyectos"></table></div>
+  </div>
+</main>
+
+<div class="viz-tip" id="vizTip"></div>
+
+<footer class="site-footer">
+  <div class="inner">
+    Condominio Lahia · Cifras tomadas del Excel de captura mensual de la administración · Sitio temporal de demostración.
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/finanzas.js"></script>
+</body>
+</html>

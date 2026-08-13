@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Casa club · Condominio Lahia</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="assets/logo.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span class="logo">LAHIA</span><span class="tag">Lofts</span></a>
+    <nav class="main">
+      <a href="index.html">Inicio</a>
+      <a href="reglamentos.html">Reglamentos</a>
+      <a href="casa-club.html" class="active">Casa club</a>
+      <a href="finanzas.html">Finanzas</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="section-title" style="margin-top:1rem">Reservación de la casa club</h1>
+  <p class="section-sub">Solicita el uso de la casa club para tus eventos. La reservación queda sujeta a confirmación de la administración.</p>
+
+  <div class="notice"><strong>Condiciones de ejemplo.</strong> Cuotas y horarios son ilustrativos, para revisión del administrador.</div>
+
+  <div class="two-col">
+    <section class="rule-block" style="margin-bottom:0">
+      <h2>📌 Condiciones de uso</h2>
+      <ol>
+        <li><strong>Quién puede reservar.</strong> Solo residentes al corriente en sus cuotas de mantenimiento.</li>
+        <li><strong>Horarios.</strong> Eventos de 10:00 a 22:00 h. El sonido se modera a partir de las 20:00 h en respeto al horario de descanso.</li>
+        <li><strong>Cuota de recuperación.</strong> $800.00 por evento (limpieza y consumos), pagaderos al confirmar la reservación.</li>
+        <li><strong>Depósito en garantía.</strong> $1,500.00 reembolsables al entregar el espacio en buen estado.</li>
+        <li><strong>Aforo.</strong> Máximo 40 personas. El residente es responsable de sus invitados en todo momento.</li>
+        <li><strong>Anticipación.</strong> Reserva con al menos 7 días de anticipación; máximo una reservación por unidad al mes.</li>
+        <li><strong>Restricciones.</strong> El uso de la casa club no incluye la alberca. No se permite fijar decoración con clavos ni cinta que dañe los acabados.</li>
+        <li><strong>Cancelaciones.</strong> Sin cargo hasta 48 horas antes del evento.</li>
+      </ol>
+    </section>
+
+    <section class="rule-block" style="margin-bottom:0">
+      <h2>📝 Solicitud de reservación</h2>
+      <form class="res-form" id="resForm">
+        <div>
+          <label class="f" for="rNombre">Nombre del residente</label>
+          <input id="rNombre" required placeholder="Nombre y apellido">
+        </div>
+        <div>
+          <label class="f" for="rDepto">Unidad</label>
+          <input id="rDepto" required placeholder="Ej. A-12 o PH-36">
+        </div>
+        <div>
+          <label class="f" for="rFecha">Fecha del evento</label>
+          <input id="rFecha" type="date" required>
+        </div>
+        <div>
+          <label class="f" for="rHorario">Horario</label>
+          <select id="rHorario">
+            <option>10:00 – 14:00</option>
+            <option>14:00 – 18:00</option>
+            <option>18:00 – 22:00</option>
+          </select>
+        </div>
+        <div>
+          <label class="f" for="rInvitados">Número de invitados</label>
+          <input id="rInvitados" type="number" min="1" max="40" value="15">
+        </div>
+        <div>
+          <label class="f" for="rTipo">Tipo de evento</label>
+          <input id="rTipo" placeholder="Ej. cumpleaños infantil">
+        </div>
+        <div class="full form-actions">
+          <button type="submit" class="btn primary">Generar solicitud</button>
+        </div>
+        <div class="full" id="resOut" hidden>
+          <div class="msg-preview" id="resMsg"></div>
+          <div class="form-actions" style="margin-top:0.75rem">
+            <a class="btn primary" id="resWa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+            <button type="button" class="btn ghost" id="resCopy">Copiar mensaje</button>
+          </div>
+          <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem">El mensaje se envía a la administración, que confirmará disponibilidad y te indicará el pago de la cuota y el depósito.</p>
+        </div>
+      </form>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    Condominio Lahia · Sitio temporal de demostración — condiciones ilustrativas pendientes de aprobación por la asamblea.
+  </div>
+</footer>
+
+<script>
+document.getElementById('resForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const g = id => document.getElementById(id).value.trim();
+  const fecha = g('rFecha') ? new Date(g('rFecha') + 'T12:00:00').toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
+  const msg = 'Hola, soy ' + g('rNombre') + ', de la unidad ' + g('rDepto') + ' del Condominio Lahia. ' +
+    'Quiero solicitar la reservación de la casa club para el ' + fecha + ', en el horario de ' + g('rHorario') +
+    ', con ' + g('rInvitados') + ' invitados' + (g('rTipo') ? ' (' + g('rTipo') + ')' : '') +
+    '. Quedo pendiente de la confirmación y de las indicaciones de pago. ¡Gracias!';
+  document.getElementById('resMsg').textContent = msg;
+  document.getElementById('resWa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('resOut').hidden = false;
+});
+document.getElementById('resCopy').addEventListener('click', function () {
+  navigator.clipboard.writeText(document.getElementById('resMsg').textContent).then(() => {
+    this.textContent = '¡Copiado!';
+    setTimeout(() => { this.textContent = 'Copiar mensaje'; }, 1600);
+  });
+});
+</script>
+</body>
+</html>
