@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Cómo asistir, acreditarse y votar · Asamblea Lahia</title>
+<link rel="icon" href="../assets/logo.svg">
+<style>
+  :root{
+    --crema:#F7F3EA; --azul:#1F5670; --azul-osc:#123C53; --agua:#2E6F8E; --agua-suave:#E4EFF4;
+    --verde:#2E7C4F; --verde-suave:#E7EFE7; --oro:#C0902C; --oro-suave:#F7EFDA;
+    --rojo:#D0453B; --rojo-suave:#FBEAE8; --gris:#6E6A61; --borde:#E3DDCF; --blanco:#FFFFFF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--crema); color:#26303F; line-height:1.55;}
+  .serif{font-family:Georgia,'Times New Roman',serif;}
+
+  .barra-sup{position:sticky; top:0; z-index:50; background:var(--crema); border-bottom:3px solid var(--azul); padding:9px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .barra-sup .marca{font-weight:800; letter-spacing:3px; font-size:.85rem; color:var(--azul);}
+  .barra-sup .marca small{display:block; letter-spacing:1.5px; font-size:.6rem; color:var(--gris); font-weight:700;}
+  .barra-sup nav{margin-left:auto; display:flex; gap:4px; flex-wrap:wrap;}
+  .barra-sup nav a{text-decoration:none; color:var(--gris); font-size:.82rem; font-weight:600; padding:5px 11px; border-radius:999px;}
+  .barra-sup nav a:hover{background:var(--agua-suave); color:var(--azul);}
+  .barra-sup nav a.activo{background:var(--azul); color:#fff;}
+  .barra-sup nav a.fuera{color:var(--agua); border:1px solid var(--borde);}
+
+  main{max-width:1000px; margin:0 auto; padding:26px 18px;}
+  .kicker{font-size:.72rem; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--agua); margin-bottom:8px;}
+  h1.portada{font-size:2rem; line-height:1.15; color:var(--azul); font-weight:800; margin-bottom:10px;}
+  h1.portada em{font-style:normal; color:var(--verde);}
+  .bajada{font-size:1rem; color:#4A5261; max-width:760px; margin-bottom:24px;}
+
+  section.bloque{background:var(--blanco); border:1px solid var(--borde); border-radius:14px; margin-bottom:22px; overflow:hidden; box-shadow:0 1px 5px rgba(31,86,112,.07);}
+  .bloque-cab{display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:13px 18px; border-bottom:1px solid var(--borde); background:#FCFAF4;}
+  .bloque-cab .num{width:36px; height:36px; border-radius:50%; background:var(--azul); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; flex-shrink:0;}
+  .bloque-cab .num.tramite{background:var(--gris);}
+  .bloque-cab h2{font-size:1.06rem; flex:1; min-width:220px; color:var(--azul);}
+  .bloque-cab h2 small{display:block; font-weight:400; font-family:'Segoe UI',system-ui,sans-serif; font-size:.76rem; color:var(--gris);}
+  .bloque-cuerpo{padding:18px;}
+
+  .etiqueta{display:inline-block; font-size:.63rem; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; padding:3px 9px; border-radius:999px;}
+  .e-vota{background:var(--oro-suave); color:#8A6410;}
+  .e-tramite{background:#EFEBE1; color:var(--gris);}
+  .e-dinero{background:var(--rojo-suave); color:#9C2E26;}
+
+  .micro{font-size:.68rem; font-weight:800; letter-spacing:2.2px; text-transform:uppercase; margin-bottom:7px;}
+  .tarjetas{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;}
+  .tarjeta{border:1px solid var(--borde); border-radius:12px; padding:14px 16px; background:#FFFDF8;}
+  .tarjeta h4{color:var(--azul); font-size:1rem; margin-bottom:6px;}
+  .tarjeta p, .tarjeta li{font-size:.88rem; color:#3C4453;}
+  .tarjeta ul, .tarjeta ol{padding-left:19px; display:flex; flex-direction:column; gap:5px;}
+  .t-azul{border-top:4px solid var(--azul);} .t-azul .micro{color:var(--azul);}
+  .t-oro{border-top:4px solid var(--oro); background:var(--oro-suave);} .t-oro .micro{color:#8A6410;}
+  .t-verde{border-top:4px solid var(--verde); background:var(--verde-suave);} .t-verde .micro{color:var(--verde);}
+  .t-rojo{border-top:4px solid var(--rojo); background:var(--rojo-suave);} .t-rojo .micro{color:var(--rojo);}
+  .t-agua{border-top:4px solid var(--agua); background:var(--agua-suave);} .t-agua .micro{color:var(--agua);}
+
+  h3.sub{font-size:.76rem; text-transform:uppercase; letter-spacing:1.6px; color:var(--azul); margin:18px 0 9px; display:flex; align-items:center; gap:8px; font-weight:800;}
+  h3.sub:first-child{margin-top:0;}
+  h3.sub::after{content:""; flex:1; height:1px; background:var(--borde);}
+
+  p + p{margin-top:8px;}
+  .cuerpo p{font-size:.92rem; color:#3C4453;}
+  .cita{border-left:3px solid var(--borde); padding:6px 0 6px 12px; font-size:.84rem; color:var(--gris); font-style:italic; margin-bottom:12px;}
+  ul.lista{padding-left:19px; display:flex; flex-direction:column; gap:6px; font-size:.9rem; color:#3C4453;}
+  strong.pesos{color:var(--azul); font-variant-numeric:tabular-nums;}
+
+  textarea, input[type=text], input[type=number], select{width:100%; border:1px solid var(--borde); border-radius:8px; padding:8px 10px; font:inherit; font-size:.88rem; background:#FFFDF9; color:#26303F; resize:vertical;}
+  textarea:focus, input:focus, select:focus{outline:2px solid var(--oro); outline-offset:1px;}
+  textarea{min-height:56px;}
+
+  table{width:100%; border-collapse:collapse; font-size:.87rem;}
+  th{background:var(--azul); color:#fff; text-align:left; padding:8px 10px; font-size:.7rem; text-transform:uppercase; letter-spacing:.8px;}
+  td{border-bottom:1px solid var(--borde); padding:7px 8px; vertical-align:top; background:#fff;}
+  td input{border:none; background:transparent; padding:4px 6px;}
+  td.num, th.num{text-align:right; font-variant-numeric:tabular-nums;}
+  tr.total td{background:#FCFAF4; font-weight:800; color:var(--azul);}
+  .btn-x{border:none; background:transparent; color:var(--rojo); cursor:pointer; font-size:.95rem;}
+  .btn-add{margin-top:9px; border:1.5px dashed var(--borde); background:#fff; color:var(--azul); border-radius:9px; padding:7px 14px; font-weight:700; cursor:pointer; font-size:.84rem;}
+  .btn-add:hover{border-color:var(--azul);}
+
+  .aviso{border:1px solid var(--borde); border-left:4px solid var(--oro); background:var(--oro-suave); border-radius:10px; padding:12px 15px; font-size:.85rem; color:#5C4712; margin-bottom:20px;}
+  .aviso strong{color:#8A6410;}
+
+  footer{max-width:1000px; margin:0 auto; padding:8px 18px 26px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:.66rem; letter-spacing:2px; font-weight:700; color:var(--gris); border-top:2px solid var(--azul);}
+  footer a{color:var(--agua);}
+  @media(max-width:640px){ h1.portada{font-size:1.6rem;} main{padding:20px 14px;} }
+</style>
+<style>
+  .checklist{list-style:none; display:flex; flex-direction:column; gap:9px;}
+  .checklist li{display:flex; gap:10px; align-items:flex-start; font-size:.9rem; color:#3C4453; background:#FFFDF8; border:1px solid var(--borde); border-radius:10px; padding:10px 12px;}
+  .checklist input{width:19px; height:19px; margin-top:2px; flex-shrink:0; accent-color:#2E7C4F;}
+  .checklist li.marcado{background:var(--verde-suave); border-color:var(--verde);}
+  .carta-form{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:16px;}
+  .carta-form label{display:block; font-size:.76rem; font-weight:700; color:var(--azul); margin-bottom:4px;}
+  .hoja{background:#fff; border:1px solid var(--borde); border-radius:10px; padding:26px 30px; font-family:Georgia,'Times New Roman',serif; font-size:.92rem; line-height:1.75; color:#26303F;}
+  .hoja h4{text-align:center; font-size:1.05rem; letter-spacing:2px; margin-bottom:18px; text-transform:uppercase;}
+  .hoja p{margin-bottom:13px; text-align:justify;}
+  .hoja .lugar{text-align:right; margin-bottom:20px; font-size:.86rem;}
+  .firmas{display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:44px; text-align:center; font-size:.82rem;}
+  .firmas div{border-top:1px solid #26303F; padding-top:6px;}
+  .firmas .ancho{grid-column:1 / -1; max-width:320px; margin:0 auto 20px;}
+  .acciones{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+  .acciones button{border:none; border-radius:10px; padding:11px 18px; font-weight:800; cursor:pointer; font-size:.88rem; background:var(--azul); color:#fff;}
+  .acciones button.sec{background:var(--verde-suave); color:#245C3C;}
+  @media print{
+    .barra-sup, footer, .acciones, .aviso, .indice, .no-print{display:none !important;}
+    body{background:#fff;} main{padding:0; max-width:none;}
+    section.bloque{border:none; box-shadow:none; margin:0;}
+    .bloque-cab, .carta-form{display:none;}
+    .bloque-cuerpo{padding:0;}
+    .hoja{border:none; padding:0; font-size:12pt;}
+    #bloqueCarta{page-break-before:always;}
+  }
+</style>
+</head>
+<body>
+
+<div class="barra-sup">
+  <span class="marca">L A H I A<small>ASAMBLEA · 27 AGOSTO 2026</small></span>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="informacion.html">Los 12 puntos</a>
+    <a href="reglas.html" class="activo">Cómo asistir y votar</a>
+    <a href="acuerdos.html">Tablero de acuerdos</a>
+    <a href="../index.html" class="fuera">Sitio del condominio ↗</a>
+  </nav>
+</div>
+
+<main>
+  <div class="kicker">Reglas de asistencia, representación y voto</div>
+  <h1 class="portada serif">Qué llevar el jueves 27 <em>y cómo mandar a alguien en tu lugar</em></h1>
+  <p class="bajada">La convocatoria pide acreditar la calidad de condómino con documentos: sin ellos no se puede votar, aunque se viva en el departamento. Y si no puedes asistir, tu voto no se pierde: se puede delegar con una carta poder ante dos testigos. Aquí está el detalle y un formato listo para llenar e imprimir.</p>
+
+  <div class="aviso">
+    <strong>Ojo con el horario.</strong> A las 19:00, en tercera convocatoria, la asamblea se instala con los condóminos que estén presentes, sin mínimo de asistencia. Lo que se vote ahí obliga a los 40 departamentos, hayan asistido o no.
+  </div>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">🪪</div>
+      <h2 class="serif">Qué llevar según tu caso<small>Cada asistente debe exhibir identificación oficial y la documentación que acredite su calidad</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <div class="tarjetas">
+        <div class="tarjeta t-verde">
+          <div class="micro">Caso 1</div>
+          <h4 class="serif">Condómino con escritura</h4>
+          <ul>
+            <li>Identificación oficial vigente.</li>
+            <li>Copia de la <strong>primera y la última hoja</strong> de la escritura pública.</li>
+          </ul>
+        </div>
+        <div class="tarjeta t-oro">
+          <div class="micro">Caso 2</div>
+          <h4 class="serif">Adquirente aún sin escriturar</h4>
+          <ul>
+            <li>Identificación oficial vigente.</li>
+            <li><strong>Contrato de promesa de compraventa</strong>, únicamente para quien no ha culminado su proceso de escrituración.</li>
+          </ul>
+        </div>
+        <div class="tarjeta t-azul">
+          <div class="micro">Caso 3</div>
+          <h4 class="serif">Persona moral</h4>
+          <ul>
+            <li>Comparece por representante legal o apoderado.</li>
+            <li>Copia del <strong>poder legal otorgado por la persona moral</strong>.</li>
+            <li>Identificación oficial de quien comparece.</li>
+          </ul>
+        </div>
+        <div class="tarjeta t-agua">
+          <div class="micro">Caso 4</div>
+          <h4 class="serif">Representante de un condómino</h4>
+          <ul>
+            <li><strong>Carta poder otorgada ante dos testigos.</strong></li>
+            <li>Identificaciones de <strong>otorgante, apoderado y los dos testigos</strong>.</li>
+            <li>Los documentos que acrediten al condómino representado (casos 1 o 2).</li>
+            <li>Si el condómino es persona moral, la carta debe suscribirla quien tenga facultades para ello.</li>
+          </ul>
+          <p style="margin-top:8px; font-weight:700; color:#9C2E26;">No basta una carta simple sin testigos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">✅</div>
+      <h2 class="serif">Lista para no olvidar nada<small>Se marca en este navegador, nada se envía</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <ul class="checklist" id="checklist">
+        <li><input type="checkbox"><span>Identificación oficial vigente (original).</span></li>
+        <li><input type="checkbox"><span>Copia de la primera y última hoja de la escritura, o contrato de promesa de compraventa.</span></li>
+        <li><input type="checkbox"><span>Si voy a representar a alguien: carta poder firmada ante dos testigos.</span></li>
+        <li><input type="checkbox"><span>Si voy a representar a alguien: copias de identificación del otorgante, del apoderado y de los dos testigos.</span></li>
+        <li><input type="checkbox"><span>Leí los doce puntos y anoté mis preguntas para los puntos 4, 5 y 6, que son los que cuestan dinero.</span></li>
+        <li><input type="checkbox"><span>Llegar antes de las 18:30 si queremos que la asamblea se instale en primera convocatoria.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="bloque" id="bloqueCarta">
+    <div class="bloque-cab">
+      <div class="num">✍️</div>
+      <h2 class="serif">Formato de carta poder<small>Llena los campos y se arma sola · después imprímela y fírmenla a mano</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <div class="carta-form">
+        <div><label for="cOtorgante">Nombre del condómino que otorga el poder</label><input type="text" id="cOtorgante" placeholder="Nombre completo"></div>
+        <div><label for="cUnidad">Departamento</label><input type="text" id="cUnidad" placeholder="p. ej. A-14 o PH-37"></div>
+        <div><label for="cApoderado">Nombre de quien lo representará</label><input type="text" id="cApoderado" placeholder="Nombre completo"></div>
+        <div><label for="cTestigo1">Testigo 1</label><input type="text" id="cTestigo1" placeholder="Nombre completo"></div>
+        <div><label for="cTestigo2">Testigo 2</label><input type="text" id="cTestigo2" placeholder="Nombre completo"></div>
+        <div><label for="cFecha">Fecha de la carta</label><input type="text" id="cFecha" placeholder="p. ej. 25 de agosto de 2026"></div>
+      </div>
+      <div class="hoja" id="hojaCarta">
+        <p class="lugar">Santiago de Querétaro, Qro., a <span id="vFecha">_____ de agosto de 2026</span>.</p>
+        <h4>Carta poder</h4>
+        <p><strong>A quien corresponda<br>Asamblea General Ordinaria de Condóminos<br>Condominio Vertical Habitacional «LAHIA»</strong></p>
+        <p>Quien suscribe, <strong id="vOtorgante">__________________________</strong>, en mi carácter de condómino de la unidad privativa <strong id="vUnidad">______</strong> del Condominio Vertical Habitacional «LAHIA», ubicado en Sendero del Misterio 83, Milenio III, 76060, Santiago de Querétaro, Qro., por medio del presente instrumento otorgo poder tan amplio y bastante como en derecho proceda a favor de <strong id="vApoderado">__________________________</strong>, para que en mi nombre y representación asista a la <strong>Primera Asamblea General Ordinaria de Condóminos</strong>, a celebrarse el jueves 27 de agosto de 2026 en el área de amenidades del propio condominio.</p>
+        <p>El apoderado queda facultado para intervenir en las deliberaciones, <strong>emitir mi voto</strong> respecto de todos y cada uno de los puntos del orden del día contenidos en la convocatoria correspondiente, y firmar el acta y demás documentos que de dicha asamblea deriven, quedando desde ahora ratificado cuanto en mi nombre haga en el ejercicio de este mandato.</p>
+        <p>Se otorga la presente ante dos testigos, quienes firman al calce, acompañándose copia de las identificaciones oficiales del otorgante, del apoderado y de ambos testigos.</p>
+        <div class="firmas">
+          <div class="ancho">Firma del otorgante<br><strong id="vOtorgante2">__________________________</strong></div>
+          <div>Acepta el apoderado<br><strong id="vApoderado2">__________________________</strong></div>
+          <div>&nbsp;<br><strong>&nbsp;</strong></div>
+          <div>Testigo 1<br><strong id="vTestigo1">__________________________</strong></div>
+          <div>Testigo 2<br><strong id="vTestigo2">__________________________</strong></div>
+        </div>
+      </div>
+      <div class="acciones">
+        <button id="btnImprimir">🖨 Imprimir o guardar en PDF</button>
+        <button class="sec" id="btnLimpiar">Limpiar campos</button>
+      </div>
+      <p class="cita" style="margin-top:14px;">Formato de apoyo redactado para esta guía a partir de lo que pide la convocatoria (carta poder ante dos testigos, con identificaciones). No es un documento oficial del condominio; si tu caso tiene alguna particularidad —copropiedad, sucesión, persona moral— conviene consultarlo con la administración antes del día 27.</p>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">⏱</div>
+      <h2 class="serif">Las tres convocatorias, en claro<small>Por qué importa llegar temprano</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <table>
+        <thead><tr><th style="width:90px">Hora</th><th>Se instala si…</th><th style="width:120px" class="num">Condóminos</th></tr></thead>
+        <tbody>
+          <tr><td><strong>18:30</strong></td><td>Asiste al menos el 75% del total de condóminos</td><td class="num">30 de 40</td></tr>
+          <tr><td><strong>18:45</strong></td><td>Asiste más del 50% del total</td><td class="num">21 de 40</td></tr>
+          <tr><td><strong>19:00</strong></td><td>Con los condóminos que se encuentren presentes, sin mínimo</td><td class="num">los que haya</td></tr>
+        </tbody>
+      </table>
+      <p class="cita" style="margin-top:12px;">Entre más gente acredite su asistencia —en persona o por carta poder—, más representativo será lo que se acuerde sobre las cuotas y el régimen condominal.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>CONDOMINIO LAHIA</span>
+  <span><a href="../index.html">SITIO DEL CONDOMINIO</a> · CONVOCATORIA DEL 17 DE AGOSTO DE 2026</span>
+</footer>
+
+<script>
+/* Carta poder en vivo */
+const MAPA = [['cOtorgante','vOtorgante','__________________________'], ['cUnidad','vUnidad','______'],
+              ['cApoderado','vApoderado','__________________________'], ['cTestigo1','vTestigo1','__________________________'],
+              ['cTestigo2','vTestigo2','__________________________'], ['cFecha','vFecha','_____ de agosto de 2026']];
+function pintarCarta(){
+  MAPA.forEach(([campo, vista, vacio]) => {
+    const v = document.getElementById(campo).value.trim();
+    document.getElementById(vista).textContent = v || vacio;
+  });
+  document.getElementById('vOtorgante2').textContent = document.getElementById('cOtorgante').value.trim() || '__________________________';
+  document.getElementById('vApoderado2').textContent = document.getElementById('cApoderado').value.trim() || '__________________________';
+}
+MAPA.forEach(([campo]) => document.getElementById(campo).addEventListener('input', pintarCarta));
+document.getElementById('btnImprimir').addEventListener('click', () => window.print());
+document.getElementById('btnLimpiar').addEventListener('click', () => {
+  MAPA.forEach(([campo]) => document.getElementById(campo).value = '');
+  pintarCarta();
+});
+pintarCarta();
+
+/* Checklist con memoria en este navegador */
+const CLAVE = 'lahiaAsambleaChecklist';
+const cajas = document.querySelectorAll('#checklist input');
+try{
+  const guardado = JSON.parse(localStorage.getItem(CLAVE) || '[]');
+  cajas.forEach((c,i) => { c.checked = !!guardado[i]; c.closest('li').classList.toggle('marcado', c.checked); });
+}catch(e){}
+document.getElementById('checklist').addEventListener('change', e => {
+  e.target.closest('li').classList.toggle('marcado', e.target.checked);
+  try{ localStorage.setItem(CLAVE, JSON.stringify([...cajas].map(c => c.checked))); }catch(e){}
+});
+</script>
+</body>
+</html>

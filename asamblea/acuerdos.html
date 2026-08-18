@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Tablero de acuerdos · Asamblea Lahia 27 de agosto de 2026</title>
+<link rel="icon" href="../assets/logo.svg">
+<style>
+  :root{
+    --crema:#F7F3EA; --azul:#1F5670; --azul-osc:#123C53; --agua:#2E6F8E; --agua-suave:#E4EFF4;
+    --verde:#2E7C4F; --verde-suave:#E7EFE7; --oro:#C0902C; --oro-suave:#F7EFDA;
+    --rojo:#D0453B; --rojo-suave:#FBEAE8; --gris:#6E6A61; --borde:#E3DDCF; --blanco:#FFFFFF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--crema); color:#26303F; line-height:1.55;}
+  .serif{font-family:Georgia,'Times New Roman',serif;}
+
+  .barra-sup{position:sticky; top:0; z-index:50; background:var(--crema); border-bottom:3px solid var(--azul); padding:9px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .barra-sup .marca{font-weight:800; letter-spacing:3px; font-size:.85rem; color:var(--azul);}
+  .barra-sup .marca small{display:block; letter-spacing:1.5px; font-size:.6rem; color:var(--gris); font-weight:700;}
+  .barra-sup nav{margin-left:auto; display:flex; gap:4px; flex-wrap:wrap;}
+  .barra-sup nav a{text-decoration:none; color:var(--gris); font-size:.82rem; font-weight:600; padding:5px 11px; border-radius:999px;}
+  .barra-sup nav a:hover{background:var(--agua-suave); color:var(--azul);}
+  .barra-sup nav a.activo{background:var(--azul); color:#fff;}
+  .barra-sup nav a.fuera{color:var(--agua); border:1px solid var(--borde);}
+
+  main{max-width:1000px; margin:0 auto; padding:26px 18px;}
+  .kicker{font-size:.72rem; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--agua); margin-bottom:8px;}
+  h1.portada{font-size:2rem; line-height:1.15; color:var(--azul); font-weight:800; margin-bottom:10px;}
+  h1.portada em{font-style:normal; color:var(--verde);}
+  .bajada{font-size:1rem; color:#4A5261; max-width:760px; margin-bottom:24px;}
+
+  section.bloque{background:var(--blanco); border:1px solid var(--borde); border-radius:14px; margin-bottom:22px; overflow:hidden; box-shadow:0 1px 5px rgba(31,86,112,.07);}
+  .bloque-cab{display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:13px 18px; border-bottom:1px solid var(--borde); background:#FCFAF4;}
+  .bloque-cab .num{width:36px; height:36px; border-radius:50%; background:var(--azul); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; flex-shrink:0;}
+  .bloque-cab .num.tramite{background:var(--gris);}
+  .bloque-cab h2{font-size:1.06rem; flex:1; min-width:220px; color:var(--azul);}
+  .bloque-cab h2 small{display:block; font-weight:400; font-family:'Segoe UI',system-ui,sans-serif; font-size:.76rem; color:var(--gris);}
+  .bloque-cuerpo{padding:18px;}
+
+  .etiqueta{display:inline-block; font-size:.63rem; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; padding:3px 9px; border-radius:999px;}
+  .e-vota{background:var(--oro-suave); color:#8A6410;}
+  .e-tramite{background:#EFEBE1; color:var(--gris);}
+  .e-dinero{background:var(--rojo-suave); color:#9C2E26;}
+
+  .micro{font-size:.68rem; font-weight:800; letter-spacing:2.2px; text-transform:uppercase; margin-bottom:7px;}
+  .tarjetas{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;}
+  .tarjeta{border:1px solid var(--borde); border-radius:12px; padding:14px 16px; background:#FFFDF8;}
+  .tarjeta h4{color:var(--azul); font-size:1rem; margin-bottom:6px;}
+  .tarjeta p, .tarjeta li{font-size:.88rem; color:#3C4453;}
+  .tarjeta ul, .tarjeta ol{padding-left:19px; display:flex; flex-direction:column; gap:5px;}
+  .t-azul{border-top:4px solid var(--azul);} .t-azul .micro{color:var(--azul);}
+  .t-oro{border-top:4px solid var(--oro); background:var(--oro-suave);} .t-oro .micro{color:#8A6410;}
+  .t-verde{border-top:4px solid var(--verde); background:var(--verde-suave);} .t-verde .micro{color:var(--verde);}
+  .t-rojo{border-top:4px solid var(--rojo); background:var(--rojo-suave);} .t-rojo .micro{color:var(--rojo);}
+  .t-agua{border-top:4px solid var(--agua); background:var(--agua-suave);} .t-agua .micro{color:var(--agua);}
+
+  h3.sub{font-size:.76rem; text-transform:uppercase; letter-spacing:1.6px; color:var(--azul); margin:18px 0 9px; display:flex; align-items:center; gap:8px; font-weight:800;}
+  h3.sub:first-child{margin-top:0;}
+  h3.sub::after{content:""; flex:1; height:1px; background:var(--borde);}
+
+  p + p{margin-top:8px;}
+  .cuerpo p{font-size:.92rem; color:#3C4453;}
+  .cita{border-left:3px solid var(--borde); padding:6px 0 6px 12px; font-size:.84rem; color:var(--gris); font-style:italic; margin-bottom:12px;}
+  ul.lista{padding-left:19px; display:flex; flex-direction:column; gap:6px; font-size:.9rem; color:#3C4453;}
+  strong.pesos{color:var(--azul); font-variant-numeric:tabular-nums;}
+
+  textarea, input[type=text], input[type=number], select{width:100%; border:1px solid var(--borde); border-radius:8px; padding:8px 10px; font:inherit; font-size:.88rem; background:#FFFDF9; color:#26303F; resize:vertical;}
+  textarea:focus, input:focus, select:focus{outline:2px solid var(--oro); outline-offset:1px;}
+  textarea{min-height:56px;}
+
+  table{width:100%; border-collapse:collapse; font-size:.87rem;}
+  th{background:var(--azul); color:#fff; text-align:left; padding:8px 10px; font-size:.7rem; text-transform:uppercase; letter-spacing:.8px;}
+  td{border-bottom:1px solid var(--borde); padding:7px 8px; vertical-align:top; background:#fff;}
+  td input{border:none; background:transparent; padding:4px 6px;}
+  td.num, th.num{text-align:right; font-variant-numeric:tabular-nums;}
+  tr.total td{background:#FCFAF4; font-weight:800; color:var(--azul);}
+  .btn-x{border:none; background:transparent; color:var(--rojo); cursor:pointer; font-size:.95rem;}
+  .btn-add{margin-top:9px; border:1.5px dashed var(--borde); background:#fff; color:var(--azul); border-radius:9px; padding:7px 14px; font-weight:700; cursor:pointer; font-size:.84rem;}
+  .btn-add:hover{border-color:var(--azul);}
+
+  .aviso{border:1px solid var(--borde); border-left:4px solid var(--oro); background:var(--oro-suave); border-radius:10px; padding:12px 15px; font-size:.85rem; color:#5C4712; margin-bottom:20px;}
+  .aviso strong{color:#8A6410;}
+
+  footer{max-width:1000px; margin:0 auto; padding:8px 18px 26px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:.66rem; letter-spacing:2px; font-weight:700; color:var(--gris); border-top:2px solid var(--azul);}
+  footer a{color:var(--agua);}
+  @media(max-width:640px){ h1.portada{font-size:1.6rem;} main{padding:20px 14px;} }
+</style>
+<style>
+  body{padding-bottom:88px;}
+  .zoom{display:flex; gap:4px;}
+  .zoom button{border:1px solid var(--azul); background:#fff; color:var(--azul); border-radius:7px; padding:4px 9px; font-weight:800; cursor:pointer; font-size:.8rem;}
+  .zoom button:hover{background:var(--azul); color:#fff;}
+  .reloj-global{display:flex; align-items:baseline; gap:8px; background:var(--azul); color:#fff; border-radius:10px; padding:5px 12px; cursor:pointer;}
+  .reloj-global .tiempo{font-variant-numeric:tabular-nums; font-size:1.25rem; font-weight:800; color:#F2C94C;}
+  .reloj-global .etiqueta2{font-size:.6rem; text-transform:uppercase; letter-spacing:1.4px; color:#B9D2DF;}
+
+  .quorum{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; align-items:start;}
+  .quorum label{font-size:.78rem; font-weight:700; color:var(--azul); display:block; margin-bottom:5px;}
+  .marcador{border-radius:12px; padding:15px 17px; color:#fff; background:var(--gris);}
+  .marcador.ok{background:var(--verde);} .marcador.parcial{background:var(--oro);} .marcador.no{background:var(--rojo);}
+  .marcador .cifra{font-size:1.9rem; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.1;}
+  .marcador .pie{font-size:.8rem; opacity:.92; margin-top:4px;}
+  .escalera{margin-top:12px; font-size:.83rem;}
+  .escalera div{display:flex; gap:9px; align-items:center; padding:5px 0; border-bottom:1px dashed var(--borde);}
+  .escalera div:last-child{border-bottom:none;}
+  .escalera .marca-h{font-weight:800; color:var(--azul); width:60px; font-variant-numeric:tabular-nums;}
+  .escalera .estado{margin-left:auto; font-size:.72rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--gris);}
+  .escalera .estado.si{color:var(--verde);} .escalera .estado.no{color:var(--rojo);}
+
+  .punto-cab{display:flex; flex-wrap:wrap; align-items:center; gap:10px;}
+  select.estado{max-width:230px; font-weight:700;}
+  select.estado.aprobado{background:var(--verde-suave); color:#245C3C; border-color:var(--verde);}
+  select.estado.modificado{background:var(--oro-suave); color:#8A6410; border-color:var(--oro);}
+  select.estado.rechazado{background:var(--rojo-suave); color:#9C2E26; border-color:var(--rojo);}
+  select.estado.pospuesto{background:#EFEBE1; color:var(--gris);}
+  .votos{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-bottom:12px;}
+  .voto{border:1px solid var(--borde); border-radius:10px; padding:8px 10px; background:#FFFDF8;}
+  .voto label{display:block; font-size:.68rem; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:var(--gris); margin-bottom:4px;}
+  .voto input{text-align:center; font-size:1.15rem; font-weight:800; font-variant-numeric:tabular-nums; padding:5px;}
+  .voto.favor{border-top:3px solid var(--verde);} .voto.favor label{color:var(--verde);}
+  .voto.contra{border-top:3px solid var(--rojo);} .voto.contra label{color:var(--rojo);}
+  .voto.abst{border-top:3px solid var(--gris);}
+  .voto.suma{background:var(--agua-suave); border-top:3px solid var(--agua);}
+  .voto.suma .lectura{font-size:1.15rem; font-weight:800; color:var(--azul); text-align:center; font-variant-numeric:tabular-nums;}
+  .voto.suma .lectura small{display:block; font-size:.68rem; font-weight:600; color:var(--gris); letter-spacing:.4px;}
+  .voto.suma.excede{background:var(--rojo-suave); border-top-color:var(--rojo);}
+  .voto.suma.excede .lectura{color:var(--rojo);}
+  .ref{font-size:.82rem; color:var(--gris); margin-bottom:10px;}
+  .ref a{color:var(--agua);}
+
+  .atribuir{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:14px; background:#FCFAF4; border:1px solid var(--borde); border-radius:10px; padding:9px 12px;}
+  .atribuir select{max-width:150px;}
+  .atribuir button{border:none; border-radius:8px; background:var(--azul); color:#fff; padding:7px 13px; font-weight:700; cursor:pointer; font-size:.82rem;}
+  .atribuir span{font-size:.76rem; color:var(--gris);}
+
+  .estacionamiento{background:#fff; border:1px dashed var(--borde); border-radius:14px; padding:16px 18px; margin-bottom:22px;}
+  .estacionamiento h3{color:var(--azul); font-size:1rem; margin-bottom:5px;}
+  .estacionamiento p{font-size:.83rem; color:var(--gris); margin-bottom:9px;}
+
+  .pie-fijo{position:fixed; bottom:0; left:0; right:0; background:var(--azul); padding:10px 16px; display:flex; gap:10px; align-items:center; justify-content:center; z-index:60; flex-wrap:wrap;}
+  .pie-fijo button{border:none; border-radius:10px; padding:11px 18px; font-weight:800; cursor:pointer; font-size:.9rem;}
+  #btnResumen{background:#F2C94C; color:#123C53;}
+  #btnReiniciar{background:transparent; color:#B9D2DF; border:1px solid #4B7E97;}
+  #estadoGuardado{color:#9FD4B2; font-size:.78rem; font-weight:700;}
+  @media(max-width:640px){ body{padding-bottom:140px;} .pie-fijo{padding:8px 12px;} .pie-fijo button{padding:10px 14px; font-size:.85rem;} }
+
+  dialog{border:none; border-radius:14px; padding:0; max-width:660px; width:92%; box-shadow:0 18px 50px rgba(0,0,0,.3);}
+  dialog::backdrop{background:rgba(18,60,83,.55);}
+  .dlg-cab{background:var(--azul); color:#fff; padding:13px 18px; display:flex; align-items:center;}
+  .dlg-cab h3{flex:1; font-size:1rem;}
+  .dlg-cab button{background:transparent; border:none; color:#fff; font-size:1.3rem; cursor:pointer;}
+  .dlg-cuerpo{padding:15px 18px;}
+  #textoResumen{width:100%; min-height:320px; font-family:ui-monospace, Consolas, monospace; font-size:.8rem; white-space:pre-wrap;}
+  .dlg-pie{padding:0 18px 16px; display:flex; gap:10px;}
+  .dlg-pie button{flex:1; border:none; border-radius:9px; padding:11px; font-weight:800; cursor:pointer; font-size:.88rem;}
+  #btnCopiar{background:var(--verde); color:#fff;}
+  #btnCopiar.copiado{background:#F2C94C; color:#123C53;}
+  #btnMinuta{background:var(--verde-suave); color:#245C3C;}
+</style>
+</head>
+<body>
+
+<div class="barra-sup">
+  <span class="marca">L A H I A<small>TABLERO DE ACUERDOS</small></span>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="informacion.html">Los 12 puntos</a>
+    <a href="reglas.html">Cómo asistir y votar</a>
+    <a href="acuerdos.html" class="activo">Tablero</a>
+  </nav>
+  <span class="zoom"><button id="zMenos" title="Reducir letra">A−</button><button id="zMas" title="Agrandar letra">A+</button></span>
+  <div class="reloj-global" id="relojGlobal" title="Tocar para iniciar o pausar">
+    <span class="tiempo" id="tGlobal">00:00</span>
+    <span class="etiqueta2">sesión</span>
+  </div>
+</div>
+
+<main>
+  <div class="kicker">Jueves 27 de agosto de 2026 · Área de amenidades</div>
+  <h1 class="portada serif">Registro de acuerdos de la <em>Primera Asamblea General Ordinaria</em></h1>
+  <p class="bajada">Un espacio por cada punto del orden del día: qué se acordó y con cuántos votos. Todo se guarda solo en este navegador; al final se genera el resumen para compartir y la minuta en texto para el acta.</p>
+
+  <!-- ══════ INSTALACIÓN Y QUÓRUM ══════ -->
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">1</div>
+      <h2 class="serif">Lista de asistencia, quórum e instalación<small>Punto 1 del orden del día</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <div class="quorum">
+        <div>
+          <label for="nPresentes">Condóminos presentes</label>
+          <input type="number" id="nPresentes" min="0" max="40" value="0">
+          <label for="nRepresentados" style="margin-top:12px;">Representados con carta poder</label>
+          <input type="number" id="nRepresentados" min="0" max="40" value="0">
+          <label for="horaInstal" style="margin-top:12px;">Hora de instalación</label>
+          <input type="text" id="horaInstal" placeholder="p. ej. 19:00">
+        </div>
+        <div>
+          <div class="marcador" id="marcador">
+            <div class="cifra" id="cifraQuorum">0 / 40</div>
+            <div class="pie" id="pieQuorum">Sin asistentes registrados</div>
+          </div>
+          <div class="escalera" id="escalera"></div>
+        </div>
+        <div>
+          <label for="txtPresidente">Presidente de la asamblea</label>
+          <input type="text" id="txtPresidente">
+          <label for="txtSecretario" style="margin-top:12px;">Secretario</label>
+          <input type="text" id="txtSecretario">
+          <label for="txtEscrutadores" style="margin-top:12px;">Escrutadores</label>
+          <input type="text" id="txtEscrutadores">
+          <p class="ref" style="margin-top:10px;">Punto 2 del orden del día. Los escrutadores son quienes cuentan los votos de cada punto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="atribuir">
+    <span>Para atribuir una intervención: elige el departamento, toca el recuadro de acuerdo donde estás escribiendo y presiona</span>
+    <select id="selUnidad"></select>
+    <button id="btnInsertar">+ Insertar en el acuerdo activo</button>
+  </div>
+
+  <div id="puntos"></div>
+
+  <!-- ══════ COMPROMISOS ══════ -->
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">✔</div>
+      <h2 class="serif">Compromisos que salen de la asamblea<small>Qué, quién y para cuándo</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <table id="tablaPlan">
+        <thead><tr><th style="width:45%">Acción</th><th>Responsable</th><th>Fecha límite</th><th style="width:34px"></th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" placeholder="p. ej. Circular el estado de cuenta con la cuota nueva"></td><td><input type="text"></td><td><input type="text"></td><td><button class="btn-x">✕</button></td></tr>
+          <tr><td><input type="text" placeholder="p. ej. Protocolizar el acta ante notario"></td><td><input type="text"></td><td><input type="text"></td><td><button class="btn-x">✕</button></td></tr>
+          <tr><td><input type="text" placeholder="p. ej. Convocar a la elección de la Mesa Directiva"></td><td><input type="text"></td><td><input type="text"></td><td><button class="btn-x">✕</button></td></tr>
+        </tbody>
+      </table>
+      <button class="btn-add" id="addPlan">+ Agregar compromiso</button>
+    </div>
+  </section>
+
+  <div class="estacionamiento">
+    <h3>🅿️ Estacionamiento de temas</h3>
+    <p>Lo que surja fuera del orden del día se anota aquí y se retoma después: en la asamblea solo puede acordarse lo que fue convocado.</p>
+    <textarea id="txtEstacionamiento" placeholder="Un tema por línea…"></textarea>
+  </div>
+</main>
+
+<footer>
+  <span>CONDOMINIO LAHIA</span>
+  <span><a href="../index.html">SITIO DEL CONDOMINIO</a> · LO CAPTURADO VIVE SOLO EN ESTE NAVEGADOR</span>
+</footer>
+
+<div class="pie-fijo">
+  <button id="btnResumen">📋 Generar acta de acuerdos</button>
+  <button id="btnReiniciar" title="Borra todo lo capturado y el respaldo guardado">↺ Reiniciar</button>
+  <span id="estadoGuardado"></span>
+</div>
+
+<dialog id="dlgResumen">
+  <div class="dlg-cab"><h3>Acuerdos listos para WhatsApp / correo</h3><button id="dlgCerrar">✕</button></div>
+  <div class="dlg-cuerpo"><textarea id="textoResumen"></textarea></div>
+  <div class="dlg-pie"><button id="btnCopiar">Copiar al portapapeles</button><button id="btnMinuta">⬇ Descargar minuta (.txt)</button></div>
+</dialog>
+<script>
+/* ─────────── Los puntos del orden del día ─────────── */
+const PUNTOS = [
+  {n:2,  t:'Designación de Presidente, Secretario y Escrutadores', s:'Se registra arriba, en el bloque de instalación', ref:'p1', solo:true},
+  {n:3,  t:'Renovación o ratificación de la Mesa Directiva', s:'Facultades igualitarias y compartidas entre Comité de Vigilancia, Presidente y Secretario', ref:'p3',
+         ph:'Qué se aprobó de la convocatoria de elección, cómo quedaron repartidas las facultades, fechas…'},
+  {n:4,  t:'Aumento de la cuota de mantenimiento', s:'De $2,000 a $3,000, con descuento de $500 por pronto pago en los primeros 5 días', ref:'p4',
+         ph:'Cuota aprobada, condiciones del descuento, fecha de aplicación, trato a quien tiene adeudos…'},
+  {n:5,  t:'Cuota extraordinaria de $2,000', s:'Pipas de agua y dictamen estructural · fecha límite 5 de septiembre', ref:'p5',
+         ph:'Monto final, destino, qué pasa si el Municipio exenta el dictamen, parcialidades…'},
+  {n:6,  t:'Fondo de individualización de tomas ante la CEA', s:'$4,500 por unidad privativa · condiciones 6.1 a 6.6', ref:'p6',
+         ph:'Monto, forma de cobro, qué condiciones se aceptaron o se pidió negociar, responsable del seguimiento…'},
+  {n:7,  t:'Modificación a la política de aplicación de pagos', s:'Los abonos saldarían primero adeudos anteriores de multas o servicios', ref:'p7',
+         ph:'Orden de aplicación aprobado, si hay convenios de regularización, cómo se avisa a cada condómino…'},
+  {n:8,  t:'Reglamento y tarifas de renta de la Casa Club', s:'De $1,000 a $3,000 según el número de personas', ref:'p8',
+         ph:'Tarifas aprobadas, cómo quedaron los rangos traslapados, depósito en garantía, destino del ingreso…'},
+  {n:9,  t:'Restricciones de ruido en la Casa Club', s:'Sin equipos de sonido externos, música en vivo ni instrumentos', ref:'p9',
+         ph:'Qué quedó prohibido, quién autoriza excepciones y con qué criterio, horarios, sanciones…'},
+  {n:10, t:'Creación del Régimen Condominal', s:'El punto de mayor alcance jurídico de la asamblea', ref:'p10',
+         ph:'Qué se aprobó exactamente, si hubo proyecto de escritura a la vista, indivisos, costos y plazos…'},
+  {n:11, t:'Designación de delegados especiales', s:'Para la protocolización del acta ante notario', ref:'p11',
+         ph:'Quiénes quedaron designados y plazo comprometido para protocolizar…'},
+  {n:12, t:'Clausura de la asamblea y firma del acta', s:'Hora de cierre y quiénes firman', ref:'p11',
+         ph:'Hora de clausura, quiénes firmaron el acta…'}
+];
+const ESTADOS = ['', 'Aprobado', 'Aprobado con modificaciones', 'Rechazado', 'Pospuesto', 'Solo informativo', 'No se discutió'];
+
+document.getElementById('puntos').innerHTML = PUNTOS.map(p => `
+  <section class="bloque" id="b${p.n}" data-punto="${p.n}">
+    <div class="bloque-cab punto-cab">
+      <div class="num">${p.n}</div>
+      <h2 class="serif">${p.t}<small>${p.s}</small></h2>
+      <select class="estado" data-punto="${p.n}">${ESTADOS.map(e => '<option>' + e + '</option>').join('')}</select>
+    </div>
+    <div class="bloque-cuerpo">
+      <p class="ref">Detalle del punto y preguntas sugeridas en <a href="informacion.html#${p.ref}" target="_blank">Los 12 puntos ↗</a></p>
+      <div class="votos">
+        <div class="voto favor"><label>A favor</label><input type="number" min="0" class="v-favor" data-punto="${p.n}"></div>
+        <div class="voto contra"><label>En contra</label><input type="number" min="0" class="v-contra" data-punto="${p.n}"></div>
+        <div class="voto abst"><label>Abstenciones</label><input type="number" min="0" class="v-abst" data-punto="${p.n}"></div>
+        <div class="voto suma" data-punto="${p.n}"><label>Total votado</label><div class="lectura" data-punto="${p.n}">0<small>de 0 acreditados</small></div></div>
+      </div>
+      <textarea class="acuerdo" data-punto="${p.n}" placeholder="${p.ph || 'Qué se acordó en este punto…'}"></textarea>
+    </div>
+  </section>`).join('');
+
+/* ─────────── Quórum ─────────── */
+const TOTAL = 40;
+function acreditados(){
+  const p = parseInt(document.getElementById('nPresentes').value,10) || 0;
+  const r = parseInt(document.getElementById('nRepresentados').value,10) || 0;
+  return p + r;
+}
+function pintarQuorum(){
+  const a = acreditados();
+  const m = document.getElementById('marcador');
+  document.getElementById('cifraQuorum').textContent = a + ' / ' + TOTAL;
+  const pct = Math.round(a / TOTAL * 100);
+  m.className = 'marcador' + (a >= 30 ? ' ok' : a >= 21 ? ' parcial' : a > 0 ? ' no' : '');
+  document.getElementById('pieQuorum').textContent = a === 0 ? 'Sin asistentes registrados'
+    : pct + '% de los condóminos · ' + (a >= 30 ? 'alcanza para la primera convocatoria'
+       : a >= 21 ? 'alcanza para la segunda convocatoria (18:45)'
+       : 'solo alcanza para la tercera convocatoria (19:00), que se instala con los presentes');
+  document.getElementById('escalera').innerHTML = [
+    ['18:30', 'Primera · 75% = 30 condóminos', a >= 30],
+    ['18:45', 'Segunda · más del 50% = 21 condóminos', a >= 21],
+    ['19:00', 'Tercera · con los presentes', true]
+  ].map(([h,txt,ok]) => '<div><span class="marca-h">' + h + '</span><span>' + txt +
+     '</span><span class="estado ' + (ok?'si':'no') + '">' + (ok?'✓ alcanza':'no alcanza') + '</span></div>').join('');
+  document.querySelectorAll('.voto.suma').forEach(v => pintarVotos(v.dataset.punto));
+}
+function pintarVotos(n){
+  const g = c => parseInt(document.querySelector('.' + c + '[data-punto="' + n + '"]').value,10) || 0;
+  const tot = g('v-favor') + g('v-contra') + g('v-abst');
+  const a = acreditados();
+  const caja = document.querySelector('.voto.suma[data-punto="' + n + '"]');
+  caja.querySelector('.lectura').innerHTML = tot + '<small>de ' + a + ' acreditados' + (tot > a ? ' · revisar' : '') + '</small>';
+  caja.classList.toggle('excede', tot > a && a > 0);
+}
+['nPresentes','nRepresentados'].forEach(id => document.getElementById(id).addEventListener('input', pintarQuorum));
+document.addEventListener('input', e => {
+  if(e.target.matches('.v-favor, .v-contra, .v-abst')) pintarVotos(e.target.dataset.punto);
+});
+pintarQuorum();
+
+/* ─────────── Color del estado ─────────── */
+document.addEventListener('change', e => {
+  if(!e.target.classList.contains('estado')) return;
+  const v = e.target.value;
+  e.target.className = 'estado' + (v === 'Aprobado' ? ' aprobado'
+    : v === 'Aprobado con modificaciones' ? ' modificado'
+    : v === 'Rechazado' ? ' rechazado'
+    : (v === 'Pospuesto' || v === 'No se discutió') ? ' pospuesto' : '');
+});
+
+/* ─────────── Atribuir intervenciones por departamento ─────────── */
+const UNIDADES = [];
+for(let i=1; i<=34; i++) UNIDADES.push('A-' + String(i).padStart(2,'0'));
+for(let i=35; i<=40; i++) UNIDADES.push('PH-' + i);
+document.getElementById('selUnidad').innerHTML = UNIDADES.map(u => '<option>' + u + '</option>').join('');
+let campoActivo = null;
+document.addEventListener('focusin', e => { if(e.target.classList.contains('acuerdo') || e.target.id === 'txtEstacionamiento') campoActivo = e.target; });
+document.getElementById('btnInsertar').addEventListener('click', () => {
+  if(!campoActivo || !campoActivo.isConnected){ alert('Primero toca el recuadro de acuerdo donde vas a escribir.'); return; }
+  const u = document.getElementById('selUnidad').value;
+  const v = campoActivo.value;
+  campoActivo.value = (v && !v.endsWith('\n') ? v + '\n' : v) + '• ' + u + ': ';
+  campoActivo.focus();
+  campoActivo.setSelectionRange(campoActivo.value.length, campoActivo.value.length);
+  campoActivo.dispatchEvent(new Event('input', {bubbles:true}));
+});
+
+/* ─────────── Reloj de sesión ─────────── */
+let seg = 0, corriendo = false;
+document.getElementById('relojGlobal').addEventListener('click', () => { corriendo = !corriendo; });
+setInterval(() => {
+  if(!corriendo) return;
+  seg++;
+  document.getElementById('tGlobal').textContent =
+    String(Math.floor(seg/60)).padStart(2,'0') + ':' + String(seg%60).padStart(2,'0');
+}, 1000);
+
+/* ─────────── Filas de compromisos ─────────── */
+document.getElementById('addPlan').addEventListener('click', () => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><button class="btn-x">✕</button></td>';
+  document.querySelector('#tablaPlan tbody').appendChild(tr);
+});
+document.addEventListener('click', e => { if(e.target.classList.contains('btn-x')) e.target.closest('tr').remove(); });
+
+/* ─────────── Modo proyector ─────────── */
+const ZOOMS = [87.5, 100, 112.5, 125, 137.5];
+let zoomIdx = 1;
+const aplicarZoom = () => document.documentElement.style.fontSize = ZOOMS[zoomIdx] + '%';
+document.getElementById('zMas').addEventListener('click', () => { if(zoomIdx < ZOOMS.length-1){ zoomIdx++; aplicarZoom(); } });
+document.getElementById('zMenos').addEventListener('click', () => { if(zoomIdx > 0){ zoomIdx--; aplicarZoom(); } });
+
+/* ─────────── Acta exportable ─────────── */
+function generarResumen(){
+  const L = [];
+  const val = id => document.getElementById(id).value.trim();
+  L.push('*ACUERDOS · PRIMERA ASAMBLEA GENERAL ORDINARIA*');
+  L.push('_Condominio Lahia · jueves 27 de agosto de 2026 · área de amenidades_');
+  const a = acreditados();
+  const conv = a >= 30 ? 'primera convocatoria (18:30)' : a >= 21 ? 'segunda convocatoria (18:45)' : 'tercera convocatoria (19:00)';
+  L.push('');
+  L.push('*Instalación*');
+  L.push('• Acreditados: ' + a + ' de 40 (' + (parseInt(document.getElementById('nPresentes').value,10)||0) + ' presentes y ' +
+         (parseInt(document.getElementById('nRepresentados').value,10)||0) + ' representados) — ' + conv);
+  if(val('horaInstal')) L.push('• Hora de instalación: ' + val('horaInstal'));
+  if(val('txtPresidente')) L.push('• Presidente: ' + val('txtPresidente'));
+  if(val('txtSecretario')) L.push('• Secretario: ' + val('txtSecretario'));
+  if(val('txtEscrutadores')) L.push('• Escrutadores: ' + val('txtEscrutadores'));
+  PUNTOS.forEach(p => {
+    const est = document.querySelector('.estado[data-punto="' + p.n + '"]').value;
+    const g = c => parseInt(document.querySelector('.' + c + '[data-punto="' + p.n + '"]').value,10) || 0;
+    const f = g('v-favor'), c = g('v-contra'), ab = g('v-abst');
+    const texto = document.querySelector('.acuerdo[data-punto="' + p.n + '"]').value.trim();
+    if(!est && !f && !c && !ab && !texto) return;
+    L.push('');
+    L.push('*Punto ' + p.n + ' — ' + p.t + '*');
+    if(est) L.push('Resultado: ' + est.toUpperCase());
+    if(f || c || ab) L.push('Votos: ' + f + ' a favor · ' + c + ' en contra · ' + ab + ' abstenciones (de ' + a + ' acreditados)');
+    if(texto) L.push(texto);
+  });
+  const plan = [];
+  document.querySelectorAll('#tablaPlan tbody tr').forEach(tr => {
+    const c = tr.querySelectorAll('td input');
+    const accion = c[0].value.trim(), resp = c[1].value.trim(), fecha = c[2].value.trim();
+    if(!accion) return;
+    let l = '☐ ' + accion;
+    if(resp) l += ' — ' + resp;
+    if(fecha) l += ' — para ' + fecha;
+    plan.push(l);
+  });
+  if(plan.length){ L.push(''); L.push('*Compromisos*'); L.push(...plan); }
+  const est = document.getElementById('txtEstacionamiento').value.trim();
+  if(est){
+    L.push(''); L.push('*Temas estacionados (fuera del orden del día)*');
+    est.split('\n').filter(x => x.trim()).forEach(x => L.push('• ' + x.trim()));
+  }
+  L.push('');
+  L.push('_Registro de trabajo. El documento con validez es el acta protocolizada._');
+  return L.join('\n');
+}
+const dlg = document.getElementById('dlgResumen');
+document.getElementById('btnResumen').addEventListener('click', () => {
+  document.getElementById('textoResumen').value = generarResumen();
+  dlg.showModal();
+});
+document.getElementById('dlgCerrar').addEventListener('click', () => dlg.close());
+document.getElementById('btnCopiar').addEventListener('click', async () => {
+  const btn = document.getElementById('btnCopiar');
+  try{ await navigator.clipboard.writeText(document.getElementById('textoResumen').value); }
+  catch(e){ document.getElementById('textoResumen').select(); document.execCommand('copy'); }
+  btn.textContent = '✔ Copiado'; btn.classList.add('copiado');
+  setTimeout(() => { btn.textContent = 'Copiar al portapapeles'; btn.classList.remove('copiado'); }, 2000);
+});
+document.getElementById('btnMinuta').addEventListener('click', () => {
+  const txt = document.getElementById('textoResumen').value;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain;charset=utf-8'}));
+  a.download = 'acuerdos-asamblea-lahia-2026-08-27.txt';
+  a.click(); URL.revokeObjectURL(a.href);
+});
+
+/* ─────────── Respaldo automático en este navegador ─────────── */
+const CLAVE = 'lahiaAsamblea20260827';
+let storageOk = false;
+try{ localStorage.setItem(CLAVE+'_t','1'); localStorage.removeItem(CLAVE+'_t'); storageOk = true; }catch(e){}
+const campos = () => document.querySelectorAll('main textarea, main input[type=text], main input[type=number], main select');
+function serializar(){
+  return JSON.stringify({
+    filasPlan: document.querySelectorAll('#tablaPlan tbody tr').length,
+    valores: [...campos()].map(x => x.value)
+  });
+}
+let tGuardar = null;
+function programarGuardado(){
+  if(!storageOk) return;
+  clearTimeout(tGuardar);
+  tGuardar = setTimeout(() => {
+    try{
+      localStorage.setItem(CLAVE, serializar());
+      const eg = document.getElementById('estadoGuardado');
+      eg.textContent = '✓ guardado';
+      setTimeout(() => { eg.textContent = ''; }, 1500);
+    }catch(e){}
+  }, 600);
+}
+document.querySelector('main').addEventListener('input', programarGuardado);
+document.querySelector('main').addEventListener('change', programarGuardado);
+(function restaurar(){
+  if(!storageOk) return;
+  let datos = null;
+  try{ datos = JSON.parse(localStorage.getItem(CLAVE)); }catch(e){}
+  if(!datos || !Array.isArray(datos.valores)) return;
+  const n = document.querySelectorAll('#tablaPlan tbody tr').length;
+  for(let i=n; i<(datos.filasPlan||n); i++) document.getElementById('addPlan').click();
+  const c = campos();
+  c.forEach((el,i) => { if(datos.valores[i] !== undefined) el.value = datos.valores[i]; });
+  document.querySelectorAll('.estado').forEach(s => s.dispatchEvent(new Event('change',{bubbles:true})));
+  pintarQuorum();
+})();
+document.getElementById('btnReiniciar').addEventListener('click', () => {
+  if(!confirm('¿Borrar todo lo capturado y el respaldo guardado?')) return;
+  try{ localStorage.removeItem(CLAVE); }catch(e){}
+  location.reload();
+});
+window.addEventListener('beforeunload', e => {
+  if(storageOk) return;
+  const hay = [...document.querySelectorAll('textarea, input')].some(x => x.value.trim());
+  if(hay){ e.preventDefault(); e.returnValue = ''; }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Primera Asamblea General Ordinaria · Condominio Lahia</title>
+<link rel="icon" href="../assets/logo.svg">
+<style>
+  :root{
+    --crema:#F7F3EA; --azul:#1F5670; --azul-osc:#123C53; --agua:#2E6F8E; --agua-suave:#E4EFF4;
+    --verde:#2E7C4F; --verde-suave:#E7EFE7; --oro:#C0902C; --oro-suave:#F7EFDA;
+    --rojo:#D0453B; --rojo-suave:#FBEAE8; --gris:#6E6A61; --borde:#E3DDCF; --blanco:#FFFFFF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--crema); color:#26303F; line-height:1.55;}
+  .serif{font-family:Georgia,'Times New Roman',serif;}
+
+  .barra-sup{position:sticky; top:0; z-index:50; background:var(--crema); border-bottom:3px solid var(--azul); padding:9px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .barra-sup .marca{font-weight:800; letter-spacing:3px; font-size:.85rem; color:var(--azul);}
+  .barra-sup .marca small{display:block; letter-spacing:1.5px; font-size:.6rem; color:var(--gris); font-weight:700;}
+  .barra-sup nav{margin-left:auto; display:flex; gap:4px; flex-wrap:wrap;}
+  .barra-sup nav a{text-decoration:none; color:var(--gris); font-size:.82rem; font-weight:600; padding:5px 11px; border-radius:999px;}
+  .barra-sup nav a:hover{background:var(--agua-suave); color:var(--azul);}
+  .barra-sup nav a.activo{background:var(--azul); color:#fff;}
+  .barra-sup nav a.fuera{color:var(--agua); border:1px solid var(--borde);}
+
+  main{max-width:1000px; margin:0 auto; padding:26px 18px;}
+  .kicker{font-size:.72rem; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--agua); margin-bottom:8px;}
+  h1.portada{font-size:2rem; line-height:1.15; color:var(--azul); font-weight:800; margin-bottom:10px;}
+  h1.portada em{font-style:normal; color:var(--verde);}
+  .bajada{font-size:1rem; color:#4A5261; max-width:760px; margin-bottom:24px;}
+
+  section.bloque{background:var(--blanco); border:1px solid var(--borde); border-radius:14px; margin-bottom:22px; overflow:hidden; box-shadow:0 1px 5px rgba(31,86,112,.07);}
+  .bloque-cab{display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:13px 18px; border-bottom:1px solid var(--borde); background:#FCFAF4;}
+  .bloque-cab .num{width:36px; height:36px; border-radius:50%; background:var(--azul); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; flex-shrink:0;}
+  .bloque-cab .num.tramite{background:var(--gris);}
+  .bloque-cab h2{font-size:1.06rem; flex:1; min-width:220px; color:var(--azul);}
+  .bloque-cab h2 small{display:block; font-weight:400; font-family:'Segoe UI',system-ui,sans-serif; font-size:.76rem; color:var(--gris);}
+  .bloque-cuerpo{padding:18px;}
+
+  .etiqueta{display:inline-block; font-size:.63rem; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; padding:3px 9px; border-radius:999px;}
+  .e-vota{background:var(--oro-suave); color:#8A6410;}
+  .e-tramite{background:#EFEBE1; color:var(--gris);}
+  .e-dinero{background:var(--rojo-suave); color:#9C2E26;}
+
+  .micro{font-size:.68rem; font-weight:800; letter-spacing:2.2px; text-transform:uppercase; margin-bottom:7px;}
+  .tarjetas{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;}
+  .tarjeta{border:1px solid var(--borde); border-radius:12px; padding:14px 16px; background:#FFFDF8;}
+  .tarjeta h4{color:var(--azul); font-size:1rem; margin-bottom:6px;}
+  .tarjeta p, .tarjeta li{font-size:.88rem; color:#3C4453;}
+  .tarjeta ul, .tarjeta ol{padding-left:19px; display:flex; flex-direction:column; gap:5px;}
+  .t-azul{border-top:4px solid var(--azul);} .t-azul .micro{color:var(--azul);}
+  .t-oro{border-top:4px solid var(--oro); background:var(--oro-suave);} .t-oro .micro{color:#8A6410;}
+  .t-verde{border-top:4px solid var(--verde); background:var(--verde-suave);} .t-verde .micro{color:var(--verde);}
+  .t-rojo{border-top:4px solid var(--rojo); background:var(--rojo-suave);} .t-rojo .micro{color:var(--rojo);}
+  .t-agua{border-top:4px solid var(--agua); background:var(--agua-suave);} .t-agua .micro{color:var(--agua);}
+
+  h3.sub{font-size:.76rem; text-transform:uppercase; letter-spacing:1.6px; color:var(--azul); margin:18px 0 9px; display:flex; align-items:center; gap:8px; font-weight:800;}
+  h3.sub:first-child{margin-top:0;}
+  h3.sub::after{content:""; flex:1; height:1px; background:var(--borde);}
+
+  p + p{margin-top:8px;}
+  .cuerpo p{font-size:.92rem; color:#3C4453;}
+  .cita{border-left:3px solid var(--borde); padding:6px 0 6px 12px; font-size:.84rem; color:var(--gris); font-style:italic; margin-bottom:12px;}
+  ul.lista{padding-left:19px; display:flex; flex-direction:column; gap:6px; font-size:.9rem; color:#3C4453;}
+  strong.pesos{color:var(--azul); font-variant-numeric:tabular-nums;}
+
+  textarea, input[type=text], input[type=number], select{width:100%; border:1px solid var(--borde); border-radius:8px; padding:8px 10px; font:inherit; font-size:.88rem; background:#FFFDF9; color:#26303F; resize:vertical;}
+  textarea:focus, input:focus, select:focus{outline:2px solid var(--oro); outline-offset:1px;}
+  textarea{min-height:56px;}
+
+  table{width:100%; border-collapse:collapse; font-size:.87rem;}
+  th{background:var(--azul); color:#fff; text-align:left; padding:8px 10px; font-size:.7rem; text-transform:uppercase; letter-spacing:.8px;}
+  td{border-bottom:1px solid var(--borde); padding:7px 8px; vertical-align:top; background:#fff;}
+  td input{border:none; background:transparent; padding:4px 6px;}
+  td.num, th.num{text-align:right; font-variant-numeric:tabular-nums;}
+  tr.total td{background:#FCFAF4; font-weight:800; color:var(--azul);}
+  .btn-x{border:none; background:transparent; color:var(--rojo); cursor:pointer; font-size:.95rem;}
+  .btn-add{margin-top:9px; border:1.5px dashed var(--borde); background:#fff; color:var(--azul); border-radius:9px; padding:7px 14px; font-weight:700; cursor:pointer; font-size:.84rem;}
+  .btn-add:hover{border-color:var(--azul);}
+
+  .aviso{border:1px solid var(--borde); border-left:4px solid var(--oro); background:var(--oro-suave); border-radius:10px; padding:12px 15px; font-size:.85rem; color:#5C4712; margin-bottom:20px;}
+  .aviso strong{color:#8A6410;}
+
+  footer{max-width:1000px; margin:0 auto; padding:8px 18px 26px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:.66rem; letter-spacing:2px; font-weight:700; color:var(--gris); border-top:2px solid var(--azul);}
+  footer a{color:var(--agua);}
+  @media(max-width:640px){ h1.portada{font-size:1.6rem;} main{padding:20px 14px;} }
+</style>
+</head>
+<body>
+
+<div class="barra-sup">
+  <span class="marca">L A H I A<small>ASAMBLEA · 27 AGOSTO 2026</small></span>
+  <nav>
+    <a href="index.html" class="activo">Inicio</a>
+    <a href="informacion.html">Los 12 puntos</a>
+    <a href="reglas.html">Cómo asistir y votar</a>
+    <a href="acuerdos.html">Tablero de acuerdos</a>
+    <a href="../index.html" class="fuera">Sitio del condominio ↗</a>
+  </nav>
+</div>
+
+<main>
+  <div class="kicker">Convocatoria · Código Urbano del Estado de Querétaro</div>
+  <h1 class="portada serif">Primera Asamblea General Ordinaria de <em>Condóminos</em></h1>
+  <p class="bajada">Jueves <strong>27 de agosto de 2026</strong>, en el área de amenidades de Sendero del Misterio 83, Milenio III. Doce puntos en el orden del día: siete de ellos cambian lo que cada departamento paga o lo que se puede hacer en las áreas comunes. Esta página los explica antes de la asamblea y sirve para registrar lo que se acuerde en ella.</p>
+
+  <div class="aviso">
+    <strong>Este sitio no sustituye la convocatoria.</strong> Es un apoyo informativo para los 40 condóminos de Lahia, redactado a partir del documento oficial firmado por el Condominio LAHIA con fecha del 17 de agosto de 2026. Si algo aquí no coincide con la convocatoria, manda la convocatoria.
+  </div>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">📅</div>
+      <h2 class="serif">Cuándo, dónde y con cuántos<small>Lugar, fecha y las tres convocatorias</small></h2>
+      <span id="cuenta" class="etiqueta e-vota">—</span>
+    </div>
+    <div class="bloque-cuerpo">
+      <div class="tarjetas">
+        <div class="tarjeta t-azul">
+          <div class="micro">Lugar</div>
+          <h4 class="serif">Área de amenidades del condominio</h4>
+          <p>Sendero del Misterio 83, Milenio III, 76060, Santiago de Querétaro, Qro.</p>
+        </div>
+        <div class="tarjeta t-azul">
+          <div class="micro">Fecha</div>
+          <h4 class="serif">Jueves 27 de agosto de 2026</h4>
+          <p>La hora de inicio depende de cuántos condóminos estén presentes: hay tres convocatorias escalonadas.</p>
+        </div>
+        <div class="tarjeta t-verde">
+          <div class="micro">Qué se necesita para instalar la asamblea</div>
+          <ul>
+            <li><strong>18:30 h</strong> — primera convocatoria: asistencia mínima del 75% (<strong>30 de 40</strong> condóminos).</li>
+            <li><strong>18:45 h</strong> — segunda convocatoria: más del 50% (<strong>21 de 40</strong>).</li>
+            <li><strong>19:00 h</strong> — tercera convocatoria: <strong>con los que estén presentes</strong>, sin mínimo.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="cita" style="margin-top:14px;">En la práctica, esto significa que a las 19:00 la asamblea se instala aunque asistan pocos, y lo que se vote ahí obliga a los 40 departamentos. Quien no pueda ir puede acreditar a alguien con carta poder — ver <a href="reglas.html">Cómo asistir y votar</a>.</p>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">📖</div>
+      <h2 class="serif">Las tres páginas de esta guía<small>Antes, durante y después de la asamblea</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <div class="tarjetas">
+        <a class="tarjeta t-agua" href="informacion.html" style="text-decoration:none; display:block;">
+          <div class="micro">Antes · para leer con calma</div>
+          <h4 class="serif">Los 12 puntos, explicados</h4>
+          <p>Qué dice cada punto del orden del día, qué implicaría si se aprueba, cuánto costaría y qué conviene preguntar en la asamblea. Incluye una calculadora de lo que pagaría un departamento.</p>
+        </a>
+        <a class="tarjeta t-oro" href="reglas.html" style="text-decoration:none; display:block;">
+          <div class="micro">Antes · trámite</div>
+          <h4 class="serif">Cómo asistir, acreditarse y votar</h4>
+          <p>Qué documentos hay que llevar, cómo se acredita a un representante con carta poder ante dos testigos, y un formato de carta poder listo para llenar e imprimir.</p>
+        </a>
+        <a class="tarjeta t-verde" href="acuerdos.html" style="text-decoration:none; display:block;">
+          <div class="micro">Durante · tablero en vivo</div>
+          <h4 class="serif">Registro de acuerdos</h4>
+          <p>Punto por punto: qué se acordó, con cuántos votos a favor, en contra y abstenciones. Al final genera el resumen para WhatsApp y descarga la minuta para el acta.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">🗳️</div>
+      <h2 class="serif">El orden del día de un vistazo<small>Doce puntos · toca cualquiera para leer el detalle</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <table>
+        <thead><tr><th style="width:34px">#</th><th>Punto</th><th style="width:150px">Qué es</th></tr></thead>
+        <tbody id="tablaPuntos"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div class="num">💵</div>
+      <h2 class="serif">Lo que está en juego en pesos<small>Si se aprobara todo lo propuesto, tal como viene redactado</small></h2>
+    </div>
+    <div class="bloque-cuerpo">
+      <table>
+        <thead><tr><th>Concepto</th><th class="num">Por departamento</th><th class="num">Los 40 departamentos</th><th>Cuándo</th></tr></thead>
+        <tbody>
+          <tr><td>Cuota ordinaria mensual (hoy $2,000)</td><td class="num">$3,000<br><small style="color:#6E6A61">$2,500 con pronto pago</small></td><td class="num">$120,000 / mes</td><td>Desde el 5 de septiembre</td></tr>
+          <tr><td>Cuota extraordinaria (pipas de agua y dictamen estructural)</td><td class="num">$2,000</td><td class="num">$80,000</td><td>Límite: 5 de septiembre</td></tr>
+          <tr><td>Fondo de individualización de tomas ante la CEA</td><td class="num">$4,500</td><td class="num">$180,000</td><td>Ejecución tentativa: noviembre a enero</td></tr>
+          <tr class="total"><td>Septiembre, en el peor caso (sin pronto pago)</td><td class="num">$5,000</td><td class="num">$200,000</td><td>Más los $4,500 del fondo cuando se cobre</td></tr>
+        </tbody>
+      </table>
+      <p class="cita" style="margin-top:12px;">Las cifras salen textualmente de la convocatoria. La suma de la última fila es aritmética propia, para ver el mes de septiembre completo. La renta de la casa club (punto 8) no aparece aquí porque solo la paga quien la reserva.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>CONDOMINIO LAHIA</span>
+  <span><a href="../index.html">SITIO DEL CONDOMINIO</a> · 40 DEPARTAMENTOS · MILENIO III, QUERÉTARO</span>
+</footer>
+
+<script>
+const PUNTOS = [
+  [1,'Lista de asistencia, verificación de quórum e instalación de la asamblea','tramite'],
+  [2,'Designación de Presidente, Secretario y Escrutadores','tramite'],
+  [3,'Convocatoria para renovar o ratificar la Mesa Directiva, con facultades igualitarias y compartidas','vota'],
+  [4,'Aumento de la cuota de mantenimiento de $2,000 a $3,000, con descuento de $500 por pronto pago','dinero'],
+  [5,'Cuota extraordinaria de $2,000 para pipas de agua y dictamen estructural','dinero'],
+  [6,'Fondo de $4,500 por unidad para la individualización de tomas de agua ante la CEA','dinero'],
+  [7,'Cambio en la aplicación de pagos: los abonos saldarían primero adeudos anteriores','vota'],
+  [8,'Nuevo reglamento y tarifas de renta de la Casa Club','dinero'],
+  [9,'Restricciones de ruido en la Casa Club','vota'],
+  [10,'Creación del Régimen Condominal','vota'],
+  [11,'Designación de delegados especiales para protocolizar el acta','tramite'],
+  [12,'Clausura de la asamblea y firma del acta','tramite']
+];
+const ETIQ = {tramite:['e-tramite','Trámite'], vota:['e-vota','Se vota'], dinero:['e-dinero','Se vota · dinero']};
+document.getElementById('tablaPuntos').innerHTML = PUNTOS.map(([n,t,c]) => {
+  const [cls,txt] = ETIQ[c];
+  return '<tr><td><strong>'+n+'</strong></td><td><a href="informacion.html#p'+n+'" style="color:#1F5670; font-weight:600; text-decoration:none;">'+t+'</a></td><td><span class="etiqueta '+cls+'">'+txt+'</span></td></tr>';
+}).join('');
+
+/* Cuenta regresiva a la primera convocatoria */
+const ASAMBLEA = new Date(2026, 7, 27, 18, 30, 0);
+function pintarCuenta(){
+  const el = document.getElementById('cuenta');
+  const dif = ASAMBLEA - new Date();
+  if(dif <= 0){ el.textContent = 'La asamblea ya inició o ya ocurrió'; el.className = 'etiqueta e-tramite'; return; }
+  const dias = Math.floor(dif/86400000), horas = Math.floor(dif%86400000/3600000);
+  el.textContent = dias > 0 ? ('Faltan ' + dias + (dias===1?' día':' días') + ' y ' + horas + ' h') : ('Faltan ' + horas + ' h');
+}
+pintarCuenta(); setInterval(pintarCuenta, 60000);
+</script>
+</body>
+</html>
