@@ -216,3 +216,31 @@ table.data tr.total td { font-weight: 700; color: var(--ink); border-bottom: non
 .site-footer { border-top: 1px solid var(--border); margin-top: 3rem; }
 .site-footer .inner { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; font-size: 0.85rem; color: var(--muted); }
 .site-footer a { color: var(--muted); }
+
+/* ---------- Áreas comunes / reglamento ---------- */
+.rule-block ul { padding-left: 1.2rem; color: var(--ink-2); }
+.rule-block ul li { margin-bottom: 0.4rem; }
+.rule-block ul li::marker { color: var(--accent); }
+.rule-block .lead-note { color: var(--ink-2); font-size: 0.95rem; margin-top: 0; }
+
+.area-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.badge {
+  display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em;
+  text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent-strong);
+}
+@media (prefers-color-scheme: dark) { .badge { color: var(--accent-strong); } }
+.badge.warn { background: color-mix(in srgb, var(--series-2) 16%, transparent); color: var(--series-2); }
+
+.hours { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 0.4rem 0 1rem; }
+.hours th, .hours td { text-align: left; padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--grid); color: var(--ink-2); }
+.hours th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+.hours td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.quick { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; margin: 1rem 0 0; }
+.quick .q { background: var(--page); border: 1px solid var(--border); border-radius: 10px; padding: 0.7rem 0.9rem; }
+.quick .q .k { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+.quick .q .v { font-weight: 700; font-size: 1rem; margin-top: 0.1rem; }
+.quick .q .d { font-size: 0.82rem; color: var(--ink-2); }
+
+.ref { font-size: 0.8rem; color: var(--muted); font-style: italic; }
