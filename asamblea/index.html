@@ -95,6 +95,7 @@
   <nav>
     <a href="index.html" class="activo">Inicio</a>
     <a href="informacion.html">Los 12 puntos</a>
+    <a href="individualizacion.html">Individualización</a>
     <a href="reglas.html">Cómo asistir y votar</a>
     <a href="acuerdos.html">Tablero de acuerdos</a>
     <a href="../index.html" class="fuera">Sitio del condominio ↗</a>
@@ -144,7 +145,7 @@
   <section class="bloque">
     <div class="bloque-cab">
       <div class="num">📖</div>
-      <h2 class="serif">Las tres páginas de esta guía<small>Antes, durante y después de la asamblea</small></h2>
+      <h2 class="serif">Las cuatro páginas de esta guía<small>Antes, durante y después de la asamblea</small></h2>
     </div>
     <div class="bloque-cuerpo">
       <div class="tarjetas">
@@ -152,6 +153,11 @@
           <div class="micro">Antes · para leer con calma</div>
           <h4 class="serif">Los 12 puntos, explicados</h4>
           <p>Qué dice cada punto del orden del día, qué implicaría si se aprueba, cuánto costaría y qué conviene preguntar en la asamblea. Incluye una calculadora de lo que pagaría un departamento.</p>
+        </a>
+        <a class="tarjeta t-rojo" href="individualizacion.html" style="text-decoration:none; display:block;">
+          <div class="micro">Antes · el punto más caro</div>
+          <h4 class="serif">Individualización de tomas ante la CEA</h4>
+          <p>Cómo se componen los $4,500 del punto 6, por qué el precio depende de que entren los 40 departamentos, qué hay que confirmar antes de votar y la cotización completa en PDF.</p>
         </a>
         <a class="tarjeta t-oro" href="reglas.html" style="text-decoration:none; display:block;">
           <div class="micro">Antes · trámite</div>
@@ -191,7 +197,7 @@
         <tbody>
           <tr><td>Cuota ordinaria mensual (hoy $2,000)</td><td class="num">$3,000<br><small style="color:#6E6A61">$2,500 con pronto pago</small></td><td class="num">$120,000 / mes</td><td>Desde el 5 de septiembre</td></tr>
           <tr><td>Cuota extraordinaria (pipas de agua y dictamen estructural)</td><td class="num">$2,000</td><td class="num">$80,000</td><td>Límite: 5 de septiembre</td></tr>
-          <tr><td>Fondo de individualización de tomas ante la CEA</td><td class="num">$4,500</td><td class="num">$180,000</td><td>Ejecución tentativa: noviembre a enero</td></tr>
+          <tr><td><a href="individualizacion.html" style="color:#1F5670; font-weight:600; text-decoration:none;">Fondo de individualización de tomas ante la CEA</a><br><small style="color:#6E6A61">$1,000 de gestión + $3,500 de contrato y medidor</small></td><td class="num">$4,500</td><td class="num">$180,000</td><td>Ejecución tentativa: noviembre a enero</td></tr>
           <tr class="total"><td>Septiembre, en el peor caso (sin pronto pago)</td><td class="num">$5,000</td><td class="num">$200,000</td><td>Más los $4,500 del fondo cuando se cobre</td></tr>
         </tbody>
       </table>
@@ -212,11 +218,11 @@ const PUNTOS = [
   [3,'Convocatoria para renovar o ratificar la Mesa Directiva, con facultades igualitarias y compartidas','vota'],
   [4,'Aumento de la cuota de mantenimiento de $2,000 a $3,000, con descuento de $500 por pronto pago','dinero'],
   [5,'Cuota extraordinaria de $2,000 para pipas de agua y dictamen estructural','dinero'],
-  [6,'Fondo de $4,500 por unidad para la individualización de tomas de agua ante la CEA','dinero'],
+  [6,'Fondo de $4,500 por unidad para la individualización de tomas de agua ante la CEA: $1,000 de gestión y $3,500 de contrato y medidor','dinero'],
   [7,'Cambio en la aplicación de pagos: los abonos saldarían primero adeudos anteriores','vota'],
   [8,'Nuevo reglamento y tarifas de renta de la Casa Club','dinero'],
-  [9,'Restricciones de ruido en la Casa Club','vota'],
-  [10,'Creación del Régimen Condominal','vota'],
+  [9,'Lineamientos de convivencia y uso de la Casa Club','vota'],
+  [10,'Creación del Régimen Condominal: personalidad jurídica propia y base de la entrega-recepción','vota'],
   [11,'Designación de delegados especiales para protocolizar el acta','tramite'],
   [12,'Clausura de la asamblea y firma del acta','tramite']
 ];
