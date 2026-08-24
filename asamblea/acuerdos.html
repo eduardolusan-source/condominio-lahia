@@ -166,7 +166,7 @@
   <span class="marca">L A H I A<small>TABLERO DE ACUERDOS</small></span>
   <nav>
     <a href="index.html">Inicio</a>
-    <a href="informacion.html">Los 12 puntos</a>
+    <a href="informacion.html">Los 13 puntos</a>
     <a href="individualizacion.html">Individualización</a>
     <a href="reglas.html">Cómo asistir y votar</a>
     <a href="acuerdos.html" class="activo">Tablero</a>
@@ -272,26 +272,31 @@
 <script>
 /* ─────────── Los puntos del orden del día ─────────── */
 const PUNTOS = [
-  {n:2,  t:'Designación de Presidente, Secretario y Escrutadores', s:'Se registra arriba, en el bloque de instalación', ref:'p1', solo:true},
-  {n:3,  t:'Renovación o ratificación de la Mesa Directiva', s:'Facultades igualitarias y compartidas entre Comité de Vigilancia, Presidente y Secretario', ref:'p3',
-         ph:'Qué se aprobó de la convocatoria de elección, cómo quedaron repartidas las facultades, fechas…'},
-  {n:4,  t:'Aumento de la cuota de mantenimiento', s:'De $2,000 a $3,000, con descuento de $500 por pronto pago en los primeros 5 días', ref:'p4',
-         ph:'Cuota aprobada, condiciones del descuento, fecha de aplicación, trato a quien tiene adeudos…'},
-  {n:5,  t:'Cuota extraordinaria de $2,000', s:'Pipas de agua y dictamen estructural · fecha límite 5 de septiembre', ref:'p5',
-         ph:'Monto final, destino, qué pasa si el Municipio exenta el dictamen, parcialidades…'},
-  {n:6,  t:'Fondo de individualización de tomas ante la CEA', s:'$4,500 por unidad: $1,000 de gestión y $3,500 de medidor · condiciones 6.1 a 6.6', ref:'p6',
-         ph:'Monto, forma de cobro, qué condiciones se aceptaron o se pidió negociar, responsable del seguimiento…'},
-  {n:7,  t:'Modificación a la política de aplicación de pagos', s:'Los abonos saldarían primero adeudos anteriores de multas o servicios', ref:'p7',
-         ph:'Orden de aplicación aprobado, si hay convenios de regularización, cómo se avisa a cada condómino…'},
-  {n:8,  t:'Reglamento y tarifas de renta de la Casa Club', s:'De $1,000 a $3,000 según el número de personas', ref:'p8',
-         ph:'Tarifas aprobadas, cómo quedaron los rangos traslapados, depósito en garantía, destino del ingreso…'},
-  {n:9,  t:'Lineamientos de convivencia y uso de la Casa Club', s:'Sonido confinado al interior · excepciones autorizadas por el Administrador', ref:'p9',
-         ph:'Qué quedó acordado sobre sonido y horarios, quién autoriza excepciones y con qué criterio, sanciones…'},
-  {n:10, t:'Creación del Régimen Condominal', s:'Personalidad jurídica propia y base de la entrega-recepción', ref:'p10',
-         ph:'Qué se aprobó exactamente, si hubo proyecto de escritura a la vista, indivisos, costos y plazos…'},
-  {n:11, t:'Designación de delegados especiales', s:'Para la protocolización del acta ante notario', ref:'p11',
+  {n:1,  t:'Lista de asistencia, verificación de quórum e instalación', s:'Tres convocatorias: 18:30, 18:45 y 19:00', ref:'p1',
+         ph:'Cuántos condóminos y cuántas representaciones, en qué convocatoria se instaló, hora exacta…'},
+  {n:2,  t:'Designación de Presidente, Secretario y Escrutadores', s:'Quién conduce, quién redacta y quién cuenta los votos', ref:'p2',
+         ph:'Nombres y departamentos de quienes quedaron designados…'},
+  {n:3,  t:'Designación de delegados especiales', s:'Para la protocolización del acta ante notario', ref:'p3',
          ph:'Quiénes quedaron designados y plazo comprometido para protocolizar…'},
-  {n:12, t:'Clausura de la asamblea y firma del acta', s:'Hora de cierre y quiénes firman', ref:'p11',
+  {n:4,  t:'Entrega operativa, administrativa y documental', s:'Al administrador y a la mesa directiva · programación para realizarla', ref:'p4',
+         ph:'Qué se entrega, en qué fechas, quién firma de recibido, qué quedó pendiente o con observaciones…'},
+  {n:5,  t:'Creación del Régimen Condominal', s:'Personalidad jurídica propia y base de la entrega-recepción', ref:'p5',
+         ph:'Qué se acordó exactamente, si hubo proyecto de escritura a la vista, indivisos, costos y plazos…'},
+  {n:6,  t:'Modificación a la política de aplicación de pagos', s:'Los abonos saldarían primero adeudos anteriores de multas o servicios', ref:'p6',
+         ph:'Orden de aplicación aprobado, si hay convenios de regularización, cómo se avisa a cada condómino…'},
+  {n:7,  t:'Renovación o ratificación de la Mesa Directiva', s:'Convocatoria con facultades igualitarias y compartidas', ref:'p7',
+         ph:'Qué se aprobó de la convocatoria de elección, cómo quedaron repartidas las facultades, fechas…'},
+  {n:8,  t:'Lineamientos de convivencia y uso de la Casa Club', s:'Sonido confinado al interior · excepciones autorizadas por el Administrador', ref:'p8',
+         ph:'Qué quedó acordado sobre sonido y horarios, quién autoriza excepciones y con qué criterio, sanciones…'},
+  {n:9,  t:'Aumento de la cuota de mantenimiento', s:'De $2,000 a $3,000, con descuento de $500 por pronto pago en los primeros 5 días', ref:'p9',
+         ph:'Cuota aprobada, condiciones del descuento, fecha de aplicación, trato a quien tiene adeudos…'},
+  {n:10, t:'Nuevo cálculo de mantenimiento y cuota extraordinaria de $2,000', s:'Pipas de agua y dictamen estructural · fecha límite 5 de septiembre', ref:'p10',
+         ph:'Cómo quedó el nuevo cálculo, monto final de la extraordinaria, destino, parcialidades…'},
+  {n:11, t:'Fondo de individualización de tomas ante la CEA', s:'$4,500 por unidad: $1,000 de gestión y $3,500 de medidor · condiciones 11.1 a 11.6', ref:'p11',
+         ph:'Monto, forma de cobro, si el descuento y el IVA quedaron por escrito, responsable del seguimiento…'},
+  {n:12, t:'Reglamento y tarifas de renta de la Casa Club', s:'De $1,000 a $3,000 según el número de personas', ref:'p12',
+         ph:'Tarifas aprobadas, cómo quedaron los rangos traslapados, depósito en garantía, destino del ingreso…'},
+  {n:13, t:'Clausura de la asamblea y firma del acta', s:'Hora de cierre y quiénes firman', ref:'p13',
          ph:'Hora de clausura, quiénes firmaron el acta…'}
 ];
 const ESTADOS = ['', 'Aprobado', 'Aprobado con modificaciones', 'Rechazado', 'Pospuesto', 'Solo informativo', 'No se discutió'];
@@ -304,7 +309,7 @@ document.getElementById('puntos').innerHTML = PUNTOS.map(p => `
       <select class="estado" data-punto="${p.n}">${ESTADOS.map(e => '<option>' + e + '</option>').join('')}</select>
     </div>
     <div class="bloque-cuerpo">
-      <p class="ref">Detalle del punto y preguntas sugeridas en <a href="informacion.html#${p.ref}" target="_blank">Los 12 puntos ↗</a></p>
+      <p class="ref">Detalle del punto y preguntas sugeridas en <a href="informacion.html#${p.ref}" target="_blank">Los 13 puntos ↗</a></p>
       <div class="votos">
         <div class="voto favor"><label>A favor</label><input type="number" min="0" class="v-favor" data-punto="${p.n}"></div>
         <div class="voto contra"><label>En contra</label><input type="number" min="0" class="v-contra" data-punto="${p.n}"></div>
