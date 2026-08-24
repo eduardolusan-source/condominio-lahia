@@ -201,7 +201,7 @@
           <tr class="total"><td>Septiembre, en el peor caso (sin pronto pago)</td><td class="num">$5,000</td><td class="num">$200,000</td><td>Más los $4,500 del fondo cuando se cobre</td></tr>
         </tbody>
       </table>
-      <p class="cita" style="margin-top:12px;">Las cifras salen textualmente de la convocatoria. La suma de la última fila es aritmética propia, para ver el mes de septiembre completo. La renta de la casa club (punto 12) no aparece aquí porque solo la paga quien la reserva.</p>
+      <p class="cita" style="margin-top:12px;">Las cifras salen textualmente de la convocatoria. La suma de la última fila es aritmética propia, para ver el mes de septiembre completo. La renta de la casa club (punto 11) no aparece aquí porque solo la paga quien la reserva.</p>
     </div>
   </section>
 </main>
@@ -215,22 +215,22 @@
 const PUNTOS = [
   [1,'Lista de asistencia, verificación de quórum e instalación de la asamblea','tramite','p1'],
   [2,'Designación de Presidente, Secretario y Escrutadores','tramite','p1'],
-  [3,'Designación de delegados especiales para protocolizar el acta','tramite','p3'],
-  [4,'Entrega operativa, administrativa y documental al administrador y a la mesa directiva, y programación para realizarla','tramite','p4'],
-  [5,'Creación del Régimen Condominal: personalidad jurídica propia y base de la entrega-recepción','tramite','p5'],
-  [6,'Cambio en la aplicación de pagos: los abonos saldarían primero adeudos anteriores','vota','p6'],
-  [7,'Convocatoria para renovar o ratificar la Mesa Directiva, con facultades igualitarias y compartidas','vota','p7'],
-  [8,'Lineamientos de convivencia y uso de la Casa Club','vota','p8'],
-  [9,'Aumento de la cuota de mantenimiento de $2,000 a $3,000, con descuento de $500 por pronto pago','dinero','p9'],
-  [10,'Nuevo cálculo de mantenimiento: requiere cuota extraordinaria de $2,000','dinero','p10'],
-  [11,'Fondo de $4,500 por unidad para la individualización de tomas de agua ante la CEA: $1,000 de gestión y $3,500 de contrato y medidor','dinero','p11'],
-  [12,'Nuevo reglamento y tarifas de renta de la Casa Club','dinero','p12'],
+  [3,'Entrega operativa, administrativa y documental al administrador y a la mesa directiva, y programación para realizarla','tramite','p3'],
+  [4,'Creación del Régimen Condominal: personalidad jurídica propia y base de la entrega-recepción','tramite','p4'],
+  [5,'Cambio en la aplicación de pagos: los abonos saldarían primero adeudos anteriores','vota','p5'],
+  [6,'Convocatoria para renovar o ratificar la Mesa Directiva, con facultades igualitarias y compartidas','vota','p6'],
+  [7,'Lineamientos de convivencia y uso de la Casa Club','vota','p7'],
+  [8,'Aumento de la cuota de mantenimiento de $2,000 a $3,000, con descuento de $500 por pronto pago','dinero','p8'],
+  [9,'Nuevo cálculo de mantenimiento: requiere cuota extraordinaria de $2,000','dinero','p9'],
+  [10,'Fondo de $4,500 por unidad para la individualización de tomas de agua ante la CEA: $1,000 de gestión y $3,500 de contrato y medidor','dinero','p10'],
+  [11,'Nuevo reglamento y tarifas de renta de la Casa Club','dinero','p11'],
+  [12,'Designación de delegados especiales para protocolizar el acta','tramite','p12'],
   [13,'Clausura de la asamblea y firma del acta','tramite','p13']
 ];
 const ETIQ = {tramite:['e-tramite','Trámite'], vota:['e-vota','Se vota'], dinero:['e-dinero','Se vota · dinero']};
 document.getElementById('tablaPuntos').innerHTML = PUNTOS.map(([n,t,c,id]) => {
   const [cls,txt] = ETIQ[c];
-  const destino = n === 11 ? 'individualizacion.html' : 'informacion.html#' + id;
+  const destino = n === 10 ? 'individualizacion.html' : 'informacion.html#' + id;
   return '<tr><td><strong>'+n+'</strong></td><td><a href="'+destino+'" style="color:#1F5670; font-weight:600; text-decoration:none;">'+t+'</a></td><td><span class="etiqueta '+cls+'">'+txt+'</span></td></tr>';
 }).join('');
 
