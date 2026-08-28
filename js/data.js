@@ -207,10 +207,10 @@ const LAHIA = {
     },
     {
       id: "2026-07", nombre: "Julio", corto: "Jul",
-      saldoIni: -24807.27, saldoFin: -19561.61,
+      saldoIni: -24807.27, saldoFin: -918.11,
       ingresos: { manto: 78000, agua: 28476 },
-      egresos: { fijos: 65977.84, variables: 7252.50, agua: 28000 },
-      cobranza: { pagaron: 39, pct: 97.5 }, derrama: 700, resultadoAgua: 476,
+      egresos: { fijos: 66679.84, variables: 4500, agua: 11407 },
+      cobranza: { pagaron: 39, pct: 97.5 }, derrama: 285.18, resultadoAgua: 17069,
       morosidad: { unidadesManto: 1, acumuladoManto: 10000, unidadesAgua: 3, aguaMes: 1167 },
       detalle: {
         fijos: [
@@ -218,21 +218,18 @@ const LAHIA = {
           ["Servicio de Limpieza", "Áreas comunes", 16000],
           ["Edificare Arquitectura", "Administración", 12000],
           ["Schindler, S.A. de C.V.", "Manto. elevador", 4232.84],
-          ["Mantenimiento Alberca", "Servicio semanal", 2314],
+          ["Mantenimiento Alberca", "Servicio semanal", 3016],
           ["Plataforma", "Condovive", 725],
           ["Telmex", "Caseta y casa club", 506],
           ["Telcel", "Recarga", 200]
         ],
         variables: [
           ["Municipio", "Recolección de basura", 1000],
-          ["Nikte Jardines", "Servicio de jardinería", 4500],
-          ["Mas Limpio", "Artículos de limpieza", 528.50],
-          ["Office Depot", "Artículos de papelería", 1000],
-          ["Mas Limpio", "Artículos de limpieza", 224]
+          ["Guillermo Godínez Ángeles", "Servicio de limpieza", 3000],
+          ["Alfonso Martínez", "Gasolina podadora", 500]
         ],
         agua: [
-          ["María Cruz Ramírez H.", "Pago de 14 pipas de agua", 14000],
-          ["María Cruz Ramírez H.", "Pago de 14 pipas de agua", 14000]
+          ["María Cruz Ramírez H.", "Pago de 14 pipas de agua", 11407]
         ]
       }
     }

@@ -118,6 +118,9 @@
     let rows = "<thead><tr><th>Proveedor</th><th>Concepto</th><th class='num'>Monto</th></tr></thead><tbody>";
     secciones.forEach(([titulo, items, subtotal]) => {
       rows += "<tr><td colspan='3' style='font-weight:700; color:var(--ink); padding-top:0.9rem'>" + titulo + "</td></tr>";
+      if (!items.length) {
+        rows += "<tr><td colspan='3' style='color:var(--muted); font-style:italic'>Desglose por proveedor pendiente de capturar.</td></tr>";
+      }
       items.forEach(([prov, desc, monto]) => {
         rows += "<tr><td>" + esc(prov) + "</td><td>" + esc(desc) + "</td><td class='num'>" + fmt2(monto) + "</td></tr>";
       });
@@ -291,6 +294,111 @@
     document.getElementById("tProyectos").innerHTML = rows + "</tbody>";
   }
 
+  /* ---------- Origen de datos en vivo (opcional) ----------
+     Pega abajo la URL del CSV publicado de la hoja
+     "Lahia · Resumen público para el sitio"
+     (en la hoja: Archivo → Compartir → Publicar en la web → CSV).
+
+     Con la URL puesta, el sitio lee los meses de la hoja en cada carga y ya no
+     hace falta tocar este repositorio para publicar un mes nuevo. Si se deja
+     vacía, o si la descarga falla, se usan los datos de js/data.js.
+
+     REGLA: esa hoja NUNCA debe llevar datos por departamento. Lo que se
+     publica es legible por cualquiera que abra la URL — la clave de acceso del
+     sitio no protege nada de esto. Solo agregados. */
+  const CSV_MESES_URL = "";
+
+  /* Encabezados de la hoja → campos internos. No renombrar las columnas. */
+  const COLS = {
+    mesid: "id", nombre: "nombre", corto: "corto",
+    saldoinicial: "saldoIni", saldofinal: "saldoFin",
+    mantenimientocobrado: "manto", aguacobrada: "agua",
+    gastosfijos: "fijos", gastosvariables: "variables", gastosdeagua: "gAgua",
+    unidadesquepagaron: "pagaron", "%cobranza": "pct",
+    derramaporunidad: "derrama", resultadoagua: "resultadoAgua",
+    morososmanto: "morososManto", acumuladomorosidadmanto: "acumManto",
+    morososagua: "morososAgua", adeudoaguadelmes: "adeudoAgua"
+  };
+
+  /* NFD separa el acento de la letra; el filtro siguiente lo descarta junto
+     con espacios y signos, así "% cobranza" y "Saldo inicial" quedan como
+     "%cobranza" y "saldoinicial". */
+  const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[^a-z0-9%]+/g, "");
+  const num = v => {
+    const n = parseFloat(String(v).replace(/[^0-9.\-]/g, ""));
+    return isFinite(n) ? n : 0;
+  };
+
+  function parseCSV(texto) {
+    const filas = [];
+    let campo = "", fila = [], comillas = false;
+    for (let i = 0; i < texto.length; i++) {
+      const c = texto[i];
+      if (comillas) {
+        if (c === '"') {
+          if (texto[i + 1] === '"') { campo += '"'; i++; } else comillas = false;
+        } else campo += c;
+      } else if (c === '"') comillas = true;
+      else if (c === ",") { fila.push(campo); campo = ""; }
+      else if (c === "\n") { fila.push(campo); filas.push(fila); fila = []; campo = ""; }
+      else if (c !== "\r") campo += c;
+    }
+    if (campo !== "" || fila.length) { fila.push(campo); filas.push(fila); }
+    return filas;
+  }
+
+  async function cargarHoja() {
+    if (!CSV_MESES_URL) return false;
+    const r = await fetch(CSV_MESES_URL, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+
+    const filas = parseCSV(await r.text())
+      .filter(f => f.some(c => String(c).trim() !== ""));
+    if (filas.length < 2) throw new Error("la hoja no trae filas de datos");
+
+    const cab = filas[0].map(h => COLS[norm(h)] || null);
+    if (cab.indexOf("id") === -1) throw new Error("falta la columna 'Mes ID'");
+
+    const nuevos = filas.slice(1)
+      .map(f => {
+        const o = {};
+        cab.forEach((k, i) => { if (k) o[k] = f[i]; });
+        return o;
+      })
+      .filter(o => /^\d{4}-\d{2}$/.test(String(o.id).trim()));
+    if (!nuevos.length) throw new Error("ninguna fila con 'Mes ID' válido");
+
+    /* El desglose por proveedor no viaja en la hoja: se conserva el que ya
+       exista en data.js para ese mes, y los meses nuevos entran sin él. */
+    const previos = {};
+    LAHIA.meses.forEach(m => { previos[m.id] = m; });
+
+    const armados = nuevos.map(o => {
+      const id = String(o.id).trim();
+      const antes = previos[id];
+      return {
+        id: id,
+        nombre: String(o.nombre || "").trim() || (antes && antes.nombre) || id,
+        corto: String(o.corto || "").trim() || (antes && antes.corto) || id.slice(5),
+        saldoIni: num(o.saldoIni), saldoFin: num(o.saldoFin),
+        ingresos: { manto: num(o.manto), agua: num(o.agua) },
+        egresos: { fijos: num(o.fijos), variables: num(o.variables), agua: num(o.gAgua) },
+        cobranza: { pagaron: num(o.pagaron), pct: num(o.pct) },
+        derrama: num(o.derrama), resultadoAgua: num(o.resultadoAgua),
+        morosidad: {
+          unidadesManto: num(o.morososManto), acumuladoManto: num(o.acumManto),
+          unidadesAgua: num(o.morososAgua), aguaMes: num(o.adeudoAgua)
+        },
+        detalle: (antes && antes.detalle) || { fijos: [], variables: [], agua: [] }
+      };
+    }).sort((a, b) => a.id.localeCompare(b.id));
+
+    /* Se muta el arreglo en su lugar para no romper la referencia M. */
+    LAHIA.meses.length = 0;
+    armados.forEach(m => LAHIA.meses.push(m));
+    return true;
+  }
+
   /* ---------- Render general ---------- */
   let rendered = false;
   function render() {
@@ -305,6 +413,16 @@
     renderAgua();
     renderProyectos();
   }
+
+  /* Se intenta la hoja publicada; si responde, se repinta con esos datos. */
+  cargarHoja().then(ok => {
+    if (!ok) return;
+    mesIdx = M.length - 1;
+    if (rendered) { rendered = false; render(); }
+  }).catch(e => {
+    console.warn("[Lahia] No se pudo leer la hoja publicada (" + e.message +
+                 "). Se muestran los datos de js/data.js.");
+  });
 
   if (sessionStorage.getItem("lahiaFin") === "1") { unlock(); }
 })();
