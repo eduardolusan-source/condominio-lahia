@@ -118,7 +118,7 @@
 <body>
 
 <div class="barra-sup">
-  <span class="marca">L A H I A<small>ASAMBLEA · 27 AGOSTO 2026</small></span>
+  <span class="marca">L A H I A<small>ASAMBLEA · POR CONVOCAR</small></span>
   <nav>
     <a href="index.html">Inicio</a>
     <a href="informacion.html">Los 13 puntos</a>
@@ -131,11 +131,15 @@
 
 <main>
   <div class="kicker">Reglas de asistencia, representación y voto</div>
-  <h1 class="portada serif">Qué llevar el jueves 27 <em>y cómo mandar a alguien en tu lugar</em></h1>
+  <h1 class="portada serif">Qué llevar el día de la asamblea <em>y cómo mandar a alguien en tu lugar</em></h1>
   <p class="bajada">La convocatoria pide acreditar la calidad de condómino con documentos: sin ellos no se puede votar, aunque se viva en el departamento. Y si no puedes asistir, tu voto no se pierde: se puede delegar con una carta poder ante dos testigos. Aquí está el detalle y un formato listo para llenar e imprimir.</p>
 
   <div class="aviso">
-    <strong>Ojo con el horario.</strong> A las 19:00, en tercera convocatoria, la asamblea se instala con los condóminos que estén presentes, sin mínimo de asistencia. Lo que se vote ahí obliga a los 40 departamentos, hayan asistido o no.
+    <strong>Asamblea por convocar.</strong> La asamblea se convocará en fecha próxima. Cuando se publique la convocatoria, aquí se indicarán el día y las horas de cada convocatoria.
+  </div>
+
+  <div class="aviso">
+    <strong>Ojo con el horario.</strong> En tercera convocatoria, la asamblea se instala con los condóminos que estén presentes, sin mínimo de asistencia. Lo que se vote ahí obliga a los 40 departamentos, hayan asistido o no.
   </div>
 
   <section class="bloque">
@@ -197,7 +201,7 @@
         <li><input type="checkbox"><span>Si voy a representar a alguien: carta poder firmada ante dos testigos.</span></li>
         <li><input type="checkbox"><span>Si voy a representar a alguien: copias de identificación del otorgante, del apoderado y de los dos testigos.</span></li>
         <li><input type="checkbox"><span>Leí los trece puntos y anoté mis preguntas para los puntos 8, 9 y 10, que son los que cuestan dinero.</span></li>
-        <li><input type="checkbox"><span>Llegar antes de las 18:30 si queremos que la asamblea se instale en primera convocatoria.</span></li>
+        <li><input type="checkbox"><span>Llegar a la hora de la primera convocatoria si queremos que la asamblea se instale en ella.</span></li>
       </ul>
     </div>
   </section>
@@ -214,13 +218,14 @@
         <div><label for="cApoderado">Nombre de quien lo representará</label><input type="text" id="cApoderado" placeholder="Nombre completo"></div>
         <div><label for="cTestigo1">Testigo 1</label><input type="text" id="cTestigo1" placeholder="Nombre completo"></div>
         <div><label for="cTestigo2">Testigo 2</label><input type="text" id="cTestigo2" placeholder="Nombre completo"></div>
-        <div><label for="cFecha">Fecha de la carta</label><input type="text" id="cFecha" placeholder="p. ej. 25 de agosto de 2026"></div>
+        <div><label for="cFecha">Fecha de la carta</label><input type="text" id="cFecha" placeholder="p. ej. 25 de octubre de 2026"></div>
+        <div><label for="cAsamblea">Fecha de la asamblea (según la convocatoria)</label><input type="text" id="cAsamblea" placeholder="p. ej. jueves 29 de octubre de 2026"></div>
       </div>
       <div class="hoja" id="hojaCarta">
-        <p class="lugar">Santiago de Querétaro, Qro., a <span id="vFecha">_____ de agosto de 2026</span>.</p>
+        <p class="lugar">Santiago de Querétaro, Qro., a <span id="vFecha">_____ de __________ de 2026</span>.</p>
         <h4>Carta poder</h4>
         <p><strong>A quien corresponda<br>Asamblea General Ordinaria de Condóminos<br>Condominio Vertical Habitacional «LAHIA»</strong></p>
-        <p>Quien suscribe, <strong id="vOtorgante">__________________________</strong>, en mi carácter de condómino de la unidad privativa <strong id="vUnidad">______</strong> del Condominio Vertical Habitacional «LAHIA», ubicado en Sendero del Misterio 83, Milenio III, 76060, Santiago de Querétaro, Qro., por medio del presente instrumento otorgo poder tan amplio y bastante como en derecho proceda a favor de <strong id="vApoderado">__________________________</strong>, para que en mi nombre y representación asista a la <strong>Primera Asamblea General Ordinaria de Condóminos</strong>, a celebrarse el jueves 27 de agosto de 2026 en el área de amenidades del propio condominio.</p>
+        <p>Quien suscribe, <strong id="vOtorgante">__________________________</strong>, en mi carácter de condómino de la unidad privativa <strong id="vUnidad">______</strong> del Condominio Vertical Habitacional «LAHIA», ubicado en Sendero del Misterio 83, Milenio III, 76060, Santiago de Querétaro, Qro., por medio del presente instrumento otorgo poder tan amplio y bastante como en derecho proceda a favor de <strong id="vApoderado">__________________________</strong>, para que en mi nombre y representación asista a la <strong>Primera Asamblea General Ordinaria de Condóminos</strong>, a celebrarse el <strong id="vAsamblea">__________________________</strong> en el área de amenidades del propio condominio.</p>
         <p>El apoderado queda facultado para intervenir en las deliberaciones, <strong>emitir mi voto</strong> respecto de todos y cada uno de los puntos del orden del día contenidos en la convocatoria correspondiente, y firmar el acta y demás documentos que de dicha asamblea deriven, quedando desde ahora ratificado cuanto en mi nombre haga en el ejercicio de este mandato.</p>
         <p>Se otorga la presente ante dos testigos, quienes firman al calce, acompañándose copia de las identificaciones oficiales del otorgante, del apoderado y de ambos testigos.</p>
         <div class="firmas">
@@ -235,7 +240,7 @@
         <button id="btnImprimir">🖨 Imprimir o guardar en PDF</button>
         <button class="sec" id="btnLimpiar">Limpiar campos</button>
       </div>
-      <p class="cita" style="margin-top:14px;">Formato de apoyo redactado para esta guía a partir de lo que pide la convocatoria (carta poder ante dos testigos, con identificaciones). No es un documento oficial del condominio; si tu caso tiene alguna particularidad —copropiedad, sucesión, persona moral— conviene consultarlo con la administración antes del día 27.</p>
+      <p class="cita" style="margin-top:14px;">Formato de apoyo redactado para esta guía a partir de lo que pide la convocatoria (carta poder ante dos testigos, con identificaciones). No es un documento oficial del condominio; si tu caso tiene alguna particularidad —copropiedad, sucesión, persona moral— conviene consultarlo con la administración antes de la asamblea.</p>
     </div>
   </section>
 
@@ -246,14 +251,14 @@
     </div>
     <div class="bloque-cuerpo">
       <table>
-        <thead><tr><th style="width:90px">Hora</th><th>Se instala si…</th><th style="width:120px" class="num">Condóminos</th></tr></thead>
+        <thead><tr><th style="width:110px">Convocatoria</th><th>Se instala si…</th><th style="width:120px" class="num">Condóminos</th></tr></thead>
         <tbody>
-          <tr><td><strong>18:30</strong></td><td>Asiste al menos el 75% del total de condóminos</td><td class="num">30 de 40</td></tr>
-          <tr><td><strong>18:45</strong></td><td>Asiste más del 50% del total</td><td class="num">21 de 40</td></tr>
-          <tr><td><strong>19:00</strong></td><td>Con los condóminos que se encuentren presentes, sin mínimo</td><td class="num">los que haya</td></tr>
+          <tr><td><strong>Primera</strong></td><td>Asiste al menos el 75% del total de condóminos</td><td class="num">30 de 40</td></tr>
+          <tr><td><strong>Segunda</strong></td><td>Asiste más del 50% del total</td><td class="num">21 de 40</td></tr>
+          <tr><td><strong>Tercera</strong></td><td>Con los condóminos que se encuentren presentes, sin mínimo</td><td class="num">los que haya</td></tr>
         </tbody>
       </table>
-      <p class="cita" style="margin-top:12px;">Entre más gente acredite su asistencia —en persona o por carta poder—, más representativo será lo que se acuerde sobre las cuotas y el régimen condominal.</p>
+      <p class="cita" style="margin-top:12px;">Las horas de cada convocatoria las fijará la convocatoria que se emita. Entre más gente acredite su asistencia —en persona o por carta poder—, más representativo será lo que se acuerde sobre las cuotas y el régimen condominal.</p>
     </div>
   </section>
 </main>
@@ -267,7 +272,7 @@
 /* Carta poder en vivo */
 const MAPA = [['cOtorgante','vOtorgante','__________________________'], ['cUnidad','vUnidad','______'],
               ['cApoderado','vApoderado','__________________________'], ['cTestigo1','vTestigo1','__________________________'],
-              ['cTestigo2','vTestigo2','__________________________'], ['cFecha','vFecha','_____ de agosto de 2026']];
+              ['cTestigo2','vTestigo2','__________________________'], ['cFecha','vFecha','_____ de __________ de 2026'], ['cAsamblea','vAsamblea','__________________________']];
 function pintarCarta(){
   MAPA.forEach(([campo, vista, vacio]) => {
     const v = document.getElementById(campo).value.trim();

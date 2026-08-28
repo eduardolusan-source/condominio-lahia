@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Tablero de acuerdos · Asamblea Lahia 27 de agosto de 2026</title>
+<title>Tablero de acuerdos · Asamblea Lahia</title>
 <link rel="icon" href="../assets/logo.svg">
 <style>
   :root{
@@ -179,9 +179,13 @@
 </div>
 
 <main>
-  <div class="kicker">Jueves 27 de agosto de 2026 · Área de amenidades</div>
+  <div class="kicker">Área de amenidades · Fecha por confirmar</div>
   <h1 class="portada serif">Registro de acuerdos de la <em>Primera Asamblea General Ordinaria</em></h1>
   <p class="bajada">Un espacio por cada punto del orden del día: qué se acordó y con cuántos votos. Todo se guarda solo en este navegador; al final se genera el resumen para compartir y la minuta en texto para el acta.</p>
+
+  <div class="aviso">
+    <strong>Asamblea por convocar.</strong> La asamblea se convocará en fecha próxima. Este tablero queda listo para usarse el día que se celebre; los puntos que aparecen aquí pueden ajustarse según la convocatoria definitiva.
+  </div>
 
   <!-- ══════ INSTALACIÓN Y QUÓRUM ══════ -->
   <section class="bloque">
@@ -272,7 +276,7 @@
 <script>
 /* ─────────── Los puntos del orden del día ─────────── */
 const PUNTOS = [
-  {n:1,  t:'Lista de asistencia, verificación de quórum e instalación', s:'Tres convocatorias: 18:30, 18:45 y 19:00', ref:'p1',
+  {n:1,  t:'Lista de asistencia, verificación de quórum e instalación', s:'Primera, segunda y tercera convocatoria', ref:'p1',
          ph:'Cuántos condóminos y cuántas representaciones, en qué convocatoria se instaló, hora exacta…'},
   {n:2,  t:'Designación de Presidente, Secretario y Escrutadores', s:'Quién conduce, quién redacta y quién cuenta los votos', ref:'p2',
          ph:'Nombres y departamentos de quienes quedaron designados…'},
@@ -288,7 +292,7 @@ const PUNTOS = [
          ph:'Qué quedó acordado sobre sonido y horarios, quién autoriza excepciones y con qué criterio, sanciones…'},
   {n:8,  t:'Aumento de la cuota de mantenimiento', s:'De $2,000 a $3,000, con descuento de $500 por pronto pago en los primeros 5 días', ref:'p8',
          ph:'Cuota aprobada, condiciones del descuento, fecha de aplicación, trato a quien tiene adeudos…'},
-  {n:9,  t:'Nuevo cálculo de mantenimiento y cuota extraordinaria de $2,000', s:'Pipas de agua y dictamen estructural · fecha límite 5 de septiembre', ref:'p9',
+  {n:9,  t:'Nuevo cálculo de mantenimiento y cuota extraordinaria de $2,000', s:'Pipas de agua y dictamen estructural · pago único', ref:'p9',
          ph:'Cómo quedó el nuevo cálculo, monto final de la extraordinaria, destino, parcialidades…'},
   {n:10, t:'Fondo de individualización de tomas ante la CEA', s:'$4,500 por unidad: $1,000 de gestión y $3,500 de medidor · condiciones 10.1 a 10.6', ref:'p10',
          ph:'Monto, forma de cobro, si el descuento y el IVA quedaron por escrito, responsable del seguimiento…'},
@@ -335,12 +339,12 @@ function pintarQuorum(){
   m.className = 'marcador' + (a >= 30 ? ' ok' : a >= 21 ? ' parcial' : a > 0 ? ' no' : '');
   document.getElementById('pieQuorum').textContent = a === 0 ? 'Sin asistentes registrados'
     : pct + '% de los condóminos · ' + (a >= 30 ? 'alcanza para la primera convocatoria'
-       : a >= 21 ? 'alcanza para la segunda convocatoria (18:45)'
-       : 'solo alcanza para la tercera convocatoria (19:00), que se instala con los presentes');
+       : a >= 21 ? 'alcanza para la segunda convocatoria'
+       : 'solo alcanza para la tercera convocatoria, que se instala con los presentes');
   document.getElementById('escalera').innerHTML = [
-    ['18:30', 'Primera · 75% = 30 condóminos', a >= 30],
-    ['18:45', 'Segunda · más del 50% = 21 condóminos', a >= 21],
-    ['19:00', 'Tercera · con los presentes', true]
+    ['1ª', 'Primera · 75% = 30 condóminos', a >= 30],
+    ['2ª', 'Segunda · más del 50% = 21 condóminos', a >= 21],
+    ['3ª', 'Tercera · con los presentes', true]
   ].map(([h,txt,ok]) => '<div><span class="marca-h">' + h + '</span><span>' + txt +
      '</span><span class="estado ' + (ok?'si':'no') + '">' + (ok?'✓ alcanza':'no alcanza') + '</span></div>').join('');
   document.querySelectorAll('.voto.suma').forEach(v => pintarVotos(v.dataset.punto));
@@ -416,9 +420,9 @@ function generarResumen(){
   const L = [];
   const val = id => document.getElementById(id).value.trim();
   L.push('*ACUERDOS · PRIMERA ASAMBLEA GENERAL ORDINARIA*');
-  L.push('_Condominio Lahia · jueves 27 de agosto de 2026 · área de amenidades_');
+  L.push('_Condominio Lahia · área de amenidades_');
   const a = acreditados();
-  const conv = a >= 30 ? 'primera convocatoria (18:30)' : a >= 21 ? 'segunda convocatoria (18:45)' : 'tercera convocatoria (19:00)';
+  const conv = a >= 30 ? 'primera convocatoria' : a >= 21 ? 'segunda convocatoria' : 'tercera convocatoria';
   L.push('');
   L.push('*Instalación*');
   L.push('• Acreditados: ' + a + ' de 40 (' + (parseInt(document.getElementById('nPresentes').value,10)||0) + ' presentes y ' +
@@ -476,12 +480,12 @@ document.getElementById('btnMinuta').addEventListener('click', () => {
   const txt = document.getElementById('textoResumen').value;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain;charset=utf-8'}));
-  a.download = 'acuerdos-asamblea-lahia-2026-08-27.txt';
+  a.download = 'acuerdos-asamblea-lahia.txt';
   a.click(); URL.revokeObjectURL(a.href);
 });
 
 /* ─────────── Respaldo automático en este navegador ─────────── */
-const CLAVE = 'lahiaAsamblea20260827';
+const CLAVE = 'lahiaAsambleaAcuerdos';
 let storageOk = false;
 try{ localStorage.setItem(CLAVE+'_t','1'); localStorage.removeItem(CLAVE+'_t'); storageOk = true; }catch(e){}
 const campos = () => document.querySelectorAll('main textarea, main input[type=text], main input[type=number], main select');
