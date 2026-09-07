@@ -25,7 +25,7 @@
 
 <main class="wrap">
   <h1 class="section-title" style="margin-top:1rem">Áreas comunes</h1>
-  <p class="section-sub">Horarios y reglas de uso conforme al Reglamento Interno 2024, capítulo III.</p>
+  <p class="section-sub">Horarios y reglas de uso conforme al Reglamento Interno 2024, capítulo III, más la guía de cuidado del drenaje y la fosa séptica.</p>
 
   <div class="notice"><strong>Dos condiciones valen para todas las áreas.</strong> La primera: estar al corriente en las cuotas de mantenimiento; quien no lo esté ve suspendido el uso de gimnasio, casa club, recolección de basura y correspondencia. La segunda: las áreas comunes solo pueden usarse para el fin ordinario al que están destinadas.</div>
 
@@ -35,6 +35,7 @@
     <a href="#alberca">Alberca</a>
     <a href="#mascotas">Área pet friendly</a>
     <a href="#residuos">Residuos</a>
+    <a href="#drenaje">Drenaje y fosa séptica</a>
     <a href="#elevadores">Elevadores</a>
   </div>
 
@@ -153,6 +154,119 @@
       <li><strong>Servicio suspendido por mora.</strong> La recolección de basura es uno de los servicios que la Administración suspende a quien no está al corriente en sus cuotas.</li>
     </ol>
     <p class="ref"><strong>Propuesta (aún no en el reglamento):</strong> horario sugerido de 7:00 a 21:00 h para bajar la basura y señalética de separación en cada contenedor.</p>
+  </section>
+
+  <section class="rule-block" id="drenaje">
+    <div class="area-head"><h2>🚰 Drenaje y fosa séptica</h2><span class="badge warn">Solo papel higiénico</span></div>
+    <p class="lead-note">Todo lo que baja por inodoros, lavabos, regaderas y tarjas del edificio termina en la <strong>fosa séptica del condominio</strong>. Ahí solo se degradan el agua, los desechos del cuerpo y el papel higiénico. Lo demás se atora en las tuberías o se queda en la fosa, y la reparación la pagamos entre todos.</p>
+
+    <div class="flush-diagram">
+      <div class="table-scroll"><div class="flush-svg">
+      <svg viewBox="0 0 760 340" role="img" aria-label="Recorrido de los desechos: del departamento, por las tuberías del edificio, hasta la fosa séptica. El papel higiénico se deshace en el camino; toallitas, toallas e hilo dental forman tapones; lo que no se degrada se acumula en la fosa.">
+        <defs><clipPath id="fdTank"><rect x="480" y="200" width="180" height="120" rx="8"/></clipPath></defs>
+
+        <!-- nivel del suelo -->
+        <line class="fd-ground" x1="0" y1="176" x2="760" y2="176"/>
+        <text class="fd-small" x="8" y="190">subsuelo</text>
+
+        <!-- tubería -->
+        <path class="fd-pipe-outer" d="M248 110 H338 Q350 110 350 122 V226 Q350 238 362 238 H484"/>
+        <path class="fd-pipe-inner" d="M248 110 H338 Q350 110 350 122 V226 Q350 238 362 238 H484"/>
+
+        <!-- 1. departamento -->
+        <rect class="fd-box" x="16" y="22" width="232" height="128" rx="12"/>
+        <text class="fd-title" x="132" y="44" text-anchor="middle">TU DEPARTAMENTO</text>
+        <text class="fd-icon" x="45" y="94" text-anchor="middle">🚽</text>
+        <text class="fd-icon" x="103" y="94" text-anchor="middle">🚿</text>
+        <text class="fd-icon" x="161" y="94" text-anchor="middle">🚰</text>
+        <text class="fd-icon" x="219" y="94" text-anchor="middle">🍳</text>
+        <text class="fd-label" x="45" y="116" text-anchor="middle">inodoro</text>
+        <text class="fd-label" x="103" y="116" text-anchor="middle">regadera</text>
+        <text class="fd-label" x="161" y="116" text-anchor="middle">lavabo</text>
+        <text class="fd-label" x="219" y="116" text-anchor="middle">cocina</text>
+        <text class="fd-small" x="132" y="138" text-anchor="middle">todo sale por el mismo tubo</text>
+
+        <!-- 2. tuberías -->
+        <text class="fd-title" x="260" y="66">TUBERÍAS DEL EDIFICIO</text>
+        <text class="fd-label" x="260" y="92">papel higiénico: se deshace</text>
+        <rect class="fd-paper" x="262" y="105" width="10" height="10" rx="1"/>
+        <circle class="fd-paper" cx="284" cy="110" r="4" opacity="0.8"/>
+        <circle class="fd-paper" cx="296" cy="110" r="2.8" opacity="0.6"/>
+        <circle class="fd-paper" cx="306" cy="110" r="1.8" opacity="0.4"/>
+
+        <ellipse class="fd-clog" cx="346" cy="146" rx="8" ry="6"/>
+        <ellipse class="fd-clog" cx="354" cy="153" rx="7" ry="5"/>
+        <ellipse class="fd-clog" cx="349" cy="159" rx="6" ry="4"/>
+        <rect class="fd-badge" x="368" y="122" width="52" height="16" rx="8"/>
+        <text class="fd-badge-text" x="394" y="134" text-anchor="middle">TAPÓN</text>
+        <text class="fd-label" x="368" y="156">toallitas, toallas, hilo dental: se atoran</text>
+
+        <!-- 3. fosa séptica -->
+        <text class="fd-title" x="480" y="192">FOSA SÉPTICA</text>
+        <g clip-path="url(#fdTank)">
+          <rect class="fd-nata" x="480" y="200" width="180" height="36"/>
+          <rect class="fd-agua" x="480" y="236" width="180" height="50"/>
+          <rect class="fd-lodo" x="480" y="286" width="180" height="34"/>
+        </g>
+        <rect class="fd-tank" x="480" y="200" width="180" height="120" rx="8"/>
+        <text class="fd-label" x="488" y="222">nata: grasa y aceite</text>
+        <text class="fd-label" x="488" y="265">agua</text>
+        <text class="fd-label" x="488" y="308">lodos</text>
+        <rect class="fd-debris" x="612" y="212" width="12" height="6" rx="2"/>
+        <rect class="fd-debris" x="630" y="222" width="10" height="6" rx="2"/>
+        <rect class="fd-debris" x="645" y="209" width="11" height="7" rx="2"/>
+        <rect class="fd-debris" x="580" y="300" width="14" height="7" rx="2"/>
+        <rect class="fd-debris" x="604" y="306" width="10" height="6" rx="2"/>
+        <rect class="fd-debris" x="626" y="299" width="12" height="7" rx="2"/>
+        <text class="fd-small" x="570" y="334" text-anchor="middle">lo que no se degrada se queda aquí y la llena antes de tiempo</text>
+
+        <!-- salida -->
+        <text class="fd-small" x="664" y="252">solo sale líquido</text>
+        <line class="fd-arrow" x1="660" y1="262" x2="700" y2="262"/>
+        <polygon class="fd-arrowhead" points="700,257 710,262 700,267"/>
+      </svg>
+      </div></div>
+      <p class="cap only-mobile">Desliza el diagrama hacia los lados para ver el recorrido completo.</p>
+      <p class="cap">El papel higiénico se deshace en el camino. Las toallitas, las toallas y el hilo dental forman tapones en las tuberías del edificio; lo que llega a la fosa y no se degrada se acumula y obliga a desazolvarla antes de tiempo.</p>
+    </div>
+
+    <div class="rule-of-thumb">
+      <div class="k">Regla de bolsillo</div>
+      <div class="v">Al inodoro solo van tres cosas: agua, lo que sale del cuerpo y papel higiénico.</div>
+      <div class="d">Todo lo demás va al bote de basura. Un bote con tapa junto al inodoro resuelve la mayoría de los casos.</div>
+    </div>
+
+    <div class="lanes">
+      <div class="lane ok">
+        <h4>Sí se degrada</h4>
+        <ul>
+          <li><strong>Agua</strong></li>
+          <li><strong>Desechos del cuerpo</strong></li>
+          <li><strong>Papel higiénico</strong> — el único papel hecho para deshacerse en el drenaje</li>
+        </ul>
+      </div>
+      <div class="lane no">
+        <h4>No va al drenaje</h4>
+        <ul>
+          <li><strong>Toallitas húmedas, servilletas y papel de cocina</strong> — no se deshacen, aunque el empaque diga "desechable"</li>
+          <li><strong>Toallas femeninas, tampones y pañales</strong> — se hinchan y bloquean las tuberías</li>
+          <li><strong>Hilo dental, cabello y cotonetes</strong> — se enredan con otros desechos y forman redes</li>
+          <li><strong>Aceite y grasa de cocina</strong> — se endurecen en la tubería y forman nata en la fosa</li>
+          <li><strong>Arena y heces de gato</strong> — se compactan y pueden esparcir parásitos</li>
+          <li><strong>Curitas, goma de mascar, condones</strong> — forman grandes tapones</li>
+          <li><strong>Cosméticos y colillas de cigarro</strong> — contaminan el agua y alteran el proceso de la fosa</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="admin-note">
+      <div class="k">Aviso de la Administración</div>
+      <p>Se solicita su colaboración para evitar arrojar cualquier tipo de residuos, en especial toallas húmedas o cualquier objeto que no se degrade en el agua, en sus instalaciones de drenaje. Este simple acto puede provocar serios daños a la fosa séptica, ocasionando problemas a corto y largo plazo.</p>
+      <p>Agradecemos de antemano su comprensión y colaboración. Mantengamos juntos el buen funcionamiento de nuestra fosa séptica.</p>
+    </div>
+
+    <p class="lead-note"><strong>Si un desagüe se tapa,</strong> repórtalo a la Administración antes de recurrir a destapacaños químicos: en exceso, dañan el proceso de la fosa. Conforme al reglamento, los daños que se originen por negligencia dentro de un departamento corren por cuenta del propietario, que responde solidariamente con quienes lo ocupen (<a href="reglamentos.html#departamento">Uso de tu departamento</a>).</p>
+    <p class="ref">Listado adaptado de la infografía "Qué no deberías echar al inodoro" (Cultura Colectiva, a partir de "What Not To Flush Down…", Mother Nature Network). El aviso es de la Administración del condominio.</p>
   </section>
 
   <section class="rule-block" id="elevadores">

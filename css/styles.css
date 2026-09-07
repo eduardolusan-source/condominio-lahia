@@ -244,3 +244,52 @@ table.data tr.total td { font-weight: 700; color: var(--ink); border-bottom: non
 .quick .q .d { font-size: 0.82rem; color: var(--ink-2); }
 
 .ref { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+
+/* Anclas: que el encabezado fijo no tape el título al llegar desde un enlace */
+main [id] { scroll-margin-top: 4.75rem; }
+
+/* Drenaje y fosa séptica (areas-comunes.html#drenaje) */
+.flush-diagram { margin: 1rem 0 0; }
+.flush-svg { min-width: 640px; }
+.flush-svg svg { display: block; width: 100%; height: auto; }
+.flush-diagram .cap { font-size: 0.85rem; color: var(--ink-2); margin: 0.5rem 0 0; }
+.only-mobile { display: none; }
+@media (max-width: 700px) { .only-mobile { display: block; font-style: italic; color: var(--muted); } }
+.fd-ground { stroke: var(--baseline); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.fd-pipe-outer { fill: none; stroke: color-mix(in srgb, var(--accent) 40%, var(--surface)); stroke-width: 22; stroke-linecap: round; }
+.fd-pipe-inner { fill: none; stroke: color-mix(in srgb, var(--accent) 12%, var(--surface)); stroke-width: 14; stroke-linecap: round; }
+.fd-box { fill: var(--page); stroke: var(--grid); stroke-width: 1.5; }
+.fd-title { fill: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; }
+.fd-icon { font-size: 22px; }
+.fd-label { fill: var(--ink-2); font-size: 13px; }
+.fd-small { fill: var(--muted); font-size: 11.5px; font-style: italic; }
+.fd-paper { fill: var(--ink-2); }
+.fd-clog { fill: var(--muted); stroke: var(--ink-2); stroke-width: 1; }
+.fd-badge { fill: var(--bad-text); }
+.fd-badge-text { fill: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; }
+.fd-nata { fill: color-mix(in srgb, var(--series-2) 22%, var(--surface)); }
+.fd-agua { fill: color-mix(in srgb, var(--series-1) 18%, var(--surface)); }
+.fd-lodo { fill: color-mix(in srgb, var(--ink-2) 30%, var(--surface)); }
+.fd-tank { fill: none; stroke: var(--ink-2); stroke-width: 2; }
+.fd-debris { fill: var(--muted); }
+.fd-arrow { stroke: var(--ink-2); stroke-width: 2; }
+.fd-arrowhead { fill: var(--ink-2); }
+
+.rule-of-thumb { background: color-mix(in srgb, var(--accent) 10%, transparent); border-left: 4px solid var(--accent); border-radius: 10px; padding: 0.8rem 1rem; margin: 1.1rem 0 0; }
+.rule-of-thumb .k { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+.rule-of-thumb .v { font-weight: 700; font-size: 1.05rem; margin-top: 0.15rem; color: var(--ink); }
+.rule-of-thumb .d { font-size: 0.85rem; color: var(--ink-2); margin-top: 0.2rem; }
+
+.lanes { display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin: 1rem 0 0; }
+.lane { background: var(--page); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 0.95rem; }
+.lane h4 { margin: 0 0 0.45rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+.lane.ok h4 { color: var(--good-text); }
+.lane.no h4 { color: var(--bad-text); }
+.rule-block .lane ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
+.lane.ok ul li::marker { color: var(--good-text); }
+.lane.no ul li::marker { color: var(--bad-text); }
+@media (max-width: 700px) { .lanes { grid-template-columns: 1fr; } }
+
+.admin-note { border: 1px dashed var(--accent); border-radius: 10px; padding: 0.8rem 1rem; margin: 1.1rem 0; }
+.admin-note .k { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+.admin-note p { margin: 0.35rem 0 0; font-size: 0.93rem; color: var(--ink-2); }
