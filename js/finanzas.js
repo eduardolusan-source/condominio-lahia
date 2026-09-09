@@ -46,6 +46,14 @@
   const egresosDe = m => m.egresos.fijos + m.egresos.variables + m.egresos.agua;
   const resultadoDe = m => ingresosDe(m) - egresosDe(m);
   const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const sum = arr => arr.reduce((a, b) => a + b, 0);
+  const mesMin = m => (m.nombre || "").toLowerCase();
+  function setText(id, t) { const el = document.getElementById(id); if (el) el.textContent = t; }
+  function rango() {
+    if (!M.length) return "";
+    const a = M[0], b = M[M.length - 1];
+    return a.id === b.id ? a.nombre.toLowerCase() + " de 2026" : a.nombre.toLowerCase() + " a " + b.nombre.toLowerCase() + " de 2026";
+  }
 
   const tip = document.getElementById("vizTip");
   function showTip(html, x, y) {
@@ -68,7 +76,7 @@
       b.type = "button";
       b.textContent = m.nombre;
       b.className = i === mesIdx ? "on" : "";
-      b.addEventListener("click", () => { mesIdx = i; renderMes(); renderChips(); });
+      b.addEventListener("click", () => { mesIdx = i; renderMes(); renderChips(); setText("tituloMes", "Detalle de " + mesMin(m) + " 2026"); if (history.replaceState) history.replaceState(null, "", "#mes-" + m.id); });
       box.appendChild(b);
     });
   }
@@ -136,6 +144,73 @@
       '<div class="stat"><div class="k">Adeudo acumulado de mantenimiento (2026)</div><div class="v">' + fmt(mo.acumuladoManto) + "</div></div>" +
       '<div class="stat"><div class="k">Adeudos de agua del mes</div><div class="v">' + fmt(mo.aguaMes) + '</div><div class="d">' + mo.unidadesAgua + " unidad(es)</div></div>";
   }
+
+  /* ---------- Vista general del año ---------- */
+  function renderOverview() {
+    const box = document.getElementById("overviewCards");
+    if (!M.length) { box.innerHTML = ""; return; }
+    const first = M[0], last = M[M.length - 1];
+    const ingAcum = sum(M.map(ingresosDe)), egrAcum = sum(M.map(egresosDe));
+    const resAcum = ingAcum - egrAcum;
+    const gastoProm = egrAcum / M.length;
+    const opProm = prom(M.map(m => m.egresos.fijos + m.egresos.variables));
+    const aguaProm = prom(M.map(m => m.egresos.agua));
+    const derramaProm = prom(M.map(m => m.ingresos.agua));
+    const diasReserva = gastoProm > 0 ? Math.max(0, last.saldoFin) / (gastoProm / 30) : 0;
+    const reservaTxt = last.saldoFin <= 0 ? "Sin reserva" : diasReserva >= 60 ? (diasReserva / 30).toFixed(1) + " meses" : Math.round(diasReserva) + " días";
+    const teoricoAnual = LAHIA.cuota * LAHIA.unidades * M.length;
+    const cobrado = sum(M.map(m => m.ingresos.manto));
+    const mo = last.morosidad;
+    const porUnidad = opProm / LAHIA.unidades;
+    const brecha = LAHIA.cuota - porUnidad;
+    const positivos = M.filter(m => resultadoDe(m) >= 0);
+    box.innerHTML =
+      '<div class="stat"><div class="k">Saldo en caja</div><div class="v ' + (last.saldoFin >= 0 ? "pos" : "neg") + '">' + fmt2(last.saldoFin) + '</div><div class="d">al cierre de ' + esc(mesMin(last)) + " · el año inició en " + fmt2(first.saldoIni) + "</div></div>" +
+      '<div class="stat"><div class="k">Resultado acumulado 2026</div><div class="v ' + (resAcum >= 0 ? "pos" : "neg") + '">' + fmt2(resAcum) + '</div><div class="d">ingresos ' + fmt(ingAcum) + " − egresos " + fmt(egrAcum) + "</div></div>" +
+      '<div class="stat"><div class="k">Reserva operativa</div><div class="v ' + (diasReserva < 30 ? "neg" : "") + '">' + reservaTxt + '</div><div class="d">lo que el saldo cubre del gasto mensual promedio (' + fmt(gastoProm) + ")</div></div>" +
+      '<div class="stat"><div class="k">Adeudo acumulado de mantenimiento</div><div class="v ' + (mo.acumuladoManto > 0 ? "neg" : "") + '">' + fmt(mo.acumuladoManto) + '</div><div class="d">' + mo.unidadesManto + " unidad(es) con adeudo al cierre de " + esc(mesMin(last)) + "</div></div>" +
+      '<div class="stat"><div class="k">Cuotas del año cobradas</div><div class="v ' + (cobrado / teoricoAnual >= 0.95 ? "pos" : "") + '">' + (cobrado / teoricoAnual * 100).toFixed(1) + '%</div><div class="d">' + fmt(cobrado) + " de " + fmt(teoricoAnual) + " teóricos</div></div>" +
+      '<div class="stat"><div class="k">Costo de operar por unidad</div><div class="v">' + fmt(porUnidad) + '</div><div class="d">al mes sin contar el agua, frente a la cuota de ' + fmt(LAHIA.cuota) + ": " + (brecha >= 0 ? "sobran " + fmt(brecha) : "faltan " + fmt(-brecha)) + "</div></div>" +
+      '<div class="stat"><div class="k">Meses con resultado positivo</div><div class="v">' + positivos.length + ' <span style="font-size:0.9rem; font-weight:400; color:var(--muted)">de ' + M.length + '</span></div><div class="d">' + (positivos.length ? positivos.map(mesMin).join(", ") : "ninguno todavía") + "</div></div>" +
+      '<div class="stat"><div class="k">El agua</div><div class="v">' + fmt(aguaProm) + '</div><div class="d">pipas al mes en promedio; la derrama cubre el ' + (aguaProm ? Math.round(derramaProm / aguaProm * 100) : 0) + "%</div></div>";
+  }
+
+  function renderAnual() {
+    const t = document.getElementById("tAnual");
+    let rows = "<thead><tr><th>Mes</th><th class='num'>Ingresos</th><th class='num'>Egresos</th><th class='num'>Resultado</th><th class='num'>Saldo al cierre</th><th class='num'>Cobranza</th><th class='num'>Adeudo manto.</th><th></th></tr></thead><tbody>";
+    M.forEach((m, i) => {
+      const res = resultadoDe(m);
+      rows += "<tr class='click' data-i='" + i + "'><td style='font-weight:600; color:var(--ink)'>" + esc(m.nombre) + "</td>" +
+        "<td class='num'>" + fmt(ingresosDe(m)) + "</td><td class='num'>" + fmt(egresosDe(m)) + "</td>" +
+        "<td class='num' style='color:var(--" + (res >= 0 ? "good" : "bad") + "-text); font-weight:600'>" + fmt(res) + "</td>" +
+        "<td class='num'>" + fmt(m.saldoFin) + "</td><td class='num'>" + Number(m.cobranza.pct).toFixed(0) + "%</td>" +
+        "<td class='num'>" + fmt(m.morosidad.acumuladoManto) + "</td><td class='go'><span class='btn-mini'>Ver mes ›</span></td></tr>";
+    });
+    const ing = sum(M.map(ingresosDe)), egr = sum(M.map(egresosDe));
+    rows += "<tr class='total'><td>Acumulado 2026</td><td class='num'>" + fmt(ing) + "</td><td class='num'>" + fmt(egr) + "</td><td class='num'>" + fmt(ing - egr) + "</td><td class='num'></td><td class='num'></td><td class='num'></td><td></td></tr>";
+    t.innerHTML = rows + "</tbody>";
+    t.querySelectorAll("tr.click").forEach(tr => tr.addEventListener("click", () => abrirMes(+tr.dataset.i)));
+  }
+
+  /* ---------- Navegación general ↔ detalle ---------- */
+  const secResumen = document.getElementById("resumen");
+  const secDetalle = document.getElementById("detalle");
+  function abrirMes(i) {
+    mesIdx = i;
+    renderChips(); renderMes();
+    secResumen.hidden = true; secDetalle.hidden = false;
+    setText("tituloMes", "Detalle de " + mesMin(M[i]) + " 2026");
+    if (history.replaceState) history.replaceState(null, "", "#mes-" + M[i].id);
+    window.scrollTo(0, 0);
+  }
+  function volver(e) {
+    if (e) e.preventDefault();
+    secDetalle.hidden = true; secResumen.hidden = false;
+    if (history.replaceState) history.replaceState(null, "", location.pathname);
+    window.scrollTo(0, 0);
+  }
+  document.getElementById("volver").addEventListener("click", volver);
+  document.getElementById("volver2").addEventListener("click", volver);
 
   /* ---------- Gráfica: barras ingresos vs egresos ---------- */
   function chartBars() {
@@ -404,14 +479,21 @@
   function render() {
     if (rendered) return;
     rendered = true;
-    renderChips();
-    renderMes();
+    setText("rangoSub", "Vista general del año con cifras reales del Excel de captura de la administración · " + rango() + " · " + LAHIA.unidades + " unidades · cuota de " + fmt(LAHIA.cuota) + ".");
+    setText("rangoFijas", "Datos estructurales que no cambian mes a mes (promedios de " + rango() + ").");
+    renderOverview();
+    renderAnual();
     chartBars();
     chartLine();
     renderFijas();
     chartFijos();
     renderAgua();
     renderProyectos();
+    renderChips();
+    renderMes();
+    const h = /^#mes-(\d{4}-\d{2})$/.exec(location.hash);
+    const i = h ? M.findIndex(m => m.id === h[1]) : -1;
+    if (i >= 0) abrirMes(i);
   }
 
   /* Se intenta la hoja publicada; si responde, se repinta con esos datos. */
