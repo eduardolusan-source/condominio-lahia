@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Bienvenida · Condominio Lahia</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="assets/logo.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span class="logo">LAHIA</span><span class="tag">Lofts</span></a>
+    <nav class="main">
+      <a href="index.html">Inicio</a>
+      <a href="micuenta.html">Mi cuenta</a>
+      <a href="finanzas.html">Finanzas</a>
+      <a href="casa-club.html">Casa club</a>
+      <a href="reglamentos.html">Reglamento</a>
+      <a href="areas-comunes.html">Áreas comunes</a>
+      <a href="asamblea/index.html">Asamblea</a>
+      <a href="emergencias.html">Qué hacer si…</a>
+    </nav>
+  </div>
+</header>
+<main class="pg">
+  <h1>👋 Bienvenida a Lahia</h1>
+  <p class="sub">Lo que conviene saber la primera semana, seas propietario o inquilino. Lo completo está en el <a href="reglamentos.html">Reglamento</a>.</p>
+  <section class="caso"><h2>💳 Cuota y agua</h2><ul><li><b>$2,000 al mes</b> de mantenimiento, en los primeros 10 días; después, 10% mensual de recargo.</li><li>El agua llega en pipas y se paga aparte, con la <b>derrama de agua</b> de cada mes.</li><li>Tu estado de cuenta: <a href="micuenta.html">Mi cuenta</a>. Las cuentas del edificio: <a href="finanzas.html">Finanzas</a>.</li></ul></section>
+  <section class="caso"><h2>🔇 Ruido y obras</h2><ul><li>Desde las <b>22:00 h</b>, sin ruidos molestos; nada audible en otro depto después de las 23:00 h (00:00 h viernes y sábado).</li><li>Obras: lunes a viernes 9:00–18:00 y sábado 10:00–14:00. Domingos y festivos, no.</li></ul></section>
+  <section class="caso"><h2>📦 Mudanzas</h2><ul><li>Aviso previo por correo a la Administración y <b>$1,500 de depósito</b> (se devuelve 4 días después).</li><li>Los elevadores no se usan para mudanzas.</li></ul></section>
+  <section class="caso"><h2>🚗 Estacionamiento</h2><ul><li>Solo en tu cajón asignado, a 10 km/h y sin claxon.</li></ul></section>
+  <section class="caso"><h2>🏊 Áreas comunes</h2><ul><li>Gimnasio L–V 6:00–22:00, S y D 8:00–19:00 (sin invitados). Alberca diario 8:00–22:00, sin salvavidas.</li><li>Mascotas sin correa solo en el área pet friendly.</li><li>Basura separada: orgánica, reciclable y pilas.</li><li>Casa club: se pide en el <a href="casa-club.html">calendario</a>; renta $1,000 y garantía según el número de personas.</li></ul></section>
+  <div class="big-tel"><a class="tel adm-tel" href="contactos.html" data-adm="tel">📞 Administración</a><a class="tel wa adm-wa" href="contactos.html" data-adm="wa" hidden>💬 WhatsApp</a><a class="tel sec" href="correo.html">📩 Recibe el reporte</a></div>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    Condominio Lahia · Sendero de los Misterios 83, Milenio III, Querétaro · <a href="contactos.html">Contactos</a> · <a href="bienvenida.html">Bienvenida</a> · <a href="correo.html">Recibe el reporte</a> · <a href="privacidad.html">Aviso de privacidad</a>
+  </div>
+</footer>
+<script src="js/servicio.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/ventana.js"></script>
+<script>
+(function () {
+  const L = window.LAHIA_SITIO || {}, t = String(L.adminTel || "").replace(/\D/g, ""), w = String(L.adminWhatsapp || "").replace(/\D/g, ""), c = L.adminCorreo || "", v = String(L.casetaTel || "").replace(/\D/g, "");
+  document.querySelectorAll('[data-adm="tel"]').forEach(a => { if (t) a.href = "tel:+52" + t.slice(-10); });
+  document.querySelectorAll('[data-adm="wa"]').forEach(a => { if (w) { a.href = "https://wa.me/52" + w.slice(-10); a.hidden = false; } });
+  const b = document.getElementById("admBtns"); if (b && (t || w || c)) b.innerHTML = (t ? '<a class="tel" href="tel:+52' + t.slice(-10) + '">📞 Llamar</a>' : "") + (w ? '<a class="tel wa" href="https://wa.me/52' + w.slice(-10) + '">💬 WhatsApp</a>' : "") + (c ? '<a class="tel sec" href="mailto:' + c + '">✉️ Correo</a>' : "");
+  const k = document.getElementById("casBtns"); if (k && v) k.innerHTML = '<a class="tel" href="tel:+52' + v.slice(-10) + '">📞 Llamar a la caseta</a>';
+})();
+</script>
+</body>
+</html>

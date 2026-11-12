@@ -101,3 +101,19 @@ del sitio no los protege.
   FEBRERO 2027… (si no, el año se toma de la celda «Mes y año»). El script avisa si el saldo inicial de enero
   no coincide con el final de diciembre.
 - Un mes futuro con un pago adelantado no se publica ni cobra cuota: cuenta como adelanto del mes en curso.
+
+## Sitio completo: Mi cuenta, casa club, correos, reporte del día 10 y semáforo (13 de noviembre de 2026)
+La hoja de la Administración es ahora la Hoja de Google «Lahia-Captura-Mensual (2) ARQ ANDRES»
+(`HOJA_ID` en Code.gs). El script SOLO LA LEE: todo lo que el sitio guarda vive en una hoja privada aparte,
+«Lahia · Sitio (privado)», que el script crea en tu Drive.
+
+1. https://script.google.com → **Nuevo proyecto** → nómbralo «Lahia · Sitio».
+2. Archivo `Código`: borra todo y pega `Code.gs`. **+ → Secuencia de comandos** → `Vecinos` → pega `Vecinos.gs`. Guarda.
+3. Elige **instalarVecinos** → **Ejecutar** → acepta permisos (Avanzado → Ir a… → Permitir). Crea la hoja privada con
+   Config (sitio), Correos, Reservas casa club, Saldos iniciales y Reportes; el registro de ejecución trae su liga.
+4. **Implementar → Nueva implementación → Aplicación web** · Ejecutar como: yo · Acceso: cualquier usuario → copia la URL /exec.
+5. Pega la URL en `js/servicio.js` (`api`) y, si los tienes, el teléfono, WhatsApp y correo de la Administración y de la caseta.
+6. En la hoja privada, **Config (sitio)**: `reporte_copia` (correo de la Administración), `sitio_url`
+   (https://eduardolusan-source.github.io/condominio-lahia), `admin_whatsapp`, `admin_correo`. En **Saldos iniciales**,
+   lo que cada depto debía al iniciar 2026 (negativo).
+Para cambiar el script después: Administrar implementaciones → la de «Activa» → ✏️ → **Nueva versión** (la URL no cambia).

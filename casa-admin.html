@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Casa club · Administración · Condominio Lahia</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="assets/logo.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span class="logo">LAHIA</span><span class="tag">Lofts</span></a>
+    <nav class="main">
+      <a href="index.html">Inicio</a>
+      <a href="micuenta.html">Mi cuenta</a>
+      <a href="finanzas.html">Finanzas</a>
+      <a href="casa-club.html">Casa club</a>
+      <a href="reglamentos.html">Reglamento</a>
+      <a href="areas-comunes.html">Áreas comunes</a>
+      <a href="asamblea/index.html">Asamblea</a>
+      <a href="emergencias.html">Qué hacer si…</a>
+    </nav>
+  </div>
+</header>
+<main class="pg">
+  <div class="caja" id="r" style="text-align:center;margin-top:1.5rem"><div style="font-size:3rem">⏳</div><p>Guardando…</p></div>
+  <p class="sub" style="text-align:center"><a href="casa-club.html">Ver el calendario ›</a></p>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    Condominio Lahia · Sendero de los Misterios 83, Milenio III, Querétaro · <a href="contactos.html">Contactos</a> · <a href="bienvenida.html">Bienvenida</a> · <a href="correo.html">Recibe el reporte</a> · <a href="privacidad.html">Aviso de privacidad</a>
+  </div>
+</footer>
+<script src="js/servicio.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/ventana.js"></script>
+<script>
+(function () {
+  "use strict";
+  const LH = window.LAHIA_SITIO || {}, URL_ = LH.api || "";
+  const $ = id => document.getElementById(id), esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const post = d => fetch(URL_, { method: "POST", body: JSON.stringify(d), headers: { "Content-Type": "text/plain;charset=utf-8" } }).then(r => r.json());
+  const msg = (id, ok, t) => { const m = $(id); m.hidden = false; m.className = "msg " + (ok ? "ok" : "mal"); m.textContent = t; };
+  let claveG = ""; try { claveG = localStorage.getItem("lahia.vecino") || ""; } catch (e) {}
+  const recordar = c => { try { localStorage.setItem("lahia.vecino", c); } catch (e) {} };
+  const ERR = { clave: "La clave no es la de residentes (la misma de Finanzas).", departamento: "Elige tu departamento de la lista.", correo: "Revisa tu correo.", ocupado: "Ese día ya está apartado.", nombre: "Escribe tu nombre para que la Administración sepa quién la pide.", personas: "El aforo es de 1 a 50 personas.", dia: "Elige un día a partir de mañana.", lejos: "Se aparta hasta con 90 días de anticipación.", tope: "Tu departamento ya tiene 2 fechas apartadas.", espera: "Demasiados intentos; prueba en un rato.", "no encontrado": "No encontramos ese folio con ese correo." };
+  const SIN = '<div class="aviso-v">⚙️ Esta sección se activa en cuanto la Administración conecte el sitio con su hoja.</div>';
+  if (!URL_) { const m = document.querySelector("main.pg"); if (m) m.querySelector("h1").insertAdjacentHTML("afterend", SIN); }
+  const VIEJO = '<div class="aviso-v">⚙️ El sitio todavía está conectado a la versión anterior del servicio. La administración del sitio debe publicar la nueva: <b>Implementar → Administrar implementaciones → ✏️ → Nueva versión</b>.</div>';
+  const esViejo = j => !!j && j.servicio === "lahia-finanzas";
+  const avisarViejo = () => { const m = document.querySelector("main.pg"); if (m && !m.querySelector(".aviso-v")) m.querySelector("h1").insertAdjacentHTML("afterend", VIEJO); };
+  /* Copias en el teléfono: se pinta al instante lo último que se vio y la hoja actualiza detrás. */
+  const lee = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
+  const guarda = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const DEPTOS_FIJOS = ["A 01","A 02","A 03","A 04","A 05","A 06","A 07","A 08","A 09","A 10","A 11","A 12","A 13","A 14","A 15","A 16","A 17","A 18","A 19","A 20","A 21","A 22","A 23","A 24","A 25","A 26","A 27","A 28","A 29","A 30","A 31","A 32","A 33","A 34","PH 35","PH 36","PH 37","PH 38","PH 39","PH 40"];
+  const opciones = (sel, lista) => { const v = $(sel).value; $(sel).innerHTML = '<option value="">Elige…</option>' + lista.map(d => "<option>" + esc(d) + "</option>").join(""); if (v) $(sel).value = v; };
+  const deptos = sel => { opciones(sel, (lee("lahia.vecinos") || {}).deptos || DEPTOS_FIJOS);
+    return fetch(URL_ + "?accion=vecinos&t=" + Date.now()).then(r => r.json()).then(j => { if (esViejo(j)) { avisarViejo(); return {}; } if (j.ok) guarda("lahia.vecinos", j); if (j.ok && j.deptos.length) opciones(sel, j.deptos); return j; }); };
+  const q = new URLSearchParams(location.search), DS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"], MS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  const largo = s => { const d = new Date(s + "T12:00:00"); return isNaN(d) ? s : DS[d.getDay()] + " " + d.getDate() + " de " + MS[d.getMonth()]; };
+  const pon = (ic, t, sub) => { $("r").innerHTML = '<div style="font-size:3.2rem">' + ic + '</div><h1 style="font-size:1.5rem;margin:.3rem 0">' + esc(t) + '</h1><p class="sub" style="margin:0">' + sub + "</p>"; };
+  if (q.get("accion") !== "resolverCasa") { pon("🤔", "Liga incompleta", "Usa el botón del correo."); return; }
+  fetch(URL_ + "?" + q.toString()).then(r => r.json()).then(j => {
+    if (esViejo(j)) return pon("⚙️", "Falta publicar la versión nueva", "En el editor del script: Implementar → Administrar implementaciones → ✏️ → Nueva versión. Luego toca otra vez el botón del correo.");
+    if (j.ok) pon(j.estatus === "Confirmada" ? "✅" : "❌", (j.estatus === "Confirmada" ? "Confirmada" : "Rechazada") + " · " + j.folio, "Depto <b>" + esc(j.depto) + "</b> · " + esc(largo(j.dia)) + "<br>Al residente ya le llegó el aviso por correo.");
+    else pon("⚠️", { liga: "La liga no es válida", cancelada: "El residente la canceló", ocupado: "Ese día ya está confirmado para otro depto", "no encontrado": "No encontré el folio" }[j.error] || "No se pudo", j.error === "cancelada" ? "La fecha quedó libre." : "Revisa la pestaña «Reservas casa club» de la hoja.");
+  }).catch(() => pon("📡", "Sin conexión", "Intenta de nuevo en un momento."));
+})();
+</script>
+</body>
+</html>

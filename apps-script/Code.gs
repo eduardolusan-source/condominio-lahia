@@ -28,7 +28,7 @@
 
 /* Id del archivo en Drive (Hoja de Google o .xlsx). Es el que aparece en la
    dirección: drive.google.com/file/d/ESTE_ID/view  o  docs.google.com/spreadsheets/d/ESTE_ID/edit */
-const HOJA_ID = "1GauI7liigjmLTVuW9mdcmQvFY6OLAbkm";      // Lahia-Captura-Mensual (2) ARQ ANDRES.xlsx
+const HOJA_ID = "1nm4aYVSgaaNxz3D3jclvWu3tc3KP4H4Dx_YsilRgBOk";   // Lahia-Captura-Mensual (2) ARQ ANDRES (Hoja de Google de la Administración; solo se lee)
 
 const CUOTA = 2000;                  // cuota mensual de mantenimiento si la hoja no trae el renglón "Cuota de mantenimiento"
 const UNIDADES = 40;                 // si la hoja no trae "Número de unidades"
@@ -45,6 +45,8 @@ const MIME_HOJA = "application/vnd.google-apps.spreadsheet";
 function doGet(e) {
   const p = (e && e.parameter) || {};
   try {
+    /* Correos, casa club, Mi cuenta y lista de departamentos (archivo Vecinos.gs). */
+    if (p.accion && typeof rutaVecinosGet_ === "function") { const r = rutaVecinosGet_(p); if (r) return texto_(JSON.stringify(r)); }
     const cache = CacheService.getScriptCache();
     if (!p.fresh) {
       const guardado = cache.get("finanzas");
@@ -162,7 +164,7 @@ function armarFinanzas_() {
      transcurridas, SIN reiniciar en enero (quien debe diciembre sigue debiéndolo en
      enero). Se calcula aquí, con los cobros por departamento, y SOLO salen las sumas
      y los conteos. */
-  const saldos = {};
+  const saldos = typeof saldosIniciales_ === "function" ? saldosIniciales_() : {};   // adeudos de antes de la primera pestaña (Vecinos.gs, privado)
   meses.forEach((m, i) => {
     m.pagosPorUnidad.forEach(([depto, pagado]) => { saldos[depto] = (saldos[depto] || 0) + pagado - m.cuota; });
     if (i === meses.length - 1) futuros.forEach(f => f.pagosPorUnidad.forEach(([depto, pagado]) => { saldos[depto] = (saldos[depto] || 0) + pagado; }));
@@ -175,7 +177,7 @@ function armarFinanzas_() {
       adelantos: redondear_(pos.reduce((a, b) => a + b, 0)),
       unidadesAdelanto: pos.length
     };
-    delete m.pagosPorUnidad;   // no sale del script
+    delete m.pagosPorUnidad; delete m.aguaPorUnidad;   // no salen del script
   });
 
   return {
@@ -311,7 +313,8 @@ function leerMes_(info) {
     detalle: { fijos: fijos, variables: variables, agua: pipas },
     proyectos: proyectos,
     capturado: manto > 0 || agua > 0 || totFijos > 0 || totVar > 0 || totAgua > 0,
-    pagosPorUnidad: pagosPorUnidad
+    pagosPorUnidad: pagosPorUnidad,
+    aguaPorUnidad: cobros.map(r => [r.b, num_(r.d), num_(r.f)])      // [depto, agua pagada, deuda de agua] · solo para «Mi cuenta»
   };
 }
 

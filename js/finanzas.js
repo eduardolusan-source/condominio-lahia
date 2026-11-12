@@ -14,7 +14,7 @@
      Si se deja vacía o el script no responde, se muestra la copia de js/data.js.
      REGLA: lo que entrega el script lo puede leer cualquiera con la URL; la
      clave del sitio no lo protege. Por eso solo viajan agregados. */
-  const API_URL = "";
+  const API_URL = (window.LAHIA_SITIO || {}).api || "";            // se configura una sola vez en js/servicio.js
 
   /* ---------- Portón de acceso ---------- */
   const KEY_HASH = "bcac371b54f59945a14aa49e2e408e5d6e4dbc59387f5d8cfc6b015d40d5bb02";
@@ -91,6 +91,13 @@
     if (!r.ok) throw new Error("HTTP " + r.status);
     const j = await r.json();
     if (!j || !j.ok) throw new Error((j && j.error) || "respuesta sin datos");
+    try { localStorage.setItem(LS, JSON.stringify(j)); } catch (_) { /* sin espacio */ }
+    return deRespuesta(j);
+  }
+  /* La última respuesta en vivo se guarda en el teléfono: la siguiente visita la pinta al instante. */
+  const LS = "lahia.fin.vivo";
+  function guardada() { try { const j = JSON.parse(localStorage.getItem(LS) || "null"); return j && j.ok ? j : null; } catch (_) { return null; } }
+  function deRespuesta(j) {
     const meses = (j.meses || []).filter(m => /^\d{4}-\d{2}$/.test(String(m.id || ""))).map(m => mes(m, true)).sort((a, b) => a.id.localeCompare(b.id));
     if (!meses.length) throw new Error("el script no trae meses capturados");
     if (j.avisos && j.avisos.length) console.info("[Lahia] Avisos de la hoja:\n· " + j.avisos.join("\n· "));
@@ -139,15 +146,16 @@
   function abrir() {
     gate.hidden = true;
     content.hidden = false;
-    try { sessionStorage.setItem("lahiaFin", "1"); } catch (_) { /* sin almacenamiento */ }
+    try { localStorage.setItem("lahiaFin", "1"); } catch (_) { /* sin almacenamiento */ }
     if (tablero) return;
     tablero = Tablero.montar(document.getElementById("tablero"), OPCIONES);
-    tablero.actualizar(modeloLocal());
+    let previa = null; try { const g = guardada(); if (g) previa = deRespuesta(g); } catch (_) { previa = null; }
+    tablero.actualizar(previa || modeloLocal());
     modeloVivo().then(m => { if (m) tablero.actualizar(m); })
       .catch(e => console.warn("[Lahia] El script de la hoja no respondió (" + e.message + "). Se muestra la copia de js/data.js."));
   }
 
   let guardado = null;
-  try { guardado = sessionStorage.getItem("lahiaFin"); } catch (_) { /* sin almacenamiento */ }
+  try { guardado = localStorage.getItem("lahiaFin") || sessionStorage.getItem("lahiaFin"); } catch (_) { /* sin almacenamiento */ }
   if (guardado === "1") abrir();
 })();

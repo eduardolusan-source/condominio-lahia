@@ -6,7 +6,19 @@
 <meta name="robots" content="noindex">
 <title>Casa club · Condominio Lahia</title>
 <link rel="stylesheet" href="css/styles.css">
-<link rel="icon" href="assets/logo.svg">
+<link rel="icon" href="assets/logo.svg"><style>
+  .montos { margin-top: .8rem; padding: .7rem .9rem; border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); font-size: .95rem; } .dos2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: .6rem; }
+  .cc-top { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .9rem; } .chip { font: inherit; font-size: .85rem; font-weight: 800; padding: .3rem .8rem; border-radius: 999px; border: 0; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--ink); } .chip.enl { cursor: pointer; text-decoration: underline; }
+  .cal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: .9rem; box-shadow: var(--shadow); }
+  .cal-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; } .cal-h b { font-size: 1.15rem; text-transform: capitalize; }
+  .cal-h button { font: inherit; font-size: 1.4rem; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border); background: var(--page); color: var(--ink); cursor: pointer; } .cal-h button:disabled { opacity: .3; cursor: default; }
+  .cal-s, .cal-g { display: grid; grid-template-columns: repeat(7, 1fr); gap: .3rem; } .cal-s span { text-align: center; font-size: .72rem; font-weight: 800; color: var(--muted); }
+  .d { aspect-ratio: 1; font: inherit; font-weight: 700; font-size: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--page); color: var(--ink); cursor: pointer; }
+  .d:disabled { opacity: .35; cursor: default; } .d.hoy { box-shadow: inset 0 0 0 2px var(--accent); } .d.parcial { background: #fff3cd; color: #5a4300; opacity: 1; } .d.lleno { background: #f8d7da; color: #7a1c24; opacity: 1; } .d.sel { background: var(--accent); color: #fff; }
+  .ley { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .8rem; color: var(--ink-2); margin-top: .6rem; } .ley span::before { content: ""; display: inline-block; width: .8rem; height: .8rem; border-radius: 4px; margin-right: .3rem; vertical-align: -2px; border: 1px solid var(--border); background: var(--page); }
+  .ley .p::before { background: #fff3cd; } .ley .l::before { background: #f8d7da; }
+  details.caja summary { cursor: pointer; } .exp li { margin: .3rem 0; }
+  @media (prefers-color-scheme: dark) { .d.parcial, .ley .p::before { background: #5a4300; color: #ffe08a; } .d.lleno, .ley .l::before { background: #5a1d22; color: #ffb3b9; } .d.sel { color: #0d0d0d; } }</style>
 </head>
 <body>
 <header class="site-header">
@@ -14,22 +26,40 @@
     <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span class="logo">LAHIA</span><span class="tag">Lofts</span></a>
     <nav class="main">
       <a href="index.html">Inicio</a>
+      <a href="micuenta.html">Mi cuenta</a>
+      <a href="finanzas.html">Finanzas</a>
+      <a href="casa-club.html" class="active">Casa club</a>
       <a href="reglamentos.html">Reglamento</a>
       <a href="areas-comunes.html">Áreas comunes</a>
-      <a href="casa-club.html" class="active">Casa club</a>
-      <a href="finanzas.html">Finanzas</a>
       <a href="asamblea/index.html">Asamblea</a>
+      <a href="emergencias.html">Qué hacer si…</a>
     </nav>
   </div>
 </header>
-
-<main class="wrap">
-  <h1 class="section-title" style="margin-top:1rem">Reservación de la casa club</h1>
-  <p class="section-sub">La casa club es un espacio común para la convivencia de los vecinos y puede reservarse para uso privado. Cuotas, aforo y garantías conforme al Reglamento Interno 2024.</p>
-
-  <div class="notice"><strong>La reservación se formaliza en la Administración.</strong> El reglamento pide una <strong>solicitud por escrito y firmada</strong> por el condómino responsable. Este formulario prepara el mensaje con todos los datos que la Administración necesita; la reservación queda confirmada cuando se entrega la solicitud firmada y se cubre el depósito.</div>
-
-  <div class="panel">
+<main class="pg">
+  <h1>🎉 Casa club</h1>
+  <div class="cc-top"><span class="chip">Renta $1,000</span><span class="chip">Hasta 50 personas</span><button type="button" class="chip enl" id="info">¿Cómo funciona?</button></div>
+  <div class="cal">
+    <div class="cal-h"><button type="button" id="ant" aria-label="Mes anterior">‹</button><b id="mesT"></b><button type="button" id="sig" aria-label="Mes siguiente">›</button></div>
+    <div class="cal-s"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+    <div class="cal-g" id="grid"></div>
+    <div class="ley"><span>libre</span><span class="p">por confirmar</span><span class="l">ocupado</span></div>
+  </div>
+  <form class="caja" id="f" hidden novalidate style="margin-top:1rem">
+    <h2 id="diaT" style="font-size:1.15rem;margin:0"></h2>
+    <label class="lb" for="dep">Departamento</label><select class="in" id="dep"></select>
+    <label class="lb" for="nom">Tu nombre <small style="font-weight:400;color:var(--muted)">(propietario o inquilino; solo lo ve la Administración)</small></label><input class="in" id="nom" maxlength="80" autocomplete="name">
+    <label class="lb" for="mail">Correo para avisarte</label><input class="in" id="mail" type="email" inputmode="email" autocomplete="email" maxlength="120">
+    <div class="dos2"><div><label class="lb" for="per">Personas</label><input class="in" id="per" type="number" inputmode="numeric" min="1" max="50" value="10"></div>
+    <div><label class="lb" for="mot">Motivo <small style="font-weight:400;color:var(--muted)">(opcional)</small></label><input class="in" id="mot" maxlength="120" placeholder="Cumpleaños, reunión…"></div></div>
+    <div class="montos" id="montos"></div>
+    <div class="trampa" aria-hidden="true"><input id="web" tabindex="-1" autocomplete="off"></div>
+    <button class="go" id="go">Pedir este día</button><p class="msg" id="m" hidden></p>
+  </form>
+  <details class="caja" style="margin-top:1rem"><summary><b>🔎 Ya la pedí: ver mi folio</b></summary>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:.5rem;margin-top:.8rem"><input class="in" id="fol" placeholder="CC-0001" autocapitalize="characters"><button class="go" type="button" id="goF" style="margin:0;padding:0 1.2rem">Ver</button></div>
+    <div id="rF"></div></details>
+  <section id="reglas" style="margin-top:1.6rem"><h2 class="section-title" style="margin-top:0">Reglas y cuotas</h2><div class="panel">
     <h3>Cuotas y garantía</h3>
     <div class="table-scroll">
       <table class="hours">
@@ -63,130 +93,81 @@
       <p class="ref"><strong>Propuesta (aún no en el reglamento):</strong> reservar con al menos 7 días de anticipación, máximo una reservación por departamento al mes y cancelación sin cargo hasta 48 horas antes.</p>
     </section>
 
-    <section class="rule-block" style="margin-bottom:0">
-      <h2>📝 Solicitud de reservación</h2>
-      <form class="res-form" id="resForm">
-        <div>
-          <label class="f" for="rNombre">Nombre del condómino responsable</label>
-          <input id="rNombre" required placeholder="Nombre y apellido">
-        </div>
-        <div>
-          <label class="f" for="rDepto">Departamento</label>
-          <input id="rDepto" required placeholder="Ej. A-12 o PH-36">
-        </div>
-        <div>
-          <label class="f" for="rFecha">Fecha del evento</label>
-          <input id="rFecha" type="date" required>
-        </div>
-        <div>
-          <label class="f" for="rObjeto">Objeto de la reunión</label>
-          <input id="rObjeto" required placeholder="Ej. cumpleaños infantil">
-        </div>
-        <div>
-          <label class="f" for="rIni">Hora de inicio</label>
-          <input id="rIni" type="time" value="16:00" required>
-        </div>
-        <div>
-          <label class="f" for="rFin">Hora de término</label>
-          <input id="rFin" type="time" value="21:00" required>
-        </div>
-        <div>
-          <label class="f" for="rInvitados">Número de personas (máx. 50)</label>
-          <input id="rInvitados" type="number" min="1" max="50" value="15" required>
-        </div>
-        <div>
-          <label class="f" for="rExternos">Invitados externos al condominio</label>
-          <input id="rExternos" placeholder="Nombres, separados por coma">
-        </div>
-        <div class="full" id="montos" style="font-size:0.9rem; color:var(--ink-2)"></div>
-        <div class="full form-actions">
-          <button type="submit" class="btn primary">Generar solicitud</button>
-        </div>
-        <div class="full" id="resOut" hidden>
-          <div class="msg-preview" id="resMsg"></div>
-          <div class="form-actions" style="margin-top:0.75rem">
-            <a class="btn primary" id="resWa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
-            <button type="button" class="btn ghost" id="resCopy">Copiar mensaje</button>
-          </div>
-          <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem">La Administración confirmará disponibilidad e indicará dónde entregar la solicitud firmada y cómo cubrir la renta y la garantía.</p>
-        </div>
-      </form>
-    </section>
-  </div>
+    </div></section>
 </main>
-
 <footer class="site-footer">
   <div class="inner">
-    Condominio Lahia · Condiciones tomadas del Reglamento Interno 2024, capítulo III. Los puntos señalados como propuesta no forman parte del reglamento vigente.
+    Condominio Lahia · Sendero de los Misterios 83, Milenio III, Querétaro · <a href="contactos.html">Contactos</a> · <a href="bienvenida.html">Bienvenida</a> · <a href="correo.html">Recibe el reporte</a> · <a href="privacidad.html">Aviso de privacidad</a>
   </div>
 </footer>
-
+<script src="js/servicio.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/ventana.js"></script>
 <script>
-const HORARIO = [
-  { dia: 0, ini: '10:00', fin: '20:00', txt: 'domingo, de 10:00 a 20:00 h' },
-  { dia: 1, ini: '09:00', fin: '22:00', txt: 'lunes a jueves, de 9:00 a 22:00 h' },
-  { dia: 2, ini: '09:00', fin: '22:00', txt: 'lunes a jueves, de 9:00 a 22:00 h' },
-  { dia: 3, ini: '09:00', fin: '22:00', txt: 'lunes a jueves, de 9:00 a 22:00 h' },
-  { dia: 4, ini: '09:00', fin: '22:00', txt: 'lunes a jueves, de 9:00 a 22:00 h' },
-  { dia: 5, ini: '09:00', fin: '23:59', txt: 'viernes, de 9:00 a 23:59 h' },
-  { dia: 6, ini: '09:00', fin: '23:59', txt: 'sábado, de 9:00 a 23:59 h' }
-];
-const g = id => document.getElementById(id).value.trim();
-const mxn = n => n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2 });
-
-function garantia(n) {
-  if (n <= 9) return 0;
-  if (n <= 20) return 1000;
-  if (n <= 30) return 1500;
-  return 2000;
-}
-
-function pintarMontos() {
-  const n = parseInt(document.getElementById('rInvitados').value, 10) || 0;
-  const gar = garantia(n);
-  const box = document.getElementById('montos');
-  box.innerHTML = '<strong>Renta:</strong> ' + mxn(1000) +
-    ' · <strong>Garantía:</strong> ' + (gar ? mxn(gar) : 'no aplica (menos de 10 personas)') +
-    ' · <strong>Total a depositar:</strong> ' + mxn(1000 + gar);
-}
-['rInvitados'].forEach(id => document.getElementById(id).addEventListener('input', pintarMontos));
-pintarMontos();
-
-document.getElementById('resForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  const fechaVal = g('rFecha');
-  const d = new Date(fechaVal + 'T12:00:00');
-  const fecha = fechaVal ? d.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
-  const n = parseInt(g('rInvitados'), 10) || 0;
-  const gar = garantia(n);
-  const h = HORARIO[d.getDay()];
-  let aviso = '';
-  if (fechaVal && (g('rIni') < h.ini || g('rFin') > h.fin)) {
-    aviso = '\n\nNota: el horario solicitado queda fuera del horario de la casa club para ese día (' + h.txt + '). Quedo atento a lo que indique la Administración.';
+(function () {
+  "use strict";
+  const LH = window.LAHIA_SITIO || {}, URL_ = LH.api || "";
+  const $ = id => document.getElementById(id), esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const post = d => fetch(URL_, { method: "POST", body: JSON.stringify(d), headers: { "Content-Type": "text/plain;charset=utf-8" } }).then(r => r.json());
+  const msg = (id, ok, t) => { const m = $(id); m.hidden = false; m.className = "msg " + (ok ? "ok" : "mal"); m.textContent = t; };
+  let claveG = ""; try { claveG = localStorage.getItem("lahia.vecino") || ""; } catch (e) {}
+  const recordar = c => { try { localStorage.setItem("lahia.vecino", c); } catch (e) {} };
+  const ERR = { clave: "La clave no es la de residentes (la misma de Finanzas).", departamento: "Elige tu departamento de la lista.", correo: "Revisa tu correo.", ocupado: "Ese día ya está apartado.", nombre: "Escribe tu nombre para que la Administración sepa quién la pide.", personas: "El aforo es de 1 a 50 personas.", dia: "Elige un día a partir de mañana.", lejos: "Se aparta hasta con 90 días de anticipación.", tope: "Tu departamento ya tiene 2 fechas apartadas.", espera: "Demasiados intentos; prueba en un rato.", "no encontrado": "No encontramos ese folio con ese correo." };
+  const SIN = '<div class="aviso-v">⚙️ Esta sección se activa en cuanto la Administración conecte el sitio con su hoja.</div>';
+  if (!URL_) { const m = document.querySelector("main.pg"); if (m) m.querySelector("h1").insertAdjacentHTML("afterend", SIN); }
+  const VIEJO = '<div class="aviso-v">⚙️ El sitio todavía está conectado a la versión anterior del servicio. La administración del sitio debe publicar la nueva: <b>Implementar → Administrar implementaciones → ✏️ → Nueva versión</b>.</div>';
+  const esViejo = j => !!j && j.servicio === "lahia-finanzas";
+  const avisarViejo = () => { const m = document.querySelector("main.pg"); if (m && !m.querySelector(".aviso-v")) m.querySelector("h1").insertAdjacentHTML("afterend", VIEJO); };
+  /* Copias en el teléfono: se pinta al instante lo último que se vio y la hoja actualiza detrás. */
+  const lee = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
+  const guarda = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const DEPTOS_FIJOS = ["A 01","A 02","A 03","A 04","A 05","A 06","A 07","A 08","A 09","A 10","A 11","A 12","A 13","A 14","A 15","A 16","A 17","A 18","A 19","A 20","A 21","A 22","A 23","A 24","A 25","A 26","A 27","A 28","A 29","A 30","A 31","A 32","A 33","A 34","PH 35","PH 36","PH 37","PH 38","PH 39","PH 40"];
+  const opciones = (sel, lista) => { const v = $(sel).value; $(sel).innerHTML = '<option value="">Elige…</option>' + lista.map(d => "<option>" + esc(d) + "</option>").join(""); if (v) $(sel).value = v; };
+  const deptos = sel => { opciones(sel, (lee("lahia.vecinos") || {}).deptos || DEPTOS_FIJOS);
+    return fetch(URL_ + "?accion=vecinos&t=" + Date.now()).then(r => r.json()).then(j => { if (esViejo(j)) { avisarViejo(); return {}; } if (j.ok) guarda("lahia.vecinos", j); if (j.ok && j.deptos.length) opciones(sel, j.deptos); return j; }); };
+  const MS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"], DS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const t0 = new Date(); t0.setHours(12, 0, 0, 0); const HOY = iso(t0), TOPE = iso(new Date(t0.getTime() + 90 * 864e5));
+  let mes = new Date(t0.getFullYear(), t0.getMonth(), 1), oc = {}, sel = "", yo = {};
+  try { yo = JSON.parse(localStorage.getItem("lahia.casa") || "{}") || {}; } catch (e) {}
+  if (yo.nombre) $("nom").value = yo.nombre; if (yo.correo) $("mail").value = yo.correo;
+  function pintar() {
+    $("mesT").textContent = MS[mes.getMonth()] + " " + mes.getFullYear();
+    $("ant").disabled = mes.getFullYear() === t0.getFullYear() && mes.getMonth() === t0.getMonth();
+    const lim = new Date(TOPE + "T12:00:00"); $("sig").disabled = mes.getFullYear() * 12 + mes.getMonth() >= lim.getFullYear() * 12 + lim.getMonth();
+    const hueco = (mes.getDay() + 6) % 7, n = new Date(mes.getFullYear(), mes.getMonth() + 1, 0).getDate(); let h = "<span></span>".repeat(hueco);
+    for (let d = 1; d <= n; d++) { const s = iso(new Date(mes.getFullYear(), mes.getMonth(), d)), o = oc[s];
+      h += '<button type="button" class="d' + (s === HOY ? " hoy" : "") + (o ? (o === "ocupado" ? " lleno" : " parcial") : "") + (s === sel ? " sel" : "") + '" data-d="' + s + '"' + (s <= HOY || s > TOPE || o ? " disabled" : "") + ">" + d + "</button>"; }
+    $("grid").innerHTML = h;
   }
-  const externos = g('rExternos');
-  const msg = 'Solicitud de reservación de la casa club — Condominio Lahia\n\n' +
-    'Condómino responsable: ' + g('rNombre') + '\n' +
-    'Departamento: ' + g('rDepto') + '\n' +
-    'Objeto de la reunión: ' + g('rObjeto') + '\n' +
-    'Fecha: ' + fecha + '\n' +
-    'Horario: de ' + g('rIni') + ' a ' + g('rFin') + ' h\n' +
-    'Número de personas: ' + n + '\n' +
-    'Invitados externos: ' + (externos ? externos : 'ninguno') + '\n\n' +
-    'Depósitos: renta ' + mxn(1000) + (gar ? ' y garantía ' + mxn(gar) : ' (sin garantía, reunión menor a 10 personas)') +
-    '. Total: ' + mxn(1000 + gar) + '.\n\n' +
-    'Me hago responsable del área durante el evento y del comportamiento de mis invitados, y entregaré el espacio limpio y con la basura en bolsas negras. Quedo pendiente de la confirmación y del lugar donde entregar la solicitud firmada.' + aviso;
-  document.getElementById('resMsg').textContent = msg;
-  document.getElementById('resWa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  document.getElementById('resOut').hidden = false;
-});
-
-document.getElementById('resCopy').addEventListener('click', function () {
-  navigator.clipboard.writeText(document.getElementById('resMsg').textContent).then(() => {
-    this.textContent = '¡Copiado!';
-    setTimeout(() => { this.textContent = 'Copiar mensaje'; }, 1600);
-  });
-});
+  $("grid").onclick = e => { const b = e.target.closest("[data-d]"); if (!b || b.disabled) return; sel = b.dataset.d; pintar();
+    const d = new Date(sel + "T12:00:00"); $("diaT").textContent = "📅 " + DS[d.getDay()].replace(/^./, c => c.toUpperCase()) + " " + d.getDate() + " de " + MS[d.getMonth()] + " · " + HOR[d.getDay()]; montos(); $("f").hidden = false; $("m").hidden = true; $("f").scrollIntoView({ behavior: "smooth", block: "start" }); };
+  const HOR = ["10:00 a 20:00 h", "9:00 a 22:00 h", "9:00 a 22:00 h", "9:00 a 22:00 h", "9:00 a 22:00 h", "9:00 a 23:59 h", "9:00 a 23:59 h"];
+  const gar = n => n >= 31 ? 2000 : n >= 21 ? 1500 : n >= 10 ? 1000 : 0, $m = v => "$" + v.toLocaleString("es-MX");
+  const montos = () => { const n = Number($("per").value) || 0, g = gar(n); $("montos").innerHTML = "Renta <b>$1,000</b>" + (g ? " + garantía <b>" + $m(g) + "</b> = <b>" + $m(1000 + g) + "</b>" : " · sin garantía (menos de 10 personas)") + (n > 50 ? ' <span style="color:var(--bad-text)">· máximo 50</span>' : ""); };
+  $("per").addEventListener("input", montos);
+  $("ant").onclick = () => { mes = new Date(mes.getFullYear(), mes.getMonth() - 1, 1); pintar(); };
+  $("sig").onclick = () => { mes = new Date(mes.getFullYear(), mes.getMonth() + 1, 1); pintar(); };
+  const usa = j => { oc = {}; (j.ocupados || []).forEach(o => { oc[o.dia] = o.estatus; }); if (j.deptos && j.deptos.length) { opciones("dep", j.deptos); if (yo.depto && !$("dep").value) $("dep").value = yo.depto; } pintar(); };
+  opciones("dep", (lee("lahia.vecinos") || {}).deptos || DEPTOS_FIJOS); if (yo.depto) $("dep").value = yo.depto;
+  const prev = lee("lahia.casa.pub"); if (prev && prev.ok) usa(prev); else pintar();
+  function cargar() { return fetch(URL_ + "?accion=casa&t=" + Date.now()).then(r => r.json()).then(j => { if (j && j.ok && j.ocupados) guarda("lahia.casa.pub", j); oc = {}; if (esViejo(j)) { avisarViejo(); $("grid").innerHTML = '<p style="grid-column:1/-1;color:var(--muted)">El calendario se activa en cuanto se publique la versión nueva.</p>'; return; } (j.ocupados || []).forEach(o => { oc[o.dia] = o.estatus; });
+    if (j.deptos && j.deptos.length) { $("dep").innerHTML = '<option value="">Elige…</option>' + j.deptos.map(d => "<option>" + esc(d) + "</option>").join(""); if (yo.depto) $("dep").value = yo.depto; } pintar(); })
+    .catch(() => { if (!lee("lahia.casa.pub")) $("grid").insertAdjacentHTML("afterend", '<p style="color:var(--bad-text)">Sin conexión con la hoja. Intenta en un momento.</p>'); }); }
+  $("f").onsubmit = async e => { e.preventDefault(); const b = $("go"); b.disabled = true;
+    const j = await post({ accion: "casa", dia: sel, depto: $("dep").value, nombre: $("nom").value.trim(), correo: $("mail").value.trim(), personas: Number($("per").value), motivo: $("mot").value.trim(), web: $("web").value }).catch(() => ({ error: "conexión" }));
+    b.disabled = false;
+    if (j.ok) { try { localStorage.setItem("lahia.casa", JSON.stringify({ nombre: $("nom").value.trim(), correo: $("mail").value.trim(), depto: $("dep").value })); } catch (e) {} $("f").hidden = true; sel = ""; await cargar();
+      window.ventana("✓ Pedida · " + j.folio, '<p class="exp">La Administración la confirma y te llega un correo. Guarda tu folio <b>' + esc(j.folio) + '</b>.</p><p class="exp">Horario: ' + esc(j.horario || "") + '. Renta $1,000' + (j.garantia ? " y garantía " + $m(j.garantia) : "") + '. El reglamento pide entregar la solicitud por escrito y firmada.</p>'); }
+    else msg("m", false, ERR[j.error] || "No se pudo (" + j.error + ")."); };
+  $("goF").onclick = async () => { const f = $("fol").value.trim().toUpperCase(); const j = await fetch(URL_ + "?accion=folio&folio=" + encodeURIComponent(f)).then(r => r.json()).catch(() => ({}));
+    if (!j.ok) { $("rF").innerHTML = '<p class="msg mal">Folio no encontrado.</p>'; return; }
+    $("rF").innerHTML = '<p style="margin:.8rem 0 0"><b>' + esc(j.folio) + "</b> · " + esc(j.dia) + ' · <span class="chip">' + esc(j.estatus) + "</span>" + (j.nota ? "<br><small>" + esc(j.nota) + "</small>" : "") + "</p>" +
+      (/por confirmar|confirmada/i.test(j.estatus) ? '<input class="in" id="mailC" type="email" placeholder="tu correo, para cancelar" style="margin-top:.6rem"><button class="go sec" type="button" id="goC">Cancelar esta reserva</button><p class="msg" id="mC" hidden></p>' : "");
+    const c = $("goC"); if (c) c.onclick = async () => { const r = await post({ accion: "cancelarCasa", folio: j.folio, correo: $("mailC").value.trim() }).catch(() => ({})); msg("mC", !!r.ok, r.ok ? "✓ Cancelada; el día quedó libre." : ERR[r.error] || "No se pudo."); if (r.ok) cargar(); }; };
+  $("info").onclick = () => window.ventana("¿Cómo funciona?", '<ul class="exp"><li>Un evento por día. Horario: L–J 9:00–22:00 · V y S 9:00–23:59 · D 10:00–20:00.</li><li>Renta <b>$1,000</b> siempre. Garantía: 10–20 personas $1,000 · 21–30 $1,500 · 31–50 $2,000; con 9 o menos, sin garantía.</li><li>Hay que estar al corriente en el mantenimiento y entregar la solicitud firmada.</li><li>Sin basura al terminar y la alberca no está incluida.</li></ul><div class="acc"><a href="#reglas">Reglas completas</a></div>');
+  cargar();
+})();
 </script>
 </body>
 </html>
