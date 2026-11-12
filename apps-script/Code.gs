@@ -131,18 +131,23 @@ function armarFinanzas_() {
   const hojas = ss.getSheets().map(h => infoMes_(h)).filter(Boolean).sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
   if (!hojas.length) throw new Error("No encuentro pestañas de meses (ENERO, FEBRERO…).");
 
-  const meses = [], avisos = [], proyectos = {};
+  /* Meses futuros (alguien pagó diciembre por adelantado): no se publican ni cobran
+     cuota; sus pagos cuentan como adelanto del mes en curso. */
+  const hoyId = Utilities.formatDate(new Date(), "America/Mexico_City", "yyyy-MM");
+  const meses = [], avisos = [], proyectos = {}, futuros = [];
   let unidades = UNIDADES, cuota = CUOTA;
   hojas.forEach(info => {
     const m = leerMes_(info);
     if (!m.capturado) return;
+    if (m.id > hoyId) { futuros.push(m); return; }
     const prev = meses[meses.length - 1];
     if (prev && prev.id === m.id) { avisos.push("Hay dos pestañas para " + m.nombre + " " + m.anio + "; se usa la primera."); return; }
     if (prev && firma_(prev) === firma_(m) && Math.abs(m.saldoIni - prev.saldoFin) > 0.5) {
       avisos.push(m.nombre + " " + m.anio + " es una copia de " + prev.nombre.toLowerCase() + " sin capturar (mismas cifras y saldo inicial sin encadenar); no se publica.");
       return;
     }
-    if (prev && prev.anio === m.anio && Math.abs(m.saldoIni - prev.saldoFin) > 0.5) {
+    const anterior = (m.id.slice(5) === "01" ? (m.anio - 1) + "-12" : m.anio + "-" + ("0" + (parseInt(m.id.slice(5), 10) - 1)).slice(-2));
+    if (prev && prev.id === anterior && Math.abs(m.saldoIni - prev.saldoFin) > 0.5) {     // también de diciembre a enero
       avisos.push("El saldo inicial de " + m.nombre.toLowerCase() + " (" + m.saldoIni + ") no coincide con el saldo final de " + prev.nombre.toLowerCase() + " (" + prev.saldoFin + ").");
     }
     unidades = m.unidades || unidades;
@@ -153,14 +158,15 @@ function armarFinanzas_() {
   });
   if (!meses.length) throw new Error("Ninguna pestaña mensual tiene datos todavía.");
 
-  /* Morosidad acumulada: saldo por unidad = pagado en el año − cuotas
-     transcurridas. Se calcula aquí, con los cobros por departamento, y SOLO
-     salen las sumas y los conteos. */
+  /* Morosidad acumulada: saldo por unidad = todo lo pagado − todas las cuotas
+     transcurridas, SIN reiniciar en enero (quien debe diciembre sigue debiéndolo en
+     enero). Se calcula aquí, con los cobros por departamento, y SOLO salen las sumas
+     y los conteos. */
   const saldos = {};
-  let anioSaldos = null;
-  meses.forEach(m => {
-    if (m.anio !== anioSaldos) { anioSaldos = m.anio; Object.keys(saldos).forEach(k => delete saldos[k]); }
+  meses.forEach((m, i) => {
     m.pagosPorUnidad.forEach(([depto, pagado]) => { saldos[depto] = (saldos[depto] || 0) + pagado - m.cuota; });
+    if (i === meses.length - 1) futuros.forEach(f => f.pagosPorUnidad.forEach(([depto, pagado]) => { saldos[depto] = (saldos[depto] || 0) + pagado; }));
+    m.enCurso = m.id === hoyId;
     const vals = Object.keys(saldos).map(k => saldos[k]);
     const neg = vals.filter(v => v < -0.5), pos = vals.filter(v => v > 0.5);
     m.mora = {

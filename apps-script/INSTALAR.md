@@ -94,3 +94,10 @@ departamento**: la mora se calcula dentro del script (pagado en el año menos
 cuotas transcurridas, unidad por unidad) y solo se publican las sumas y los
 conteos. Cualquiera con la URL del script puede leer esos agregados; la clave
 del sitio no los protege.
+
+## Cambio de año
+- La mora **no se reinicia en enero**: quien debe diciembre sigue en la mora de enero.
+- La administración crea las pestañas (el Excel es suyo). Desde enero, nombrarlas con año: **ENERO 2027**,
+  FEBRERO 2027… (si no, el año se toma de la celda «Mes y año»). El script avisa si el saldo inicial de enero
+  no coincide con el final de diciembre.
+- Un mes futuro con un pago adelantado no se publica ni cobra cuota: cuenta como adelanto del mes en curso.
