@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Recibe el reporte · Condominio Lahia</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="assets/logo.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span class="logo">LAHIA</span><span class="tag">Lofts</span></a>
+    <nav class="main">
+      <a href="index.html">Inicio</a>
+      <a href="micuenta.html">Mi cuenta</a>
+      <a href="finanzas.html">Finanzas</a>
+      <a href="casa-club.html">Casa club</a>
+      <a href="reglamentos.html">Reglamento</a>
+      <a href="areas-comunes.html">Áreas comunes</a>
+      <a href="asamblea/index.html">Asamblea</a>
+      <a href="emergencias.html">Qué hacer si…</a>
+    </nav>
+  </div>
+</header>
+<main class="pg">
+  <h1>📩 Recibe el reporte</h1>
+  <p class="sub">Cada mes, cerca del día 10: saldo, ingresos, gastos y cobranza del edificio, en cifras agregadas.</p>
+  <div class="caja" id="avance" hidden></div>
+  <form class="caja" id="f" novalidate>
+    <label class="lb" for="dep">Tu departamento</label><select class="in" id="dep"><option value="">Cargando…</option></select>
+    <label class="lb" for="mail">Tu correo</label><input class="in" id="mail" type="email" inputmode="email" autocomplete="email" maxlength="120">
+    <label class="lb" for="cla">Clave de residentes <small style="font-weight:400;color:var(--muted)">(la misma de Finanzas)</small></label><input class="in" id="cla" type="password" autocomplete="off">
+    <div class="trampa" aria-hidden="true"><input id="web" tabindex="-1" autocomplete="off"></div>
+    <button class="go" id="go">Quiero recibirlo</button><p class="msg" id="m" hidden></p>
+  </form>
+  <details class="caja"><summary><b>Ya no quiero recibirlo</b></summary>
+    <input class="in" id="mailB" type="email" inputmode="email" placeholder="tu correo" style="margin-top:.8rem"><button class="go sec" id="goB" type="button">Darme de baja</button><p class="msg" id="mB" hidden></p></details>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    Condominio Lahia · Sendero de los Misterios 83, Milenio III, Querétaro · <a href="contactos.html">Contactos</a> · <a href="bienvenida.html">Bienvenida</a> · <a href="correo.html">Recibe el reporte</a> · <a href="privacidad.html">Aviso de privacidad</a>
+  </div>
+</footer>
+<script src="js/servicio.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/ventana.js"></script>
+<script>
+(function () {
+  "use strict";
+  const LH = window.LAHIA_SITIO || {}, URL_ = LH.api || "";
+  const $ = id => document.getElementById(id), esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const post = d => fetch(URL_, { method: "POST", body: JSON.stringify(d), headers: { "Content-Type": "text/plain;charset=utf-8" } }).then(r => r.json());
+  const msg = (id, ok, t) => { const m = $(id); m.hidden = false; m.className = "msg " + (ok ? "ok" : "mal"); m.textContent = t; };
+  let claveG = ""; try { claveG = localStorage.getItem("lahia.vecino") || ""; } catch (e) {}
+  const recordar = c => { try { localStorage.setItem("lahia.vecino", c); } catch (e) {} };
+  const ERR = { clave: "La clave no es la de residentes (la misma de Finanzas).", departamento: "Elige tu departamento de la lista.", correo: "Revisa tu correo.", ocupado: "Ese día ya está apartado.", nombre: "Escribe tu nombre para que la Administración sepa quién la pide.", personas: "El aforo es de 1 a 50 personas.", dia: "Elige un día a partir de mañana.", lejos: "Se aparta hasta con 90 días de anticipación.", tope: "Tu departamento ya tiene 2 fechas apartadas.", espera: "Demasiados intentos; prueba en un rato.", "no encontrado": "No encontramos ese folio con ese correo." };
+  const SIN = '<div class="aviso-v">⚙️ Esta sección se activa en cuanto la Administración conecte el sitio con su hoja.</div>';
+  if (!URL_) { const m = document.querySelector("main.pg"); if (m) m.querySelector("h1").insertAdjacentHTML("afterend", SIN); }
+  const VIEJO = '<div class="aviso-v">⚙️ El sitio todavía está conectado a la versión anterior del servicio. La administración del sitio debe publicar la nueva: <b>Implementar → Administrar implementaciones → ✏️ → Nueva versión</b>.</div>';
+  const esViejo = j => !!j && j.servicio === "lahia-finanzas";
+  const avisarViejo = () => { const m = document.querySelector("main.pg"); if (m && !m.querySelector(".aviso-v")) m.querySelector("h1").insertAdjacentHTML("afterend", VIEJO); };
+  /* Copias en el teléfono: se pinta al instante lo último que se vio y la hoja actualiza detrás. */
+  const lee = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
+  const guarda = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const DEPTOS_FIJOS = ["A 01","A 02","A 03","A 04","A 05","A 06","A 07","A 08","A 09","A 10","A 11","A 12","A 13","A 14","A 15","A 16","A 17","A 18","A 19","A 20","A 21","A 22","A 23","A 24","A 25","A 26","A 27","A 28","A 29","A 30","A 31","A 32","A 33","A 34","PH 35","PH 36","PH 37","PH 38","PH 39","PH 40"];
+  const opciones = (sel, lista) => { const v = $(sel).value; $(sel).innerHTML = '<option value="">Elige…</option>' + lista.map(d => "<option>" + esc(d) + "</option>").join(""); if (v) $(sel).value = v; };
+  const deptos = sel => { opciones(sel, (lee("lahia.vecinos") || {}).deptos || DEPTOS_FIJOS);
+    return fetch(URL_ + "?accion=vecinos&t=" + Date.now()).then(r => r.json()).then(j => { if (esViejo(j)) { avisarViejo(); return {}; } if (j.ok) guarda("lahia.vecinos", j); if (j.ok && j.deptos.length) opciones(sel, j.deptos); return j; }); };
+  if (claveG) $("cla").value = claveG;
+  const pintaAv = j => { if (!j || !j.correos) return; const c = j.correos, p = Math.round(c.con / c.total * 100); $("avance").hidden = false;
+    $("avance").innerHTML = "<b>" + c.con + " de " + c.total + "</b> departamentos ya lo reciben" + '<div style="height:8px;border-radius:999px;background:var(--grid);margin-top:.5rem;overflow:hidden"><i style="display:block;height:100%;width:' + p + '%;background:var(--accent)"></i></div>'; };
+  pintaAv(lee("lahia.vecinos"));
+  deptos("dep").then(j => { if (j.correos) { const c = j.correos, p = Math.round(c.con / c.total * 100); $("avance").hidden = false;
+    $("avance").innerHTML = "<b>" + c.con + " de " + c.total + "</b> departamentos ya lo reciben" + '<div style="height:8px;border-radius:999px;background:var(--grid);margin-top:.5rem;overflow:hidden"><i style="display:block;height:100%;width:' + p + '%;background:var(--accent)"></i></div>'; } }).catch(() => {});
+  $("f").onsubmit = async e => { e.preventDefault(); const b = $("go"); b.disabled = true;
+    const j = await post({ accion: "correo", depto: $("dep").value, correo: $("mail").value.trim(), clave: $("cla").value, web: $("web").value }).catch(() => ({ error: "conexión" }));
+    b.disabled = false; if (j.ok) { recordar($("cla").value); msg("m", true, "✓ Listo. Te llegó un correo de confirmación."); $("mail").value = ""; } else msg("m", false, ERR[j.error] || "No se pudo (" + j.error + ")."); };
+  $("goB").onclick = async () => { const j = await post({ accion: "correo", correo: $("mailB").value.trim(), baja: true }).catch(() => ({ error: "conexión" })); msg("mB", !!j.ok, j.ok ? "✓ Ya no lo recibirás." : ERR[j.error] || "No se pudo."); };
+})();
+</script>
+</body>
+</html>

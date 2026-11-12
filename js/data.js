@@ -1,5 +1,11 @@
-/* Datos financieros — Condominio Lahia, enero–julio 2026.
-   Fuente: Excel de captura mensual de cuentas.
+/* Datos financieros — Condominio Lahia, enero–agosto 2026.
+   Fuente: Excel de captura mensual de cuentas de la administración
+   ("Lahia-Captura-Mensual (2) ARQ ANDRES.xlsx", versión del 28 oct 2026).
+   Esta copia es el RESPALDO: si js/finanzas.js tiene la URL del Apps Script
+   (apps-script/Code.gs), los meses se leen de la hoja en cada carga y lo de
+   este archivo solo se usa cuando el script no responde.
+   Agosto: la administración no registró pipas ni derrama ese mes; la pestaña
+   de septiembre es copia de agosto sin capturar y por eso no está aquí.
    La morosidad se publica SIEMPRE agregada (sin identificar unidades) por
    requisito de la Ley de protección de datos personales. */
 const LAHIA = {
@@ -231,6 +237,30 @@ const LAHIA = {
         agua: [
           ["María Cruz Ramírez H.", "Pago de 14 pipas de agua", 11407]
         ]
+      }
+    },
+    {
+      id: "2026-08", nombre: "Agosto", corto: "Ago",
+      saldoIni: -918.11, saldoFin: 45713.40,
+      ingresos: { manto: 80000, agua: 31602.10 },
+      egresos: { fijos: 63970.59, variables: 1000, agua: 0 },
+      cobranza: { pagaron: 40, pct: 100 }, derrama: null, resultadoAgua: 31602.10,
+      morosidad: { unidadesManto: 1, acumuladoManto: 10000, unidadesAgua: 0, aguaMes: 0 },
+      detalle: {
+        fijos: [
+          ["Servicios Integrados", "Vigilancia", 30000],
+          ["Servicio de Limpieza", "Áreas comunes", 14000],
+          ["Edificare Arquitectura", "Administración", 12000],
+          ["Schindler, S.A. de C.V.", "Manto. elevador", 4232.84],
+          ["Mantenimiento Alberca", "Servicio semanal", 2313.75],
+          ["Plataforma", "Condovive", 725],
+          ["Telmex", "Caseta y casa club", 499],
+          ["Telcel", "Recarga", 200]
+        ],
+        variables: [
+          ["Municipio", "Recolección de basura", 1000]
+        ],
+        agua: []
       }
     }
   ],

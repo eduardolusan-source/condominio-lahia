@@ -1,0 +1,18 @@
+# Condominio Lahia
+
+> Sitio para residentes de Lahia Lofts: 40 departamentos en Sendero de los Misterios 83, Milenio III, Querétaro. Reglamento Interno 2024 en lenguaje claro, áreas comunes, casa club, asamblea y cuentas del edificio (con la clave de residentes). Lo público está siempre en cifras agregadas; lo de cada departamento solo se ve en «Mi cuenta» con su PIN.
+
+## Lo básico
+- Cuota de mantenimiento: $2,000 al mes, en los primeros 10 días; 10% mensual de recargo por mora.
+- El agua llega en pipas y se paga aparte con la derrama de agua de cada mes.
+- Ruido: desde las 22:00 h sin ruidos molestos; nada audible en otro depto después de las 23:00 h (00:00 h viernes y sábado).
+- Obras: L–V 9:00–18:00 y sábado 10:00–14:00; domingos y festivos no.
+- Mudanzas: aviso por correo y $1,500 de depósito (se devuelve 4 días después); los elevadores no se usan para mudanzas.
+- Casa club: L–J 9:00–22:00, V y S 9:00–23:59, D 10:00–20:00; renta $1,000 y garantía según personas (10–20 $1,000 · 21–30 $1,500 · 31–50 $2,000); máximo 50. Se pide en casa-club.html y la Administración confirma.
+- Administración: Edificare Arquitectura (solicitudes por escrito, en la caseta o en Condovive).
+
+## Páginas
+- [Inicio](index.html) · [Mi cuenta](micuenta.html) · [Finanzas](finanzas.html) · [Casa club](casa-club.html)
+- [Reglamento](reglamentos.html) · [Áreas comunes](areas-comunes.html) · [Asamblea](asamblea/index.html)
+- [Qué hacer si…](emergencias.html) · [Contactos](contactos.html) · [Bienvenida](bienvenida.html)
+- [Recibe el reporte](correo.html) · [Aviso de privacidad](privacidad.html)
