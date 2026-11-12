@@ -60,6 +60,18 @@ function doGet(e) {
   }
 }
 
+/* Calentador: cada 10 minutos deja las cuentas ya armadas en el caché, para que nadie
+   espere los ~30 s de la primera lectura. Se instala solo con instalarVecinos() o con
+   instalarCalentador(). Los cambios de la hoja se ven a más tardar 10 minutos después. */
+function calentarFinanzas() {
+  try { CacheService.getScriptCache().put("finanzas", JSON.stringify(armarFinanzas_()), 1500); } catch (e) { Logger.log("calentador: " + e); }
+}
+function instalarCalentador() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === "calentarFinanzas").forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger("calentarFinanzas").timeBased().everyMinutes(10).create();
+  calentarFinanzas();
+}
+
 function texto_(s) { return ContentService.createTextOutput(s).setMimeType(ContentService.MimeType.JSON); }
 
 /* Para probar desde el editor: Ejecutar → probar, y ver el registro. */

@@ -23,7 +23,10 @@ const ENC_CORREOS_V = ["Registrado", "Departamento", "Correo", "Activo"];
 const ENC_RCC_V = ["Folio", "Solicitada el", "Día", "Departamento", "Correo", "Estatus", "Nota de la Administración", "Quién la pide", "Personas", "Horario", "Motivo"];
 const EST_RCC_V = ["Por confirmar", "Confirmada", "Rechazada", "Cancelada"];
 const ZONA_V = "America/Mexico_City";
-const REMITENTE_V = "Lahia · Administración";
+const REMITENTE_V = "Lahia · Administración (AMC)";
+/* Datos de la Administración (AMC · Andrés). Si en Config la casilla está vacía, se usan estos. */
+const ADMON_V = "admon.lahia@gmail.com";
+const DEF_V = { admin_whatsapp: "4424616789", admin_correo: ADMON_V, sitio_url: "https://eduardolusan-source.github.io/condominio-lahia" };
 
 /* ------------------------------- rutas ------------------------------- */
 function rutaVecinosGet_(p) {
@@ -60,6 +63,7 @@ function datosV_() {
 function cfgV_() {
   const h = datosV_().getSheetByName(HOJA_CFG_V), out = {};
   if (h && h.getLastRow() > 1) h.getRange(2, 1, h.getLastRow() - 1, 2).getValues().forEach(f => { if (f[0]) out[String(f[0]).trim()] = f[1]; });
+  Object.keys(DEF_V).forEach(k => { if (!String(out[k] == null ? "" : out[k]).trim()) out[k] = DEF_V[k]; });
   return out;
 }
 function hojaV_(nombre, enc) {
@@ -73,9 +77,9 @@ function correoOkV_(c) { return /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[a-z]{2,}$/i.test(S
 function diaV_(v) { return Object.prototype.toString.call(v) === "[object Date]" ? Utilities.formatDate(v, ZONA_V, "yyyy-MM-dd") : String(v || "").slice(0, 10); }
 function limiteV_(k, max) { const c = CacheService.getScriptCache(), kk = "limv_" + k, n = Number(c.get(kk) || 0); if (n >= max) return false; c.put(kk, String(n + 1), 3600); return true; }
 function sitioV_() { return String(cfgV_().sitio_url || "").replace(/\/+$/, ""); }
-/* A quién le llega lo de la Administración (kit, semáforo, casa club, PIN nuevos): Config → reporte_copia.
-   Solo si está vacío, a la cuenta dueña del script. */
-function admonV_() { const l = String(cfgV_().reporte_copia || "").split(/[,;\s]+/).filter(correoOkV_).filter((x, i, a) => a.indexOf(x) === i); return l.length ? l : [Session.getEffectiveUser().getEmail()]; }
+/* A quién le llega lo de la Administración (kit, casa club, PIN nuevos): siempre admon.lahia@gmail.com
+   y además quien esté en Config → reporte_copia. */
+function admonV_() { const l = [ADMON_V].concat(String(cfgV_().reporte_copia || "").split(/[,;\s]+/)).map(x => String(x).trim().toLowerCase()).filter(correoOkV_).filter((x, i, a) => a.indexOf(x) === i); return l; }
 function secretoV_() { const p = PropertiesService.getScriptProperties(); let k = p.getProperty("secreto"); if (!k) { k = Utilities.getUuid() + Utilities.getUuid(); p.setProperty("secreto", k); } return k; }
 function hexV_(b) { return b.map(x => ("0" + ((x + 256) % 256).toString(16)).slice(-2)).join(""); }
 function firmaV_(texto) { return hexV_(Utilities.computeHmacSha256Signature(texto, secretoV_())).slice(0, 32); }
@@ -283,15 +287,16 @@ function instalarVecinos() {
   const tiene = k => filasV_(HOJA_CFG_V, 1).some(f => String(f[0]).trim() === k);
   [["reporte_envio", "no", "«sí» manda el reporte del día 10 a los correos registrados. En «no» solo llega el kit a la Administración."],
    ["reporte_copia", Session.getEffectiveUser().getEmail(), "Quién recibe el kit del mes, el semáforo, los PIN nuevos y los avisos de casa club (separa con comas). Pon aquí el correo de la Administración."],
-   ["admin_whatsapp", "", "WhatsApp de la Administración (10 dígitos): botón «¿No te cuadra?» de Mi cuenta."],
-   ["admin_correo", "", "Correo de la Administración que ven los residentes."],
-   ["sitio_url", "", "Dirección del sitio (sin / al final), para las ligas de los correos."],
+   ["admin_whatsapp", DEF_V.admin_whatsapp, "WhatsApp de la Administración (10 dígitos): botón «¿No te cuadra?» de Mi cuenta."],
+   ["admin_correo", DEF_V.admin_correo, "Correo de la Administración que ven los residentes."],
+   ["sitio_url", DEF_V.sitio_url, "Dirección del sitio (sin / al final), para las ligas de los correos."],
    ["casa_club_renta", 1000, "Renta de la casa club (reglamento 2024)."]]
     .forEach(r => { if (!tiene(r[0])) h.getRange(h.getLastRow() + 1, 1, 1, 3).setValues([r]); });
   hojaV_(HOJA_CORREOS_V, ENC_CORREOS_V); hojaV_(HOJA_RCC_V, ENC_RCC_V); hojaV_(HOJA_REP_V, ["Fecha", "Mes", "Enviado a", "Nota"]); crearSaldosIniciales_();
   ScriptApp.getProjectTriggers().filter(t => ["envioMensual", "avisosCasa"].indexOf(t.getHandlerFunction()) >= 0).forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger("envioMensual").timeBased().onMonthDay(10).atHour(9).inTimezone(ZONA_V).create();
   ScriptApp.newTrigger("avisosCasa").timeBased().everyMinutes(30).create();
+  if (typeof instalarCalentador === "function") instalarCalentador();
   Logger.log("Listo. Hoja privada del sitio: " + datosV_().getUrl() + " · envío del día 10 a las 9 h y avisos de casa club cada 30 min.");
 }
 
