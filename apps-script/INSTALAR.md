@@ -117,3 +117,16 @@ La hoja de la Administración es ahora la Hoja de Google «Lahia-Captura-Mensual
    (https://eduardolusan-source.github.io/condominio-lahia), `admin_whatsapp`, `admin_correo`. En **Saldos iniciales**,
    lo que cada depto debía al iniciar 2026 (negativo).
 Para cambiar el script después: Administrar implementaciones → la de «Activa» → ✏️ → **Nueva versión** (la URL no cambia).
+
+## Reporte del día 10 visual (13 de noviembre de 2026)
+Ya pegado en el proyecto **LAHIA** (Vecinos.gs) y probado con `reportePrueba`. Solo cambia la sección «reporte
+mensual» de `Vecinos.gs`; el envío, los candados y `reporte_envio` siguen igual.
+- El correo es una carta corta y visual, igual a la de Las Misiones: el edificio de noche con una ventana encendida
+  por cada depto que pagó su cuota (se barajan con el mes: no son deptos reales), la frase del mes («La caja se
+  recuperó…», «La caja bajó…», «¡Mes verde!» y, si la caja está en números rojos, se dice), la caja en barras, en qué
+  se fue la cuota por rubro (sin las pipas, que paga la derrama) con los tres gastos más grandes, el agua del mes
+  (pipas que llegaron, lo que costaron y cuánto cubrió la derrama), los proyectos, un dato del mes y botones a Mi
+  cuenta y Finanzas. Solo tablas y colores: se ve igual en Gmail, Outlook y el celular.
+- Asunto con gancho: «Las cuentas de octubre · la caja se recupera · Lahia». El texto para WhatsApp del kit también
+  cambió.
+- Los rubros se reconocen por proveedor y concepto (`RUBROS_V`); lo que no encaja va a «Otros gastos».
