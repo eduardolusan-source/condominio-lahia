@@ -316,7 +316,7 @@ function instalarVecinos() {
   const h = hojaV_(HOJA_CFG_V, ["Clave", "Valor", "Para qué"]);
   const tiene = k => filasV_(HOJA_CFG_V, 1).some(f => String(f[0]).trim() === k);
   [["reporte_envio", "no", "«sí» manda el reporte del día 10 a los correos registrados. En «no» solo llega el kit a la Administración."],
-   ["reporte_copia", Session.getEffectiveUser().getEmail(), "Quién recibe el kit del mes, el semáforo, los PIN nuevos y los avisos de casa club (separa con comas). Pon aquí el correo de la Administración."],
+   ["reporte_copia", "", "Copia OPCIONAL de los avisos de casa club, PIN nuevos y kit del mes (separa con comas). A admon.lahia@gmail.com le llegan siempre; déjalo vacío si nadie más debe recibirlos."],
    ["admin_whatsapp", DEF_V.admin_whatsapp, "WhatsApp de la Administración (10 dígitos): botón «¿No te cuadra?» de Mi cuenta."],
    ["admin_correo", DEF_V.admin_correo, "Correo de la Administración que ven los residentes."],
    ["sitio_url", DEF_V.sitio_url, "Dirección del sitio (sin / al final), para las ligas de los correos."],
