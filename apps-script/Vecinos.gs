@@ -52,19 +52,22 @@ function doPost(e) {
 
 /* ------------------------------- utilidades ------------------------------- */
 /* Hoja privada del sitio (la crea instalarVecinos y guarda su id). */
+let DATOS_MEMO_V = null, CFG_MEMO_V = null;   // se abre una sola vez por ejecución
 function datosV_() {
+  if (DATOS_MEMO_V) return DATOS_MEMO_V;
   const p = PropertiesService.getScriptProperties(), id = p.getProperty("datos_id");
-  if (id) { try { return SpreadsheetApp.openById(id); } catch (_) { /* la borraron: se crea otra */ } }
+  if (id) { try { return (DATOS_MEMO_V = SpreadsheetApp.openById(id)); } catch (_) { /* la borraron: se crea otra */ } }
   const ss = SpreadsheetApp.create("Lahia · Sitio (privado)");
   p.setProperty("datos_id", ss.getId());
   try { ss.getSheets()[0].setName(HOJA_CFG_V); ss.getSheets()[0].getRange(1, 1, 1, 3).setValues([["Clave", "Valor", "Para qué"]]).setFontWeight("bold"); } catch (_) {}
   return ss;
 }
 function cfgV_() {
+  if (CFG_MEMO_V) return CFG_MEMO_V;
   const h = datosV_().getSheetByName(HOJA_CFG_V), out = {};
   if (h && h.getLastRow() > 1) h.getRange(2, 1, h.getLastRow() - 1, 2).getValues().forEach(f => { if (f[0]) out[String(f[0]).trim()] = f[1]; });
   Object.keys(DEF_V).forEach(k => { if (!String(out[k] == null ? "" : out[k]).trim()) out[k] = DEF_V[k]; });
-  return out;
+  return (CFG_MEMO_V = out);
 }
 function hojaV_(nombre, enc) {
   const ss = datosV_(); let h = ss.getSheetByName(nombre);
@@ -167,17 +170,43 @@ function reservarCasaV_(d) {
   h.getRange(fila, 1, 1, ENC_RCC_V.length).setValues([[folio, new Date(), dia, depto, correo, "Por confirmar", "", nombre, personas, horario, motivo]]);
   h.getRange(fila, 3).setNumberFormat("yyyy-mm-dd"); olvidarCasa_();
   try { h.getRange(fila, 6).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(EST_RCC_V, true).setAllowInvalid(true).build()); } catch (_) {}
+  encolarAvisoCasa_(folio);
+  MailApp.sendEmail(correo, "Recibimos tu solicitud de casa club " + folio, "Día: " + dia + " (" + horario + ")\nPersonas: " + personas + "\nEstatus: por confirmar.\n\nLa Administración te confirmará por correo. Renta: $" + renta.toLocaleString("es-MX") + (gar ? "; garantía: $" + gar.toLocaleString("es-MX") : "; sin garantía (menos de 10 personas)") + ". El reglamento pide entregar la solicitud por escrito y firmada.\nConsulta tu folio en la página «Casa club» del sitio.", { name: REMITENTE_V });
+  return { ok: true, folio: folio, renta: renta, garantia: gar, horario: horario };
+}
+/* El correo con botones a la Administración sale unos segundos después de la reserva, en otra ejecución:
+   así el vecino no espera a que se calcule el adeudo del depto ni a que salgan los correos. */
+function encolarAvisoCasa_(folio) {
+  const p = PropertiesService.getScriptProperties(), cola = String(p.getProperty("cola_casa") || "").split(",").filter(Boolean);
+  if (cola.indexOf(folio) < 0) cola.push(folio);
+  p.setProperty("cola_casa", cola.join(","));
+  if (!ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === "avisarAdmonCasa")) ScriptApp.newTrigger("avisarAdmonCasa").timeBased().after(5 * 1000).create();
+}
+function avisarAdmonCasa() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === "avisarAdmonCasa").forEach(t => ScriptApp.deleteTrigger(t));
+  const lock = LockService.getScriptLock(); lock.waitLock(30000);
+  let cola;
+  try { const p = PropertiesService.getScriptProperties(); cola = String(p.getProperty("cola_casa") || "").split(",").filter(Boolean); p.deleteProperty("cola_casa"); }
+  finally { lock.releaseLock(); }
+  if (!cola.length) return;
+  const fs = filasV_(HOJA_RCC_V, ENC_RCC_V.length), hoy = Utilities.formatDate(new Date(), ZONA_V, "yyyy-MM-dd");
+  cola.forEach(folio => {
+    const r = fs.find(f => String(f[0]) === folio); if (!r) return;
+    try { avisoCasaUno_(r, fs, hoy); } catch (e) { Logger.log("aviso casa " + folio + ": " + e); }
+  });
+}
+function avisoCasaUno_(r, fs, hoy) {
+  const folio = String(r[0]), dia = diaV_(r[2]), depto = String(r[3]), correo = String(r[4]), nombre = String(r[7] || ""), personas = Number(r[8]) || 0, horario = String(r[9] || ""), motivo = String(r[10] || "");
+  const renta = Number(cfgV_().casa_club_renta) || 1000, gar = garantiaCC_(personas);
   let adeudo = 0; try { adeudo = cuentaDeptoV_(deptoValidoV_(depto) || depto).debe; } catch (_) {}
   const liga = e => (sitioV_() ? sitioV_() + "/casa-admin.html" : ScriptApp.getService().getUrl()) + "?accion=resolverCasa&folio=" + folio + "&e=" + e + "&t=" + firmaV_(folio + "|" + e);
   const boton = (e, txt, color) => '<a href="' + liga(e) + '" style="display:inline-block;margin:6px 8px 6px 0;padding:14px 22px;border-radius:999px;background:' + color + ';color:#fff;text-decoration:none;font-weight:700;font-size:16px">' + txt + "</a>";
-  const fechaL = Utilities.formatDate(new Date(dia + "T12:00:00"), ZONA_V, "dd/MM/yyyy"), otras = fs.filter(f => activaV_(f) && diaV_(f[2]) >= hoy).length;
+  const fechaL = Utilities.formatDate(new Date(dia + "T12:00:00"), ZONA_V, "dd/MM/yyyy"), otras = fs.filter(f => activaV_(f) && diaV_(f[2]) >= hoy && String(f[0]) !== folio).length;
   admonV_().forEach(a => MailApp.sendEmail(a, "🏠 Casa club: depto " + depto + " pide el " + fechaL + " (" + folio + ")",
     nombre + " (depto " + depto + ") pide la casa club el " + dia + " para " + personas + " personas. Confirmar: " + liga("Confirmada") + "  ·  Rechazar: " + liga("Rechazada"),
     { name: REMITENTE_V, htmlBody: '<div style="font-family:system-ui,sans-serif;max-width:520px"><p style="font-size:13px;color:#3d6b5a;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0">Casa club · ' + folio + '</p><h2 style="margin:6px 0 4px">Depto ' + depto + " pide el " + fechaL + '</h2><p style="color:#52514e;margin:0 0 10px"><b>' + nombre + "</b> · " + correo + "<br>" + personas + " personas · " + horario + (motivo ? " · " + motivo : "") + "<br>Renta $" + renta.toLocaleString("es-MX") + (gar ? " + garantía $" + gar.toLocaleString("es-MX") : " (sin garantía, menos de 10 personas)") + "</p>" +
       (adeudo > 0.5 ? '<p style="background:#fff3cd;color:#5a4300;border-radius:10px;padding:8px 12px;margin:0 0 12px">⚠️ El depto tiene adeudo de <b>$' + Math.round(adeudo).toLocaleString("es-MX") + "</b>. El reglamento pide estar al corriente para usar la casa club.</p>" : '<p style="color:#2e7d32;margin:0 0 12px">✓ El depto está al corriente.</p>') +
       boton("Confirmada", "✅ Confirmar", "#2e7d32") + boton("Rechazada", "❌ Rechazar", "#b3261e") + '<p style="color:#898781;font-size:13px;margin-top:16px">Un toque basta: se anota y al residente le llega el aviso. Recuerda la solicitud firmada que pide el reglamento. ' + (otras ? "Hay " + otras + " fecha(s) más apartadas." : "") + "</p></div>" }));
-  MailApp.sendEmail(correo, "Recibimos tu solicitud de casa club " + folio, "Día: " + dia + " (" + horario + ")\nPersonas: " + personas + "\nEstatus: por confirmar.\n\nLa Administración te confirmará por correo. Renta: $" + renta.toLocaleString("es-MX") + (gar ? "; garantía: $" + gar.toLocaleString("es-MX") : "; sin garantía (menos de 10 personas)") + ". El reglamento pide entregar la solicitud por escrito y firmada.\nConsulta tu folio en la página «Casa club» del sitio.", { name: REMITENTE_V });
-  return { ok: true, folio: folio, renta: renta, garantia: gar, horario: horario };
 }
 function cancelarCasaV_(d) {
   const folio = String(d.folio || "").trim().toUpperCase(), correo = String(d.correo || "").trim().toLowerCase();
@@ -189,6 +218,7 @@ function cancelarCasaV_(d) {
 }
 /* Cada 30 minutos: si la Administración cambió el Estatus, avisa al residente (una sola vez por estatus). */
 function avisosCasa() {
+  if (PropertiesService.getScriptProperties().getProperty("cola_casa")) avisarAdmonCasa();
   const props = PropertiesService.getScriptProperties();
   filasV_(HOJA_RCC_V, ENC_RCC_V.length).forEach(f => {
     const folio = String(f[0]), est = String(f[5] || ""), k = "aviso_" + folio;
@@ -397,8 +427,8 @@ function crearSaldosIniciales_() {
 
 /* Pagos de todos los deptos por mes (lo único que necesita «Mi cuenta»). Se guarda 2 minutos: así varias
    consultas seguidas no vuelven a leer las 12 pestañas. Un cambio en la hoja se ve a más tardar 2 min después. */
-function matrizPagosV_() {
-  const c = CacheService.getScriptCache(), g = c.get("matriz_pagos"); if (g) return JSON.parse(g);
+function matrizPagosV_(fresca) {
+  const c = CacheService.getScriptCache(), g = fresca ? null : c.get("matriz_pagos"); if (g) return JSON.parse(g);
   const out = [];
   hojasMesL_(hoja_()).forEach(h => {
     const m = leerMes_(h), pagos = {}, agua = {}, deuda = {};
@@ -406,6 +436,11 @@ function matrizPagosV_() {
     (m.aguaPorUnidad || []).forEach(p => { agua[String(p[0]).trim()] = Number(p[1]) || 0; deuda[String(p[0]).trim()] = Number(p[2]) || 0; });
     out.push({ id: m.id, nombre: m.nombre, anio: m.anio, cuota: m.cuota, capturado: m.capturado, pagos: pagos, agua: agua, deudaAgua: deuda });
   });
-  try { c.put("matriz_pagos", JSON.stringify(out), 120); } catch (_) {}
+  try { c.put("matriz_pagos", JSON.stringify(out), fresca ? 1500 : 120); } catch (_) {}
   return out;
+}
+/* Lo llama el calentador (cada 10 min): «Mi cuenta», la lista de deptos y el aviso de casa club ya no esperan a la hoja. */
+function calentarVecinos_() {
+  matrizPagosV_(true);
+  try { CacheService.getScriptCache().remove("deptos_v"); deptosV_(); } catch (_) {}
 }
