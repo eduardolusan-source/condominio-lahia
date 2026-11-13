@@ -255,7 +255,7 @@ function salud_() {
 }
 function revisar() {
   const s = salud_(); Logger.log(s.puntos.map(p => (p.nivel === "rojo" ? "🔴 " : p.nivel === "amarillo" ? "🟡 " : "ℹ️ ") + p.texto).join("\n"));
-  MailApp.sendEmail(Session.getEffectiveUser().getEmail(), "Semáforo de la hoja · Lahia", textoSalud_(s), { name: REMITENTE_V });
+  admonV_().forEach(a => MailApp.sendEmail(a, "Semáforo de la hoja · Lahia", textoSalud_(s), { name: REMITENTE_V }));
   return s;
 }
 function textoSalud_(s) { const p = s.puntos.filter(x => x.nivel !== "info"); return (p.length ? p.map(x => (x.nivel === "rojo" ? "🔴 " : "🟡 ") + x.texto).join("\n") : "🟢 Todo cuadra.") + "\n" + s.puntos.filter(x => x.nivel === "info").map(x => "ℹ️ " + x.texto).join("\n"); }
@@ -300,7 +300,7 @@ function envioMensual() {
   if (props.getProperty("enviado_" + id)) { bitacoraV_(id, "", "Ya se había enviado"); return; }
   if (!/^s[ií]/i.test(String(cfgV_().reporte_envio || ""))) { bitacoraV_(id, "", "Envío a residentes en pausa (Config → reporte_envio)"); return; }
   const dest = filasV_(HOJA_CORREOS_V, 4).filter(f => correoOkV_(f[2]) && !/^no/i.test(String(f[3]))).map(f => String(f[2]).trim().toLowerCase()).filter((x, i, a) => a.indexOf(x) === i);
-  for (let i = 0; i < dest.length; i += 40) MailApp.sendEmail(Session.getEffectiveUser().getEmail(), "Cuentas de " + k.mes + " · Lahia", textoWaV_(k), { name: REMITENTE_V, bcc: dest.slice(i, i + 40).join(","), htmlBody: htmlReporteV_(k) });
+  for (let i = 0; i < dest.length; i += 40) MailApp.sendEmail(ADMON_V, "Cuentas de " + k.mes + " · Lahia", textoWaV_(k), { name: REMITENTE_V, bcc: dest.slice(i, i + 40).join(","), htmlBody: htmlReporteV_(k) });
   props.setProperty("enviado_" + id, new Date().toISOString());
   bitacoraV_(id, dest.length + " correos", "Enviado");
 }
