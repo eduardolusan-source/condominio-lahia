@@ -82,7 +82,9 @@ function limiteV_(k, max) { const c = CacheService.getScriptCache(), kk = "limv_
 function sitioV_() { return String(cfgV_().sitio_url || "").replace(/\/+$/, ""); }
 /* A quién le llega lo de la Administración (kit, casa club, PIN nuevos): siempre admon.lahia@gmail.com
    y además quien esté en Config → reporte_copia. */
-function admonV_() { const l = [ADMON_V].concat(String(cfgV_().reporte_copia || "").split(/[,;\s]+/)).map(x => String(x).trim().toLowerCase()).filter(correoOkV_).filter((x, i, a) => a.indexOf(x) === i); return l; }
+function admonV_() { const l = [ADMON_V].concat(String(cfgV_().reporte_copia || "").split(/[,;\s]+/)).map(x => String(x).trim().toLowerCase()).filter(correoOkV_).filter((x, i, a) => a.indexOf(x) === i)
+  .filter(x => x === ADMON_V || x !== String(Session.getEffectiveUser().getEmail() || "").toLowerCase());   // al dueño del script nunca le llegan avisos
+  return l; }
 function secretoV_() { const p = PropertiesService.getScriptProperties(); let k = p.getProperty("secreto"); if (!k) { k = Utilities.getUuid() + Utilities.getUuid(); p.setProperty("secreto", k); } return k; }
 function hexV_(b) { return b.map(x => ("0" + ((x + 256) % 256).toString(16)).slice(-2)).join(""); }
 function firmaV_(texto) { return hexV_(Utilities.computeHmacSha256Signature(texto, secretoV_())).slice(0, 32); }
