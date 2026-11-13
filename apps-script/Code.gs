@@ -65,6 +65,7 @@ function doGet(e) {
    instalarCalentador(). Los cambios de la hoja se ven a más tardar 10 minutos después. */
 function calentarFinanzas() {
   try { CacheService.getScriptCache().put("finanzas", JSON.stringify(armarFinanzas_()), 1500); } catch (e) { Logger.log("calentador: " + e); }
+  try { if (typeof calentarVecinos_ === "function") calentarVecinos_(); } catch (e) { Logger.log("calentador vecinos: " + e); }
 }
 function instalarCalentador() {
   ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === "calentarFinanzas").forEach(t => ScriptApp.deleteTrigger(t));
