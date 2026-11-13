@@ -31,6 +31,7 @@ const DEF_V = { admin_whatsapp: "4424616789", admin_correo: ADMON_V, sitio_url: 
 /* ------------------------------- rutas ------------------------------- */
 function rutaVecinosGet_(p) {
   if (p.accion === "vecinos") return { ok: true, deptos: deptosV_(), correos: correosCuenta_() };
+  if (p.accion === "anonimo") return anonimoV_();
   if (p.accion === "casa") return casaPublica_();
   if (p.accion === "folio") return folioCasa_(p.folio);
   if (p.accion === "resolverCasa") return resolverCasaV_(p);
@@ -444,5 +445,42 @@ function matrizPagosV_(fresca) {
 /* Lo llama el calentador (cada 10 min): «Mi cuenta», la lista de deptos y el aviso de casa club ya no esperan a la hoja. */
 function calentarVecinos_() {
   matrizPagosV_(true);
+  try { CacheService.getScriptCache().put("anonimo", JSON.stringify(anonimoCalcV_()), 1500); } catch (_) {}
   try { CacheService.getScriptCache().remove("deptos_v"); deptosV_(); } catch (_) {}
+}
+
+/* ---------------- El edificio de noche (Finanzas): cuántos deptos están al corriente, por mes ----------------
+   ANÓNIMO: aquí se calcula depto por depto, pero al sitio solo salen CONTEOS por mes (nunca qué depto es cuál).
+   Misma regla que «Mi cuenta»: cada pago cubre primero el mes más viejo. Se guarda 5 min (el calentador lo renueva). */
+function anonimoV_() {
+  const c = CacheService.getScriptCache(), g = c.get("anonimo");
+  if (g) { try { return JSON.parse(g); } catch (e) {} }
+  const r = anonimoCalcV_();
+  try { c.put("anonimo", JSON.stringify(r), 300); } catch (e) {}
+  return r;
+}
+function anonimoCalcV_() {
+  if (typeof LOTE_V !== "undefined") LOTE_V.on = true;
+  const hoyId = Utilities.formatDate(new Date(), ZONA_V, "yyyy-MM"), meses = {}, ds = deptosV_();
+  let deben = 0, monto = 0, mantoTot = 0, aguaDeben = 0, aguaMonto = 0, aguaMes = "";
+  ds.forEach(d => {
+    let cu; try { cu = cuentaDeptoV_(d); } catch (e) { return; }
+    (cu.meses || []).forEach(m => {
+      const x = meses[m.id] || (meses[m.id] = { id: m.id, nombre: m.nombre, enCurso: m.id === hoyId, total: 0, al: 0, parte: 0, uno: 0, dos: 0, tres: 0 });
+      x.total++;
+      if (m.saldo >= -0.5) x.al++;
+      else { const atras = Math.ceil(-m.saldo / (m.cuota || 1) - 0.001); if (-m.saldo < m.cuota - 0.5) x.parte++; else if (atras <= 1) x.uno++; else if (atras === 2) x.dos++; else x.tres++; }
+    });
+    /* Lo VENCIDO: la cuota del mes en curso todavía no se debe (lo que ya se pagó de ella sí cuenta). */
+    const ult = (cu.meses || [])[(cu.meses || []).length - 1];
+    let saldoHoy = (Number(cu.aFavor) || 0) - (Number(cu.debeManto != null ? cu.debeManto : cu.debe) || 0);
+    if (ult && ult.enCurso) saldoHoy += Number(ult.cuota) || 0;
+    const debeM = Math.max(0, -saldoHoy);
+    mantoTot += debeM;
+    const da = Math.max(0, Number(cu.deudaAgua) || 0); if (da > 0.5) { aguaDeben++; aguaMonto += da; } if (cu.mesDeudaAgua) aguaMes = cu.mesDeudaAgua;
+    if (debeM + da > 0.5) { deben++; monto += debeM + da; }
+  });
+  return { ok: true, unidades: ds.length, hoy: hoyId, meses: Object.keys(meses).sort().map(k => meses[k]),
+    hoyDeben: { deptos: deben, monto: Math.round(monto), mantenimiento: Math.round(mantoTot), agua: Math.round(aguaMonto), aguaDeptos: aguaDeben, aguaMes: aguaMes },
+    generado: new Date().toISOString() };
 }

@@ -67,9 +67,10 @@ function calentarFinanzas() {
   const c = CacheService.getScriptCache(), p = PropertiesService.getScriptProperties();
   let ver = ""; try { ver = String(DriveApp.getFileById(HOJA_ID).getLastUpdated().getTime()); } catch (e) {}
   const g = c.get("finanzas"), mp = c.get("matriz_pagos");
-  if (g && mp && ver && p.getProperty("calentador_ver") === ver) {
+  if (g && mp && c.get("anonimo") && ver && p.getProperty("calentador_ver") === ver) {
     c.put("finanzas", g, 1500); c.put("matriz_pagos", mp, 1500);
     const d = c.get("deptos_v"); if (d) c.put("deptos_v", d, 3600);
+    const an = c.get("anonimo"); if (an) c.put("anonimo", an, 1500);
     return;
   }
   try { c.put("finanzas", JSON.stringify(armarFinanzas_()), 1500); } catch (e) { Logger.log("calentador: " + e); }
